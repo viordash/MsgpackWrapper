@@ -34,6 +34,8 @@ add_executable(MsgpackWrapper
 	${CPP_SOURCE_FILES}
     )
 
+target_link_libraries(MsgpackWrapper msgpack-c)
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
