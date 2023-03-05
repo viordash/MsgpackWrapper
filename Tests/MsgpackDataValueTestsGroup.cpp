@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "JsonWrapper.h"
+#include "MsgpackWrapper.h"
 #include "CppUTest/CommandLineTestRunner.h"
 
 int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
@@ -12,7 +12,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(JsonDataValueGroup, JsonDataValue_TryParse_Test) {
 // 	JsonFieldsContainer container;
-// 	JsonValue<TJsonRawData> testable(&container, "testString");
+// 	MsgpackValue<TJsonRawData> testable(&container, "testString");
 
 // 	rapidjson::Document doc;
 // 	doc.Parse("{\"testString\":\"User1\"}");
@@ -32,7 +32,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	for (size_t i = 0; i < 16; i++) { data[i] = 'A' + (uint8_t)i; }
 // 	data[sizeof(data) - 1] = 0;
 // 	JsonFieldsContainer container;
-// 	JsonValue<TJsonRawData> testable(&container, "testString", {data, 16});
+// 	MsgpackValue<TJsonRawData> testable(&container, "testString", {data, 16});
 
 // 	rapidjson::Document doc;
 // 	doc.SetObject();
@@ -52,7 +52,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	uint8_t data[256];
 // 	for (size_t i = 0; i < sizeof(data); i++) { data[i] = (uint8_t)i; }
 // 	JsonFieldsContainer container;
-// 	JsonValue<TJsonRawData> testable(&container, "testString", {data, sizeof(data)});
+// 	MsgpackValue<TJsonRawData> testable(&container, "testString", {data, sizeof(data)});
 
 // 	rapidjson::Document doc;
 // 	doc.SetObject();
@@ -75,7 +75,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 						  "\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF\xE0\xE1\xE2"
 // 						  "\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF\xF0\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF\"}");
 
-// 	JsonValue<TJsonRawData> readTestable(&container, "testString", {NULL, 0});
+// 	MsgpackValue<TJsonRawData> readTestable(&container, "testString", {NULL, 0});
 
 // 	rapidjson::Document readDoc;
 // 	doc.Parse(jsonStr);
@@ -87,7 +87,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(JsonDataValueGroup, JsonDataValue_WriteTo_For_Null_Test) {
 // 	JsonFieldsContainer container;
-// 	JsonValue<TJsonRawData> testable(&container, "testString", {NULL, 0});
+// 	MsgpackValue<TJsonRawData> testable(&container, "testString", {NULL, 0});
 
 // 	rapidjson::Document doc;
 // 	doc.SetObject();
@@ -104,7 +104,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(JsonDataValueGroup, JsonDataValue_SetValue_Test) {
 // 	JsonFieldsContainer container;
-// 	JsonValue<TJsonRawData> testable(&container, "testString");
+// 	MsgpackValue<TJsonRawData> testable(&container, "testString");
 // 	CHECK_EQUAL(((TJsonRawData)testable.Get()).Data, NULL);
 // 	CHECK_EQUAL(((TJsonRawData)testable.Get()).Size, 0);
 
@@ -116,8 +116,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // TEST(JsonDataValueGroup, JsonDataValue_Equals_Test) {
 // 	JsonFieldsContainer container;
 // 	const char *str = "testString";
-// 	JsonValue<TJsonRawData> testable1(&container, "test", {(uint8_t *)str, strlen(str) + 1});
-// 	JsonValue<TJsonRawData> testable01(&container, "test", {(uint8_t *)str, strlen(str) + 1});
+// 	MsgpackValue<TJsonRawData> testable1(&container, "test", {(uint8_t *)str, strlen(str) + 1});
+// 	MsgpackValue<TJsonRawData> testable01(&container, "test", {(uint8_t *)str, strlen(str) + 1});
 
 // 	CHECK_TRUE(testable1 == testable01);
 // 	CHECK_FALSE(testable1 != testable01);
@@ -128,18 +128,18 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(JsonDataValueGroup, JsonDataValue_CloneTo_Test) {
 // 	JsonFieldsContainer container;
-// 	JsonValue<TJsonRawData> testable1(&container, "test", {(uint8_t *)"0123456789", sizeof("0123456789")});
+// 	MsgpackValue<TJsonRawData> testable1(&container, "test", {(uint8_t *)"0123456789", sizeof("0123456789")});
 
-// 	JsonValue<TJsonRawData> clone1(&container, "test");
+// 	MsgpackValue<TJsonRawData> clone1(&container, "test");
 
-// 	testable1.CloneTo((JsonValueBase *)&clone1);
+// 	testable1.CloneTo((MsgpackValueBase *)&clone1);
 // 	testable1.Set({(uint8_t *)"check the full data buffer is cloned", sizeof("check the full data buffer is cloned")});
 // 	STRCMP_EQUAL((char *)((TJsonRawData)clone1.Get()).Data, "0123456789");
 // }
 
 // TEST(JsonDataValueGroup, JsonDataValue_Common_TryParse_Test) {
 // 	JsonFieldsContainer container;
-// 	JsonCommonValue<TJsonRawData> testable1(&container, "test", {(uint8_t *)"0123456789", sizeof("0123456789")});
+// 	MsgpackCommonValue<TJsonRawData> testable1(&container, "test", {(uint8_t *)"0123456789", sizeof("0123456789")});
 
 // 	CHECK_FALSE(testable1.Presented());
 // 	CHECK_FALSE(testable1.IsNull());

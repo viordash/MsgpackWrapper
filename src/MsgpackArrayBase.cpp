@@ -2,16 +2,16 @@
 // #include <iostream>
 // #include <stdio.h>
 // #include <stdlib.h>
-// #include "JsonWrapper.h"
+// #include "MsgpackWrapper.h"
 
-// bool JsonArrayBase::TryStringParse(const char *jsonStr, size_t length) {
+// bool MsgpackArrayBase::TryStringParse(const char *jsonStr, size_t length) {
 // 	auto doc = BeginTryStringParse(jsonStr, length);
 // 	if (doc == NULL) { return false; }
 // 	EndTryStringParse(doc);
 // 	return true;
 // }
 
-// TJsonDocument *JsonArrayBase::BeginTryStringParse(const char *jsonStr, size_t length) {
+// TJsonDocument *MsgpackArrayBase::BeginTryStringParse(const char *jsonStr, size_t length) {
 // 	if (jsonStr == NULL) { return NULL; }
 
 // 	rapidjson::Document *doc = new rapidjson::Document();
@@ -27,9 +27,9 @@
 // 	return doc;
 // }
 
-// void JsonArrayBase::EndTryStringParse(TJsonDocument *doc) { delete doc; }
+// void MsgpackArrayBase::EndTryStringParse(TJsonDocument *doc) { delete doc; }
 
-// size_t JsonArrayBase::WriteToString(char *outBuffer, size_t outBufferSize) {
+// size_t MsgpackArrayBase::WriteToString(char *outBuffer, size_t outBufferSize) {
 // 	rapidjson::Document doc;
 // 	this->WriteToDoc(&doc);
 // 	rapidjson::StringBuffer buffer;
@@ -44,7 +44,7 @@
 // 	return size;
 // }
 
-// size_t JsonArrayBase::DirectWriteTo(void *parent, TOnReady onReady) {
+// size_t MsgpackArrayBase::DirectWriteTo(void *parent, TOnReady onReady) {
 // 	rapidjson::Document doc;
 // 	this->WriteToDoc(&doc);
 // 	rapidjson::StringBuffer buffer;

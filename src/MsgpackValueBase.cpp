@@ -2,9 +2,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include "JsonWrapper.h"
+#include "MsgpackWrapper.h"
 
-TJsonValue *JsonValueBase::GetMember(TJsonDocument *doc, const char *name) {
+TMsgpackValue *MsgpackValueBase::GetMember(TJsonDocument *doc, const char *name) {
 	// rapidjson::Value::MemberIterator member = doc->MemberBegin();
 	// while (member != doc->MemberEnd()) {
 	// 	auto &memberName = member->name;
@@ -15,4 +15,4 @@ TJsonValue *JsonValueBase::GetMember(TJsonDocument *doc, const char *name) {
 }
 
 
-bool JsonValueBase::NamesCompare(const char *name1, const char *name2) { return name1 == name2 || strcmp(name1, name2) == 0; };
+bool MsgpackValueBase::NamesCompare(const char *name1, const char *name2) { return name1 == name2 || strcmp(name1, name2) == 0; };

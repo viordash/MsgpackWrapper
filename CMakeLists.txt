@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8.0)
-project(RapidJSONWrapper VERSION 0.1.0)
+project(MsgpackWrapper VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 14)
 
 
@@ -20,16 +20,16 @@ include_directories(build/msgpack-c/include build/msgpack-c/include/msgpack)
 add_subdirectory(msgpack-c)
 
 set(CPP_SOURCE_FILES 
-src/JsonValueBase.cpp
-src/JsonValue.cpp
-src/JsonCommonValue.cpp
-src/JsonObject.cpp
-src/JsonArrayBase.cpp
-src/JsonArray.cpp
-src/JsonObjectsArray.cpp
+src/MsgpackValueBase.cpp
+src/MsgpackValue.cpp
+src/MsgpackCommonValue.cpp
+src/MsgpackObject.cpp
+src/MsgpackArrayBase.cpp
+src/MsgpackArray.cpp
+src/MsgpackObjectsArray.cpp
 )
 
-add_executable(RapidJSONWrapper     
+add_executable(MsgpackWrapper     
     main.cpp 
 	${CPP_SOURCE_FILES}
     )

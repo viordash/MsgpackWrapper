@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <chrono>
-#include "JsonWrapper.h"
+#include "MsgpackWrapper.h"
 #include "CppUTest/CommandLineTestRunner.h"
 
 int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
@@ -21,10 +21,10 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // typedef enum { uAdmin, uViewer } TUserRole;
 
-// class UserDto : public JsonObject {
+// class UserDto : public MsgpackObject {
 //   public:
-// 	JsonValue<char *> Name;
-// 	JsonValue<uint32_t> Role;
+// 	MsgpackValue<char *> Name;
+// 	MsgpackValue<uint32_t> Role;
 
 // 	UserDto(const char *name = {}, const TUserRole role = {})
 // 		: Name(this, "name", name), //
@@ -60,16 +60,16 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	return userDto;
 // }
 
-// class GoodsDto : public JsonObject {
+// class GoodsDto : public MsgpackObject {
 //   public:
-// 	JsonValue<int> Id;
-// 	JsonValue<uint32_t> Created;
-// 	JsonValue<char *> Group;
-// 	JsonValue<char *> Name;
-// 	JsonValue<float> Price;
-// 	JsonValue<double> Quantity;
-// 	JsonValue<bool> Deleted;
-// 	JsonValue<char *> StoreName;
+// 	MsgpackValue<int> Id;
+// 	MsgpackValue<uint32_t> Created;
+// 	MsgpackValue<char *> Group;
+// 	MsgpackValue<char *> Name;
+// 	MsgpackValue<float> Price;
+// 	MsgpackValue<double> Quantity;
+// 	MsgpackValue<bool> Deleted;
+// 	MsgpackValue<char *> StoreName;
 
 // 	GoodsDto(const int id = {}, const uint32_t created = {}, const char *group = {}, const char *name = {}, const float price = {}, const double quantity = {}, const bool deleted = {},
 // 			 const char *storeName = {})
@@ -148,10 +148,10 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	return goodsDto;
 // }
 
-// class GoodsList : public JsonObjectsArray {
+// class GoodsList : public MsgpackObjectsArray {
 //   public:
-// 	bool Validate(JsonObject *item) override { return item->Validate(); }
-// 	JsonObject *CreateItem() override { return new GoodsDto(); }
+// 	bool Validate(MsgpackObject *item) override { return item->Validate(); }
+// 	MsgpackObject *CreateItem() override { return new GoodsDto(); }
 // };
 
 // static void SerializeGoodsList(rapidjson::Writer<rapidjson::StringBuffer> *writer, std::vector<TGoodsDto *> *goods) {
@@ -179,12 +179,12 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	return goodsList;
 // }
 
-// class OrderDto : public JsonObject {
+// class OrderDto : public MsgpackObject {
 //   public:
-// 	JsonValue<char *> Supplier;
-// 	JsonValue<uint32_t> DateTime;
-// 	JsonValue<JsonArrayBase *> Goods;
-// 	JsonValue<JsonObject *> User;
+// 	MsgpackValue<char *> Supplier;
+// 	MsgpackValue<uint32_t> DateTime;
+// 	MsgpackValue<MsgpackArrayBase *> Goods;
+// 	MsgpackValue<MsgpackObject *> User;
 // 	GoodsList goodsList;
 // 	UserDto userDto;
 
@@ -239,10 +239,10 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	return orderDto;
 // }
 
-// class OrdersList : public JsonObjectsArray {
+// class OrdersList : public MsgpackObjectsArray {
 //   public:
-// 	bool Validate(JsonObject *item) override { return item->Validate(); }
-// 	JsonObject *CreateItem() override { return new OrderDto(); }
+// 	bool Validate(MsgpackObject *item) override { return item->Validate(); }
+// 	MsgpackObject *CreateItem() override { return new OrderDto(); }
 // };
 
 // static void SerializeOrdersList(rapidjson::Writer<rapidjson::StringBuffer> *writer, std::vector<TOrderDto *> *orders) {
@@ -270,12 +270,12 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	return ordersList;
 // }
 
-// class CustomerDto : public JsonObject {
+// class CustomerDto : public MsgpackObject {
 //   public:
-// 	JsonValue<uint64_t> Id;
-// 	JsonValue<char *> Name;
-// 	JsonValue<TJsonRawData> Blob;
-// 	JsonValue<JsonArrayBase *> Orders;
+// 	MsgpackValue<uint64_t> Id;
+// 	MsgpackValue<char *> Name;
+// 	MsgpackValue<TJsonRawData> Blob;
+// 	MsgpackValue<MsgpackArrayBase *> Orders;
 // 	OrdersList ordersList;
 
 // 	CustomerDto(const uint64_t id = {}, const char *name = {}, const TJsonRawData blob = {})
@@ -327,10 +327,10 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	return customerDto;
 // }
 
-// class CustomerList : public JsonObjectsArray {
+// class CustomerList : public MsgpackObjectsArray {
 //   public:
-// 	bool Validate(JsonObject *item) override { return item->Validate(); }
-// 	JsonObject *CreateItem() override { return new CustomerDto(); }
+// 	bool Validate(MsgpackObject *item) override { return item->Validate(); }
+// 	MsgpackObject *CreateItem() override { return new CustomerDto(); }
 // };
 
 // static void SerializeCustomerList(rapidjson::Writer<rapidjson::StringBuffer> *writer, std::vector<TCustomerDto *> *customers) {
@@ -498,7 +498,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
 // }
 
-// TEST(JsonHeavyDutyTestsGroup, JsonObject_Perfomance_Test) {
+// TEST(JsonHeavyDutyTestsGroup, MsgpackObject_Perfomance_Test) {
 // 	uint64_t durationAdd = 0;
 // 	uint64_t durationDirectWriteTo = 0;
 // 	uint64_t durationTryParse = 0;

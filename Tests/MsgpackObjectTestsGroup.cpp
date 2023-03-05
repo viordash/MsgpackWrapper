@@ -4,19 +4,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <chrono>
-#include "JsonWrapper.h"
+#include "MsgpackWrapper.h"
 #include "CppUTest/CommandLineTestRunner.h"
 
 int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
-// TEST_GROUP(JsonObjectTestsGroup){void setup(){} void teardown(){}};
+// TEST_GROUP(MsgpackObjectTestsGroup){void setup(){} void teardown(){}};
 
 // typedef enum { uAdmin, uViewer } TUserRole;
 
-// class UserDto : public JsonObject {
+// class UserDto : public MsgpackObject {
 //   public:
-// 	JsonValue<char *> Name;
-// 	JsonCommonValue<uint32_t> Role;
+// 	MsgpackValue<char *> Name;
+// 	MsgpackCommonValue<uint32_t> Role;
 
 // 	UserDto(const char *name = {}, const TUserRole role = {})
 // 		: Name(this, "name", name), //
@@ -25,16 +25,16 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	bool Validate() override { return Role.Get() < 1000; }
 // };
 
-// class GoodsDto : public JsonObject {
+// class GoodsDto : public MsgpackObject {
 //   public:
-// 	JsonValue<int> Id;
-// 	JsonValue<uint32_t> Created;
-// 	JsonValue<char *> Group;
-// 	JsonValue<char *> Name;
-// 	JsonValue<float> Price;
-// 	JsonValue<double> Quantity;
-// 	JsonCommonValue<bool> Deleted;
-// 	JsonCommonValue<char *> StoreName;
+// 	MsgpackValue<int> Id;
+// 	MsgpackValue<uint32_t> Created;
+// 	MsgpackValue<char *> Group;
+// 	MsgpackValue<char *> Name;
+// 	MsgpackValue<float> Price;
+// 	MsgpackValue<double> Quantity;
+// 	MsgpackCommonValue<bool> Deleted;
+// 	MsgpackCommonValue<char *> StoreName;
 
 // 	GoodsDto(const int id = {}, uint32_t created = {}, const char *group = {}, const char *name = {}, const float price = {}, const double quantity = {}, const bool deleted = {},
 // 			 const char *storeName = {})
@@ -48,18 +48,18 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 		  StoreName(this, "StoreName", storeName){};
 // };
 
-// class GoodsList : public JsonObjectsArray {
+// class GoodsList : public MsgpackObjectsArray {
 //   public:
-// 	bool Validate(JsonObject *item) override { return item->Validate(); }
-// 	JsonObject *CreateItem() override { return new GoodsDto(); }
+// 	bool Validate(MsgpackObject *item) override { return item->Validate(); }
+// 	MsgpackObject *CreateItem() override { return new GoodsDto(); }
 // };
 
-// class OrderDto : public JsonObject {
+// class OrderDto : public MsgpackObject {
 //   public:
-// 	JsonValue<char *> Supplier;
-// 	JsonCommonValue<uint32_t> DateTime;
-// 	JsonValue<JsonArrayBase *> Goods;
-// 	JsonValue<JsonObject *> User;
+// 	MsgpackValue<char *> Supplier;
+// 	MsgpackCommonValue<uint32_t> DateTime;
+// 	MsgpackValue<MsgpackArrayBase *> Goods;
+// 	MsgpackValue<MsgpackObject *> User;
 // 	GoodsList goodsList;
 // 	UserDto userDto;
 
@@ -73,18 +73,18 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	~OrderDto() {}
 // };
 
-// class OrdersList : public JsonObjectsArray {
+// class OrdersList : public MsgpackObjectsArray {
 //   public:
-// 	bool Validate(JsonObject *item) override { return item->Validate(); }
-// 	JsonObject *CreateItem() override { return new OrderDto(); }
+// 	bool Validate(MsgpackObject *item) override { return item->Validate(); }
+// 	MsgpackObject *CreateItem() override { return new OrderDto(); }
 // };
 
-// class CustomerDto : public JsonObject {
+// class CustomerDto : public MsgpackObject {
 //   public:
-// 	JsonValue<uint64_t> Id;
-// 	JsonValue<char *> Name;
-// 	JsonCommonValue<TJsonRawData> Blob;
-// 	JsonValue<JsonArrayBase *> Orders;
+// 	MsgpackValue<uint64_t> Id;
+// 	MsgpackValue<char *> Name;
+// 	MsgpackCommonValue<TJsonRawData> Blob;
+// 	MsgpackValue<MsgpackArrayBase *> Orders;
 // 	OrdersList ordersList;
 
 // 	CustomerDto(const uint64_t id = {}, const char *name = {}, const TJsonRawData blob = {})
@@ -94,12 +94,12 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 		  Orders(this, "orders", &ordersList){};
 // };
 
-// class ValuesWoInstance : public JsonObject {
+// class ValuesWoInstance : public MsgpackObject {
 //   public:
 // 	ValuesWoInstance(const uint64_t id = {}, const char *name = {}, const TJsonRawData blob = {}) {
-// 		new JsonValue<uint64_t>(this, "id", id);
-// 		new JsonValue<char *>(this, "name", name);
-// 		new JsonValue<TJsonRawData>(this, "blob", blob);
+// 		new MsgpackValue<uint64_t>(this, "id", id);
+// 		new MsgpackValue<char *>(this, "name", name);
+// 		new MsgpackValue<TJsonRawData>(this, "blob", blob);
 // 	};
 
 // 	~ValuesWoInstance() {
@@ -107,7 +107,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	}
 // };
 
-// TEST(JsonObjectTestsGroup, JsonObject_Parse_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Test) {
 // 	GoodsDto goods;
 // 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
 
@@ -130,7 +130,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(goods.Created.Get(), 1657052047);
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Complex_TryParse_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Complex_TryParse_Test) {
 // 	OrderDto order;
 
 // 	CHECK(order.TryStringParse("{\"supplier\":\"Dell\",\"dateTime\":1657058000,\"goods\":[{\"Id\":1,\"Created\":1657052789,\"Group\":\"Keyboards\",\"Name\":\"K1-100\",\"Price\":58."
@@ -143,7 +143,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(order.userDto.Name.Get(), "Joe Doe");
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Parse_With_Optionaly_Fields_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Optionaly_Fields_Test) {
 // 	GoodsDto goods;
 // 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045,\"Deleted\":true}"));
 // 	CHECK_EQUAL(goods.Id.Get(), 1);
@@ -166,7 +166,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(goods.StoreName.Get(), "Store #2");
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Parse_Error_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Error_Test) {
 // 	GoodsDto goods;
 // 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1  \"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
 // 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,,\"Quantity\":165.052045}"));
@@ -190,7 +190,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(goods.StoreName.Get(), NULL);
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Parse_With_Reordered_Fields_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Reordered_Fields_Test) {
 // 	GoodsDto goods;
 // 	CHECK_TRUE(goods.TryStringParse("{\"Created\":1657052045,\"Group\":\"Vegetables\",\"Id\":1,\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
 // 	CHECK_EQUAL(goods.Created.Get(), 1657052045);
@@ -211,7 +211,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(goods.StoreName.Get(), "Store #1");
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Parse_And_Length_Defined_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_And_Length_Defined_Test) {
 // 	GoodsDto goods;
 // 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}", 103));
 // 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}", 2000));
@@ -220,7 +220,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}", 1));
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Parse_With_Nullable_Values_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Nullable_Values_Test) {
 // 	GoodsDto goods;
 // 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,\"Created\":null,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
 // 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":null,\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
@@ -233,7 +233,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 		"\"Group\":\"Keyboards\",\"Name\":\"K1-100\",\"Price\":58.25,\"Quantity\":48.2,\"Deleted\":false,\"StoreName\":\"\"}],\"user\":{\"name\":\"Joe Doe\",\"role\":1}}]}"));
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Parse_With_Begin_End_Stages_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Begin_End_Stages_Test) {
 // 	GoodsDto goods;
 // 	auto doc = goods.BeginTryStringParse("{\"Id\":1,\"Created\":1657052048,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}");
 
@@ -243,7 +243,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	goods.EndTryStringParse(doc);
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_WriteTo_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_WriteTo_Test) {
 // 	char buffer[2048];
 // 	GoodsDto goods(2, 1657052789, "group", "name", 58.25, 48.2, false, "storeName");
 // 	CHECK_EQUAL(goods.WriteToString(buffer, sizeof(buffer)), 129);
@@ -252,7 +252,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 						 "\"StoreName\":\"storeName\"}");
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_WriteTo_With_Limited_Buffer_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_WriteTo_With_Limited_Buffer_Test) {
 // 	char buffer[32];
 // 	GoodsDto goods(2, 1657052789, "group", "name", 58.25, 48.2, false, "storeName");
 // 	CHECK_EQUAL(goods.WriteToString(buffer, sizeof(buffer)), 31);
@@ -269,7 +269,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	DirectWriteTestBuffer[size] = 0;
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_WriteTo_Async_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_WriteTo_Async_Test) {
 // 	GoodsDto goods(2, 1657052789, "group", "name", 58.25, 48.2);
 // 	goods.DirectWriteTo((void *)987654321, OnReady);
 
@@ -279,7 +279,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	delete[] DirectWriteTestBuffer;
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Complex_WriteTo_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Complex_WriteTo_Test) {
 // 	OrderDto orderDto("Dell", 1657058000, "Joe Doe", TUserRole::uViewer);
 // 	orderDto.goodsList.Add(new GoodsDto(1, 1657052789, "Keyboards", "K1-100", 58.25, 48.2));
 // 	orderDto.goodsList.Add(new GoodsDto(2, 1657053789, "Keyboards", "K2-100", 158.25, 448.2));
@@ -303,7 +303,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 						  "\"Price\":358.25,\"Quantity\":648.2,\"Deleted\":false,\"StoreName\":null}],\"user\":{\"name\":\"Joe Doe\",\"role\":1}}");
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Equals_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Equals_Test) {
 // 	OrderDto orderDto1("Dell", 1657058000, "Joe Doe", TUserRole::uViewer);
 // 	orderDto1.goodsList.Add(new GoodsDto(1, 1657052789, "Keyboards", "K1-100", 58.25, 48.2));
 // 	orderDto1.goodsList.Add(new GoodsDto(2, 1657053789, "Keyboards", "K2-100", 158.25, 448.2));
@@ -321,7 +321,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(orderDto1.Equals(&orderDto2));
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Clone_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Clone_Test) {
 // 	auto orderDto1 = new OrderDto("Dell", 1657058000, "Joe Doe", TUserRole::uViewer);
 // 	orderDto1->goodsList.Add(new GoodsDto(1, 1657052789, "Keyboards", "K1-100", 58.25, 48.2));
 // 	orderDto1->goodsList.Add(new GoodsDto(2, 1657053789, "Keyboards", "K2-100", 158.25, 448.2));
@@ -339,7 +339,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(orderDto2.userDto.Name.Get(), "Joe Doe");
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_With_Blob_Field_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_With_Blob_Field_Test) {
 // 	const int pictureSize = 1'000'0000;
 // 	uint8_t *picture = new uint8_t[pictureSize];
 // 	for (size_t i = 0; i < pictureSize; i++) { picture[i] = 'A' + (i % 58); }
@@ -393,7 +393,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	delete[] DirectWriteTestBuffer;
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Optional_Values_Presented_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Optional_Values_Presented_Test) {
 // 	OrderDto order;
 
 // 	CHECK_FALSE(order.DateTime.Presented());
@@ -405,11 +405,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(order.DateTime.Presented());
 // }
 
-// class OptionalObjectDto : public JsonObject {
+// class OptionalObjectDto : public MsgpackObject {
 //   public:
-// 	JsonValue<int> Id;
-// 	JsonCommonValue<JsonArrayBase *> Goods;
-// 	JsonCommonValue<JsonObject *> User;
+// 	MsgpackValue<int> Id;
+// 	MsgpackCommonValue<MsgpackArrayBase *> Goods;
+// 	MsgpackCommonValue<MsgpackObject *> User;
 // 	GoodsList goodsList;
 // 	UserDto userDto;
 
@@ -420,7 +420,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 		  User(this, "user", &userDto){};
 // };
 
-// TEST(JsonObjectTestsGroup, JsonObject_Optional_TryParse_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Optional_TryParse_Test) {
 // 	OptionalObjectDto optionalObjectDto;
 
 // 	CHECK_TRUE(optionalObjectDto.TryStringParse("{\"id\":1,\"goods\":[{\"Id\":1,\"Created\":1657052789,\"Group\":\"Keyboards\",\"Name\":\"K1-100\",\"Price\":58."
@@ -458,30 +458,30 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(optionalObjectDto.User.IsNull());
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Values_Without_Instance_Parse_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Values_Without_Instance_Parse_Test) {
 // 	ValuesWoInstance valuesWoInstance;
 
 // 	auto doc = valuesWoInstance.BeginTryStringParse("{\"id\":123,\"name\":\"Tomato\",\"blob\":\"ABCDEFGHIJKLMNOPQR\"}");
 // 	CHECK(doc != NULL);
 
-// 	auto id = (JsonValue<uint64_t> *)valuesWoInstance.GetField("id");
+// 	auto id = (MsgpackValue<uint64_t> *)valuesWoInstance.GetField("id");
 // 	CHECK_FALSE(id == NULL);
 // 	CHECK_EQUAL(id->Get(), 123);
 
-// 	auto name = (JsonValue<char *> *)valuesWoInstance.GetField("name");
+// 	auto name = (MsgpackValue<char *> *)valuesWoInstance.GetField("name");
 // 	CHECK_FALSE(name == NULL);
 // 	STRCMP_EQUAL(name->Get(), "Tomato");
 
-// 	auto blob = (JsonValue<TJsonRawData> *)valuesWoInstance.GetField("blob");
+// 	auto blob = (MsgpackValue<TJsonRawData> *)valuesWoInstance.GetField("blob");
 // 	CHECK_FALSE(blob == NULL);
 // 	STRCMP_EQUAL((char *)((TJsonRawData)(blob->Get())).Data, "ABCDEFGHIJKLMNOPQR");
 
-// 	auto notExistsValue = (JsonValue<uint32_t> *)valuesWoInstance.GetField("notExistsValue");
+// 	auto notExistsValue = (MsgpackValue<uint32_t> *)valuesWoInstance.GetField("notExistsValue");
 // 	CHECK_TRUE(notExistsValue == NULL);
 // 	valuesWoInstance.EndTryStringParse(doc);
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Values_Without_Instance_WriteTo_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Values_Without_Instance_WriteTo_Test) {
 // 	char buffer[2048];
 // 	ValuesWoInstance valuesWoInstance(1657052789, "Tomato", {(uint8_t *)"ABCDEFGHIJKLMNOPQR", strlen("ABCDEFGHIJKLMNOPQR")});
 // 	valuesWoInstance.WriteToString(buffer, sizeof(buffer));
@@ -489,7 +489,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "{\"id\":1657052789,\"name\":\"Tomato\",\"blob\":\"ABCDEFGHIJKLMNOPQR\"}");
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Validate_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Validate_Test) {
 // 	auto userDto = new UserDto();
 // 	CHECK_TRUE(userDto->Validate());
 // 	userDto->Role.Set(1000);
@@ -499,11 +499,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	delete userDto;
 // }
 
-// class SetValueObjectDto : public JsonObject {
+// class SetValueObjectDto : public MsgpackObject {
 //   public:
-// 	JsonValue<int> Id;
-// 	JsonCommonValue<JsonArrayBase *> Goods;
-// 	JsonCommonValue<JsonObject *> User;
+// 	MsgpackValue<int> Id;
+// 	MsgpackCommonValue<MsgpackArrayBase *> Goods;
+// 	MsgpackCommonValue<MsgpackObject *> User;
 // 	GoodsList goodsList;
 // 	UserDto userDto;
 
@@ -514,7 +514,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 		  User(this, "user", &userDto){};
 // };
 
-// TEST(JsonObjectTestsGroup, JsonObject_Update_ArrayValue_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Update_ArrayValue_Test) {
 // 	SetValueObjectDto testDto(1657058000, "Joe Doe", TUserRole::uViewer);
 // 	testDto.goodsList.Add(new GoodsDto(1, 1657052789, "Keyboards", "K1-100", 58.25, 48.2));
 // 	testDto.goodsList.Add(new GoodsDto(2, 1657053789, "Keyboards", "K2-100", 158.25, 448.2));
@@ -544,7 +544,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(testDto.goodsList.Item<GoodsDto *>(1)->Quantity.Get(), 22448.2);
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Update_ObjectValue_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Update_ObjectValue_Test) {
 // 	SetValueObjectDto testDto(1657058000, "Joe Doe", TUserRole::uViewer);
 
 // 	UserDto userDto("User 1", TUserRole::uAdmin);
@@ -554,11 +554,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(testDto.userDto.Role.Get(), TUserRole::uAdmin);
 // }
 
-// class NullValueObjectDto : public JsonObject {
+// class NullValueObjectDto : public MsgpackObject {
 //   public:
-// 	JsonValue<int> Id;
-// 	JsonCommonValue<JsonArrayBase *> Goods;
-// 	JsonCommonValue<JsonObject *> User;
+// 	MsgpackValue<int> Id;
+// 	MsgpackCommonValue<MsgpackArrayBase *> Goods;
+// 	MsgpackCommonValue<MsgpackObject *> User;
 
 // 	NullValueObjectDto(int id = {})
 // 		: Id(this, "id", id),	//
@@ -566,7 +566,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 		  User(this, "user"){};
 // };
 
-// TEST(JsonObjectTestsGroup, JsonObject_Update_Nulled_ArrayValue_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Update_Nulled_ArrayValue_Test) {
 // 	NullValueObjectDto testDto(1657058000);
 
 // 	GoodsList newGoodsList;
@@ -591,7 +591,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(((GoodsList *)testDto.Goods.Get())->Item<GoodsDto *>(1)->Quantity.Get(), 22448.2);
 // }
 
-// TEST(JsonObjectTestsGroup, JsonObject_Update_Nulled_ObjectValue_Test) {
+// TEST(MsgpackObjectTestsGroup, MsgpackObject_Update_Nulled_ObjectValue_Test) {
 // 	NullValueObjectDto testDto(1657058000);
 
 // 	UserDto userDto("User 1", TUserRole::uAdmin);

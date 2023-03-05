@@ -2,13 +2,13 @@
 // #include <iostream>
 // #include <stdio.h>
 // #include <stdlib.h>
-// #include "JsonWrapper.h"
+// #include "MsgpackWrapper.h"
 
-// JsonObjectsArray::~JsonObjectsArray() {
+// MsgpackObjectsArray::~MsgpackObjectsArray() {
 // 	for (const auto &item : Items) { DeleteItem(item); }
 // }
 
-// bool JsonObjectsArray::TryDocParse(TJsonDocument *doc) {
+// bool MsgpackObjectsArray::TryDocParse(TJsonDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -25,29 +25,29 @@
 // 	return true;
 // }
 
-// bool JsonObjectsArray::Add(JsonObject *item) {
+// bool MsgpackObjectsArray::Add(MsgpackObject *item) {
 // 	if (!Validate(item)) { return false; }
 // 	AddInternal(item);
 // 	return true;
 // }
 
-// void JsonObjectsArray::AddInternal(JsonObject *item) { Items.push_back(item); }
+// void MsgpackObjectsArray::AddInternal(MsgpackObject *item) { Items.push_back(item); }
 
-// bool JsonObjectsArray::Update(size_t index, JsonObject *item) {
+// bool MsgpackObjectsArray::Update(size_t index, MsgpackObject *item) {
 // 	if (index >= Size() || !Validate(item)) { return false; }
 // 	DeleteItem(Items[index]);
 // 	Items[index] = item;
 // 	return true;
 // }
 
-// void JsonObjectsArray::Remove(JsonObject *item) {
+// void MsgpackObjectsArray::Remove(MsgpackObject *item) {
 // 	auto iter = Find(item);
 // 	if (iter != Items.end()) {
 // 		DeleteItem(*iter);
 // 		Items.erase(iter);
 // 	}
 // }
-// std::vector<JsonObject *>::iterator JsonObjectsArray::Find(JsonObject *item) {
+// std::vector<MsgpackObject *>::iterator MsgpackObjectsArray::Find(MsgpackObject *item) {
 // 	if (item != NULL) {
 // 		for (auto iter = Items.begin(); iter != Items.end(); iter++) {
 // 			if (*(*iter) == *item) { return iter; }
@@ -56,34 +56,34 @@
 // 	return Items.end();
 // }
 
-// void JsonObjectsArray::DeleteItem(JsonObject *item) { delete item; }
+// void MsgpackObjectsArray::DeleteItem(MsgpackObject *item) { delete item; }
 
-// void JsonObjectsArray::WriteToDoc(TJsonDocument *doc) {
+// void MsgpackObjectsArray::WriteToDoc(TJsonDocument *doc) {
 // 	auto &allocator = doc->GetAllocator();
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), allocator);
 
 // 	for (const auto &item : Items) {
 // 		rapidjson::Document childDoc(&allocator);
-// 		JsonObject *jObject = item;
+// 		MsgpackObject *jObject = item;
 // 		jObject->WriteToDoc(&childDoc);
 // 		doc->PushBack(childDoc, allocator);
 // 	}
 // }
 
-// bool operator!=(const JsonObjectsArray &v1, const JsonObjectsArray &v2) { return !((JsonObjectsArray *)&v1)->Equals((JsonObjectsArray *)&v2); }
-// bool operator==(const JsonObjectsArray &v1, const JsonObjectsArray &v2) { return !(v1 != v2); }
+// bool operator!=(const MsgpackObjectsArray &v1, const MsgpackObjectsArray &v2) { return !((MsgpackObjectsArray *)&v1)->Equals((MsgpackObjectsArray *)&v2); }
+// bool operator==(const MsgpackObjectsArray &v1, const MsgpackObjectsArray &v2) { return !(v1 != v2); }
 
-// bool JsonObjectsArray::Equals(JsonArrayBase *other) {
-// 	if (Items.size() != ((JsonObjectsArray *)other)->Items.size()) { return false; }
+// bool MsgpackObjectsArray::Equals(MsgpackArrayBase *other) {
+// 	if (Items.size() != ((MsgpackObjectsArray *)other)->Items.size()) { return false; }
 // 	for (size_t i = 0; i < Items.size(); i++) {
-// 		if (*(Items[i]) != *(((JsonObjectsArray *)other)->Items[i])) { return false; }
+// 		if (*(Items[i]) != *(((MsgpackObjectsArray *)other)->Items[i])) { return false; }
 // 	}
 // 	return true;
 // }
 
-// void JsonObjectsArray::CloneTo(JsonArrayBase *other) {
-// 	auto otherArray = ((JsonObjectsArray *)other);
+// void MsgpackObjectsArray::CloneTo(MsgpackArrayBase *other) {
+// 	auto otherArray = ((MsgpackObjectsArray *)other);
 // 	for (const auto &item : otherArray->Items) { delete item; }
 // 	otherArray->Items.clear();
 
@@ -94,8 +94,8 @@
 // 	}
 // }
 
-// typename std::vector<JsonObject *>::iterator JsonObjectsArray::MoveTo(JsonArrayBase *other, JsonObject *item) {
-// 	auto otherArray = ((JsonObjectsArray *)other);
+// typename std::vector<MsgpackObject *>::iterator MsgpackObjectsArray::MoveTo(MsgpackArrayBase *other, MsgpackObject *item) {
+// 	auto otherArray = ((MsgpackObjectsArray *)other);
 // 	auto iter = std::find(Items.begin(), Items.end(), item);
 // 	if (iter != Items.end()) {
 // 		if (otherArray->Validate(*iter)) {
@@ -108,8 +108,8 @@
 // 	return iter;
 // }
 
-// void JsonObjectsArray::MoveAllTo(JsonArrayBase *other) {
-// 	auto otherArray = ((JsonObjectsArray *)other);
+// void MsgpackObjectsArray::MoveAllTo(MsgpackArrayBase *other) {
+// 	auto otherArray = ((MsgpackObjectsArray *)other);
 // 	auto iter = Items.begin();
 // 	while (iter != Items.end()) {
 // 		if (otherArray->Validate(*iter)) {
@@ -121,7 +121,7 @@
 // 	}
 // }
 
-// void JsonObjectsArray::Clear() {
+// void MsgpackObjectsArray::Clear() {
 // 	for (const auto &item : Items) { DeleteItem(item); }
 // 	Items.clear();
 // }

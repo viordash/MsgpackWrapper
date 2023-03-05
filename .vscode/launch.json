@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/RapidJSONWrapper",
+            "program": "${workspaceFolder}/build/MsgpackWrapper",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -24,10 +24,10 @@
             ]
         },
         {
-            "name": "(gdb) JsonStringValueTestsGroup",
+            "name": "(gdb) MsgpackStringValueTestsGroup",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests/JsonStringValueTestsGroup",
+            "program": "${workspaceFolder}/build/Tests/MsgpackStringValueTestsGroup",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -43,10 +43,10 @@
             ]
         },
         {
-            "name": "(gdb) JsonDataValueTestsGroup",
+            "name": "(gdb) MsgpackDataValueTestsGroup",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests/JsonDataValueTestsGroup",
+            "program": "${workspaceFolder}/build/Tests/MsgpackDataValueTestsGroup",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -62,10 +62,10 @@
             ]
         },
         {
-            "name": "(gdb) JsonNumericValueTestsGroup",
+            "name": "(gdb) MsgpackNumericValueTestsGroup",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests//JsonNumericValueTestsGroup",
+            "program": "${workspaceFolder}/build/Tests//MsgpackNumericValueTestsGroup",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -81,10 +81,10 @@
             ]
         },
         {
-            "name": "(gdb) JsonObjectTestsGroup",
+            "name": "(gdb) MsgpackObjectTestsGroup",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests//JsonObjectTestsGroup",
+            "program": "${workspaceFolder}/build/Tests//MsgpackObjectTestsGroup",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -100,10 +100,10 @@
             ]
         },
         {
-            "name": "(gdb) JsonArrayTestsGroup",
+            "name": "(gdb) MsgpackArrayTestsGroup",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests//JsonArrayTestsGroup",
+            "program": "${workspaceFolder}/build/Tests//MsgpackArrayTestsGroup",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -119,10 +119,10 @@
             ]
         },
         {
-            "name": "(gdb) JsonHeavyDutyTestsGroup",
+            "name": "(gdb) MsgpackHeavyDutyTestsGroup",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests//JsonHeavyDutyTestsGroup",
+            "program": "${workspaceFolder}/build/Tests//MsgpackHeavyDutyTestsGroup",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -141,7 +141,7 @@
             "name": "(Windows) Launch",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Debug/RapidJSONWrapper.exe",
+            "program": "${workspaceFolder}/build/Debug/MsgpackWrapper.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -149,10 +149,10 @@
             "console": "integratedTerminal"
         },  
         {
-            "name": "(Windows) JsonObjectTestsGroup",
+            "name": "(Windows) MsgpackObjectTestsGroup",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests/Debug/JsonObjectTestsGroup.exe",
+            "program": "${workspaceFolder}/build/Tests/Debug/MsgpackObjectTestsGroup.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -160,10 +160,10 @@
             "console": "integratedTerminal"
         },  
         {
-            "name": "(Windows) JsonNumericValueTestsGroup",
+            "name": "(Windows) MsgpackNumericValueTestsGroup",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests/Debug/JsonNumericValueTestsGroup.exe",
+            "program": "${workspaceFolder}/build/Tests/Debug/MsgpackNumericValueTestsGroup.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -171,10 +171,10 @@
             "console": "integratedTerminal"
         },  
         {
-            "name": "(Windows) JsonStringValueTestsGroup",
+            "name": "(Windows) MsgpackStringValueTestsGroup",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests/Debug/JsonStringValueTestsGroup.exe",
+            "program": "${workspaceFolder}/build/Tests/Debug/MsgpackStringValueTestsGroup.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -182,10 +182,10 @@
             "console": "integratedTerminal"
         },  
         {
-            "name": "(Windows) JsonDataValueTestsGroup",
+            "name": "(Windows) MsgpackDataValueTestsGroup",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests/Debug/JsonDataValueTestsGroup.exe",
+            "program": "${workspaceFolder}/build/Tests/Debug/MsgpackDataValueTestsGroup.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -193,10 +193,10 @@
             "console": "integratedTerminal"
         },  
         {
-            "name": "(Windows) JsonArrayTestsGroup",
+            "name": "(Windows) MsgpackArrayTestsGroup",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests/Debug/JsonArrayTestsGroup.exe",
+            "program": "${workspaceFolder}/build/Tests/Debug/MsgpackArrayTestsGroup.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -204,10 +204,10 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "(Windows) JsonHeavyDutyTestsGroup",
+            "name": "(Windows) MsgpackHeavyDutyTestsGroup",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tests/Debug/JsonHeavyDutyTestsGroup.exe",
+            "program": "${workspaceFolder}/build/Tests/Debug/MsgpackHeavyDutyTestsGroup.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

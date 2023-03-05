@@ -1,4 +1,4 @@
-project(RapidJSONWrapperTests)
+project(MsgpackWrapperTests)
 
 
 include(CTest)
@@ -23,71 +23,71 @@ set(CPPUTEST_SOURCE_DIRS
 	)
 	
 set(CPPUTEST_SOURCE_FILES 	
-		${CMAKE_CURRENT_SOURCE_DIR}/../src/JsonValueBase.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/../src/JsonValue.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/../src/JsonCommonValue.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/../src/JsonObject.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/../src/JsonArrayBase.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/../src/JsonArray.cpp	
-		${CMAKE_CURRENT_SOURCE_DIR}/../src/JsonObjectsArray.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackValueBase.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackValue.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackCommonValue.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackObject.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackArrayBase.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackArray.cpp	
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackObjectsArray.cpp
 	)
 
-add_executable(JsonStringValueTestsGroup     
+add_executable(MsgpackStringValueTestsGroup     
 	${CPPUTEST_SOURCE_FILES}
-    JsonStringValueTestsGroup.cpp)
+    MsgpackStringValueTestsGroup.cpp)
 if(WIN32)
-	target_link_libraries(JsonStringValueTestsGroup Winmm.lib)
+	target_link_libraries(MsgpackStringValueTestsGroup Winmm.lib)
 endif(WIN32)
-target_link_libraries(JsonStringValueTestsGroup CppUTest)
-target_include_directories(JsonStringValueTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
-add_test(JsonStringValueTestsGroup JsonStringValueTestsGroup)
+target_link_libraries(MsgpackStringValueTestsGroup CppUTest)
+target_include_directories(MsgpackStringValueTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
+add_test(MsgpackStringValueTestsGroup MsgpackStringValueTestsGroup)
 
-add_executable(JsonDataValueTestsGroup    
+add_executable(MsgpackDataValueTestsGroup    
 	${CPPUTEST_SOURCE_FILES}
-    JsonDataValueTestsGroup.cpp)
+    MsgpackDataValueTestsGroup.cpp)
 if(WIN32)
-	target_link_libraries(JsonDataValueTestsGroup Winmm.lib)
+	target_link_libraries(MsgpackDataValueTestsGroup Winmm.lib)
 endif(WIN32)
-target_link_libraries(JsonDataValueTestsGroup CppUTest)
-target_include_directories(JsonDataValueTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
-add_test(JsonDataValueTestsGroup JsonDataValueTestsGroup)
+target_link_libraries(MsgpackDataValueTestsGroup CppUTest)
+target_include_directories(MsgpackDataValueTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
+add_test(MsgpackDataValueTestsGroup MsgpackDataValueTestsGroup)
 
-add_executable(JsonNumericValueTestsGroup    
+add_executable(MsgpackNumericValueTestsGroup    
 	${CPPUTEST_SOURCE_FILES}
-    JsonNumericValueTestsGroup.cpp)
+    MsgpackNumericValueTestsGroup.cpp)
 if(WIN32)
-	target_link_libraries(JsonNumericValueTestsGroup Winmm.lib)
+	target_link_libraries(MsgpackNumericValueTestsGroup Winmm.lib)
 endif(WIN32)
-target_link_libraries(JsonNumericValueTestsGroup CppUTest)
-target_include_directories(JsonNumericValueTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
-add_test(JsonNumericValueTestsGroup JsonNumericValueTestsGroup)
+target_link_libraries(MsgpackNumericValueTestsGroup CppUTest)
+target_include_directories(MsgpackNumericValueTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
+add_test(MsgpackNumericValueTestsGroup MsgpackNumericValueTestsGroup)
 
-add_executable(JsonObjectTestsGroup    
+add_executable(MsgpackObjectTestsGroup    
 	${CPPUTEST_SOURCE_FILES}
-    JsonObjectTestsGroup.cpp)
+    MsgpackObjectTestsGroup.cpp)
 if(WIN32)
-	target_link_libraries(JsonObjectTestsGroup Winmm.lib)
+	target_link_libraries(MsgpackObjectTestsGroup Winmm.lib)
 endif(WIN32)
-target_link_libraries(JsonObjectTestsGroup CppUTest)
-target_include_directories(JsonObjectTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
-add_test(JsonObjectTestsGroup JsonObjectTestsGroup)
+target_link_libraries(MsgpackObjectTestsGroup CppUTest)
+target_include_directories(MsgpackObjectTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
+add_test(MsgpackObjectTestsGroup MsgpackObjectTestsGroup)
 
-add_executable(JsonArrayTestsGroup    
+add_executable(MsgpackArrayTestsGroup    
 	${CPPUTEST_SOURCE_FILES}
-    JsonArrayTestsGroup.cpp)
+    MsgpackArrayTestsGroup.cpp)
 if(WIN32)
-	target_link_libraries(JsonArrayTestsGroup Winmm.lib)
+	target_link_libraries(MsgpackArrayTestsGroup Winmm.lib)
 endif(WIN32)
-target_link_libraries(JsonArrayTestsGroup CppUTest)
-target_include_directories(JsonArrayTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
-add_test(JsonArrayTestsGroup JsonArrayTestsGroup)
+target_link_libraries(MsgpackArrayTestsGroup CppUTest)
+target_include_directories(MsgpackArrayTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
+add_test(MsgpackArrayTestsGroup MsgpackArrayTestsGroup)
 
-add_executable(JsonHeavyDutyTestsGroup    
+add_executable(MsgpackHeavyDutyTestsGroup    
 	${CPPUTEST_SOURCE_FILES}
-    JsonHeavyDutyTestsGroup.cpp)
+    MsgpackHeavyDutyTestsGroup.cpp)
 if(WIN32)
-	target_link_libraries(JsonHeavyDutyTestsGroup Winmm.lib)
+	target_link_libraries(MsgpackHeavyDutyTestsGroup Winmm.lib)
 endif(WIN32)
-target_link_libraries(JsonHeavyDutyTestsGroup CppUTest)
-target_include_directories(JsonHeavyDutyTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
-add_test(JsonHeavyDutyTestsGroup JsonHeavyDutyTestsGroup)
+target_link_libraries(MsgpackHeavyDutyTestsGroup CppUTest)
+target_include_directories(MsgpackHeavyDutyTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
+add_test(MsgpackHeavyDutyTestsGroup MsgpackHeavyDutyTestsGroup)

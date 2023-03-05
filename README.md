@@ -1,30 +1,30 @@
-# RapidJSONWrapper
-Wrap RapidJSON to be used as objects of predefined class
+# MsgpackWrapper
+Wrap Msgpack to be used as objects of predefined class
 
 
 Objects are represented as DTOs with json serialization/deserialization support:
 
     
-    class UserDto : public JsonObject {
+    class UserDto : public MsgpackObject {
       public:
-    	JsonValue<char *> Name;
-    	JsonCommonValue<uint32_t> Role;
+    	MsgpackValue<char *> Name;
+    	MsgpackCommonValue<uint32_t> Role;
     
     	UserDto(char *name = {}, TUserRole role = {})
     		: Name(this, "name", name), 
     		  Role(this, "role", role){};
     };
     
-    class GoodsDto : public JsonObject {
+    class GoodsDto : public MsgpackObject {
       public:
-    	JsonValue<int> Id;
-    	JsonValue<uint32_t> Created;
-    	JsonValue<char *> Group;
-    	JsonValue<char *> Name;
-    	JsonValue<float> Price;
-    	JsonValue<double> Quantity;
-    	JsonCommonValue<bool> Deleted;
-    	JsonCommonValue<char *> StoreName;
+    	MsgpackValue<int> Id;
+    	MsgpackValue<uint32_t> Created;
+    	MsgpackValue<char *> Group;
+    	MsgpackValue<char *> Name;
+    	MsgpackValue<float> Price;
+    	MsgpackValue<double> Quantity;
+    	MsgpackCommonValue<bool> Deleted;
+    	MsgpackCommonValue<char *> StoreName;
     
     	GoodsDto(int id = {}, uint32_t created = {}, char *group = {}, char *name = {}, float price = {}, double quantity = {}, bool deleted = {}, char *storeName = {})
     		: Id(this, "Id", id),					
@@ -37,18 +37,18 @@ Objects are represented as DTOs with json serialization/deserialization support:
     		  StoreName(this, "StoreName", storeName){};
     };
         
-	class GoodsList : public JsonObjectsArray {
+	class GoodsList : public MsgpackObjectsArray {
 	public:
-		bool Validate(JsonObject *item) override { return item->Validate(); }
-		JsonObject *CreateItem() override { return new GoodsDto(); }
+		bool Validate(MsgpackObject *item) override { return item->Validate(); }
+		MsgpackObject *CreateItem() override { return new GoodsDto(); }
 	};
     
-    class OrderDto : public JsonObject {
+    class OrderDto : public MsgpackObject {
       public:
-    	JsonValue<char *> Supplier;
-    	JsonCommonValue<uint32_t> DateTime;
-    	JsonValue<JsonArrayBase *> Goods;
-    	JsonValue<JsonObject *> User;
+    	MsgpackValue<char *> Supplier;
+    	MsgpackCommonValue<uint32_t> DateTime;
+    	MsgpackValue<MsgpackArrayBase *> Goods;
+    	MsgpackValue<MsgpackObject *> User;
     	GoodsList goodsList;
     	UserDto userDto;
     
@@ -63,7 +63,7 @@ Objects are represented as DTOs with json serialization/deserialization support:
 sample code (from tests): 
 	
 
-    TEST(JsonObjectTestsGroup, JsonObject_Complex_TryParse_Test) {
+    TEST(MsgpackObjectTestsGroup, MsgpackObject_Complex_TryParse_Test) {
     		OrderDto order;
     
     		CHECK(order.TryStringParse("{\"supplier\":\"Dell\",\"dateTime\":1657058000,\"goods\":[{\"Id\":1,\"Created\":1657052789,\"Group\":\"Keyboards\",\"Name\":\"K1-100\",\"Price\":58."
@@ -76,7 +76,7 @@ sample code (from tests):
     		STRCMP_EQUAL(order.userDto.Name.Value, "Joe Doe");
     	}
             
-    TEST(JsonObjectTestsGroup, JsonObject_Complex_WriteTo_Test) {
+    TEST(MsgpackObjectTestsGroup, MsgpackObject_Complex_WriteTo_Test) {
     	OrderDto orderDto("Dell", 1657058000, "Joe Doe", TUserRole::uViewer);
     	orderDto.goodsList.Add(new GoodsDto(1, 1657052789, "Keyboards", "K1-100", 58.25, 48.2));
     	orderDto.goodsList.Add(new GoodsDto(2, 1657053789, "Keyboards", "K2-100", 158.25, 448.2));
