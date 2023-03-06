@@ -13,6 +13,7 @@ endif(WIN32)
 set (MSGPACK_BUILD_TESTS  OFF)
 set (MSGPACK_GEN_COVERAGE  OFF)
 set (MSGPACK_BUILD_EXAMPLES  OFF)
+set (MSGPACK_ENABLE_SHARED OFF)
 set (MSGPACK_ENABLE_STATIC  ON)
 
 include_directories(msgpack-c/include/msgpack msgpack-c/include msgpack-c/src)
