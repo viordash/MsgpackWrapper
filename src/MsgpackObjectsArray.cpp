@@ -8,14 +8,14 @@
 // 	for (const auto &item : Items) { DeleteItem(item); }
 // }
 
-// bool MsgpackObjectsArray::TryDocParse(TJsonDocument *doc) {
+// bool MsgpackObjectsArray::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
 
 // 	for (const auto &jItem : jArray) {
 // 		auto newItem = CreateItem();
-// 		if (!newItem->TryParse((TJsonDocument *)&jItem) || !Add(newItem)) {
+// 		if (!newItem->TryParse((TMsgpackDocument *)&jItem) || !Add(newItem)) {
 // 			delete newItem;
 // 			Items.shrink_to_fit();
 // 			return false;
@@ -58,7 +58,7 @@
 
 // void MsgpackObjectsArray::DeleteItem(MsgpackObject *item) { delete item; }
 
-// void MsgpackObjectsArray::WriteToDoc(TJsonDocument *doc) {
+// void MsgpackObjectsArray::WriteToDoc(TMsgpackDocument *doc) {
 // 	auto &allocator = doc->GetAllocator();
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), allocator);

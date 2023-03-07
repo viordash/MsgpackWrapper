@@ -9,7 +9,7 @@
 
 int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
-// TEST_GROUP(JsonHeavyDutyTestsGroup){void setup(){} void teardown(){}};
+// TEST_GROUP(MsgpackHeavyDutyTestsGroup){void setup(){} void teardown(){}};
 
 // static char *strDuplicate(const char *src) {
 // 	if (src == NULL) { return NULL; }
@@ -274,11 +274,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 //   public:
 // 	MsgpackValue<uint64_t> Id;
 // 	MsgpackValue<char *> Name;
-// 	MsgpackValue<TJsonRawData> Blob;
+// 	MsgpackValue<TMsgpackRawData> Blob;
 // 	MsgpackValue<MsgpackArrayBase *> Orders;
 // 	OrdersList ordersList;
 
-// 	CustomerDto(const uint64_t id = {}, const char *name = {}, const TJsonRawData blob = {})
+// 	CustomerDto(const uint64_t id = {}, const char *name = {}, const TMsgpackRawData blob = {})
 // 		: Id(this, "id", id),		//
 // 		  Name(this, "name", name), //
 // 		  Blob(this, "blob", blob), //
@@ -288,7 +288,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // typedef struct {
 // 	uint64_t id;
 // 	char *name;
-// 	TJsonRawData blob;
+// 	TMsgpackRawData blob;
 // 	std::vector<TOrderDto *> *orders;
 // } TCustomerDto;
 
@@ -498,7 +498,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
 // }
 
-// TEST(JsonHeavyDutyTestsGroup, MsgpackObject_Perfomance_Test) {
+// TEST(MsgpackHeavyDutyTestsGroup, MsgpackObject_Perfomance_Test) {
 // 	uint64_t durationAdd = 0;
 // 	uint64_t durationDirectWriteTo = 0;
 // 	uint64_t durationTryParse = 0;

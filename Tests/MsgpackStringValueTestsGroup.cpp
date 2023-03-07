@@ -8,10 +8,10 @@
 
 int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
-// TEST_GROUP(JsonStringValueGroup){void setup(){} void teardown(){}};
+// TEST_GROUP(MsgpackStringValueGroup){void setup(){} void teardown(){}};
 
-// TEST(JsonStringValueGroup, JsonField_VeryLong_Name_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackStringValueGroup, MsgpackField_VeryLong_Name_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<char *> testable(&container, "testString0 testString1 testString2 testString3 testString4 testString0 testString1 testString2 testString3 "
 // 										   "testStrintestString0 testString1 testString2 testString3 testString4testString0 testString1 testString2 testString3 "
 // 										   "testStrintestString0 testString1 testString2 testString3 testString4testString0 testString1 testString2 testString3 testString4g4g4");
@@ -20,8 +20,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_CONTAINS("testString0 testString1 testString2 testString3 testString4 ", testable.Name);
 // }
 
-// TEST(JsonStringValueGroup, JsonStringValue_TryParse_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackStringValueGroup, MsgpackStringValue_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<char *> testable(&container, "testString");
 
 // 	rapidjson::Document doc;
@@ -34,8 +34,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(testable.Get(), NULL);
 // }
 
-// TEST(JsonStringValueGroup, JsonStringValue_WriteTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackStringValueGroup, MsgpackStringValue_WriteTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<char *> testable(&container, "testString", "1234567");
 
 // 	rapidjson::Document doc;
@@ -52,8 +52,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(jsonStr, "{\"testString\":\"1234567\"}");
 // }
 
-// TEST(JsonStringValueGroup, JsonStringValue_SetValue_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackStringValueGroup, MsgpackStringValue_SetValue_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<char *> testable(&container, "testString");
 // 	STRCMP_EQUAL(testable.Get(), NULL);
 
@@ -61,8 +61,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(testable.Get(), "0123456789");
 // }
 
-// TEST(JsonStringValueGroup, JsonStringValue_Equals_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackStringValueGroup, MsgpackStringValue_Equals_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<char *> testable1(&container, "test", "testString");
 // 	MsgpackValue<char *> testable01(&container, "test", "testString");
 // 	MsgpackValue<char *> testable001(&container, "testOtherField", "testString");
@@ -93,8 +93,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable2 == testable02);
 // }
 
-// TEST(JsonStringValueGroup, JsonStringValue_CloneTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackStringValueGroup, MsgpackStringValue_CloneTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<char *> testable1(&container, "test", "0123456789");
 
 // 	MsgpackValue<char *> clone1(&container, "test");
@@ -104,8 +104,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(clone1.Get(), "0123456789");
 // }
 
-// TEST(JsonStringValueGroup, JsonStringValue_Common_TryParse_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackStringValueGroup, MsgpackStringValue_Common_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<char *> testable1(&container, "test", "0123456789");
 
 // 	CHECK_FALSE(testable1.Presented());
@@ -130,8 +130,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(testable1.IsNull());
 // }
 
-// TEST(JsonStringValueGroup, JsonStringValue_Null_And_Empty_Value_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackStringValueGroup, MsgpackStringValue_Null_And_Empty_Value_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<char *> testDefault(&container, "testDefault");
 // 	MsgpackValue<char *> testNull(&container, "testNull", NULL);
 // 	MsgpackValue<char *> testEmpty(&container, "testEmpty", "");
@@ -164,8 +164,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(testCommonEmpty.Get(), NULL);
 // }
 
-// TEST(JsonStringValueGroup, JsonStringValue_Common_Change_Presented_After_Set_Value_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackStringValueGroup, MsgpackStringValue_Common_Change_Presented_After_Set_Value_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<char *> testable1(&container, "test");
 
 // 	CHECK_FALSE(testable1.Presented());
@@ -174,8 +174,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(testable1.Presented());
 // }
 
-// TEST(JsonStringValueGroup, JsonStringValue_Common_Change_IsNull_After_Set_Value_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackStringValueGroup, MsgpackStringValue_Common_Change_IsNull_After_Set_Value_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<char *> testable1(&container, "test");
 
 // 	rapidjson::Document doc;

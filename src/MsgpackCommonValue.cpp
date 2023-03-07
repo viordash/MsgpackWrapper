@@ -20,10 +20,10 @@
 // 		&& (value == ((MsgpackCommonValue<char *> *)other)->value
 // 			|| (value != NULL && ((MsgpackCommonValue<char *> *)other)->value != NULL && strcmp(value, ((MsgpackCommonValue<char *> *)other)->value) == 0));
 // }
-// template <> bool MsgpackCommonValue<TJsonRawData>::Equals(MsgpackValueBase *other) {
+// template <> bool MsgpackCommonValue<TMsgpackRawData>::Equals(MsgpackValueBase *other) {
 // 	return MsgpackValueBase::NamesCompare(Name, other->Name)														//
-// 		&& ((TJsonRawData)value).Data == ((TJsonRawData)(((MsgpackCommonValue<TJsonRawData> *)other)->value)).Data //
-// 		&& ((TJsonRawData)value).Size == ((TJsonRawData)(((MsgpackCommonValue<TJsonRawData> *)other)->value)).Size;
+// 		&& ((TMsgpackRawData)value).Data == ((TMsgpackRawData)(((MsgpackCommonValue<TMsgpackRawData> *)other)->value)).Data //
+// 		&& ((TMsgpackRawData)value).Size == ((TMsgpackRawData)(((MsgpackCommonValue<TMsgpackRawData> *)other)->value)).Size;
 // }
 // template <> bool MsgpackCommonValue<MsgpackObject *>::Equals(MsgpackValueBase *other) {
 // 	return MsgpackValueBase::NamesCompare(Name, other->Name) && (MsgpackObject *)value->Equals((MsgpackObject *)((MsgpackCommonValue<MsgpackObject *> *)other)->value);
@@ -35,7 +35,7 @@
 
 
 // */
-// template <> void MsgpackCommonValue<bool>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<bool>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull) {
 // 		json_val.SetNull();
@@ -44,7 +44,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<int8_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<int8_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull) {
 // 		json_val.SetNull();
@@ -53,7 +53,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<int16_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<int16_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull) {
 // 		json_val.SetNull();
@@ -62,7 +62,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<int32_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<int32_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull) {
 // 		json_val.SetNull();
@@ -71,7 +71,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<int64_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<int64_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull) {
 // 		json_val.SetNull();
@@ -80,7 +80,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<uint8_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<uint8_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull) {
 // 		json_val.SetNull();
@@ -89,7 +89,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<uint16_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<uint16_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull) {
 // 		json_val.SetNull();
@@ -98,7 +98,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<uint32_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<uint32_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull) {
 // 		json_val.SetNull();
@@ -107,7 +107,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<uint64_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<uint64_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull) {
 // 		json_val.SetNull();
@@ -116,7 +116,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<float>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<float>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull) {
 // 		json_val.SetNull();
@@ -125,7 +125,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<double>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<double>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull) {
 // 		json_val.SetNull();
@@ -134,7 +134,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<char *>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<char *>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
 // 	if (isNull || value == NULL) {
 // 		json_val.SetNull();
@@ -143,9 +143,9 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<TJsonRawData>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<TMsgpackRawData>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Value json_val;
-// 	TJsonRawData rawData = value;
+// 	TMsgpackRawData rawData = value;
 // 	if (isNull || rawData.Data == NULL) {
 // 		json_val.SetNull();
 // 	} else {
@@ -153,7 +153,7 @@
 // 	}
 // 	doc->AddMember(Name, json_val, doc->GetAllocator());
 // }
-// template <> void MsgpackCommonValue<MsgpackObject *>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<MsgpackObject *>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	rapidjson::Document jObject(&allocator);
 // 	if (isNull || value == NULL) {
@@ -163,7 +163,7 @@
 // 	}
 // 	doc->AddMember(Name, jObject, allocator);
 // }
-// template <> void MsgpackCommonValue<MsgpackArrayBase *>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackCommonValue<MsgpackArrayBase *>::WriteToDoc(TMsgpackDocument *doc) {
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	rapidjson::Document jArray(&allocator);
 // 	if (isNull || value == NULL) {
@@ -189,7 +189,7 @@
 // template <> void MsgpackCommonValue<float>::DeleteValue() {}
 // template <> void MsgpackCommonValue<double>::DeleteValue() {}
 // template <> void MsgpackCommonValue<char *>::DeleteValue() { delete[] this->value; }
-// template <> void MsgpackCommonValue<TJsonRawData>::DeleteValue() {}
+// template <> void MsgpackCommonValue<TMsgpackRawData>::DeleteValue() {}
 // template <> void MsgpackCommonValue<MsgpackObject *>::DeleteValue() {}
 // template <> void MsgpackCommonValue<MsgpackArrayBase *>::DeleteValue() {}
 // /*
@@ -253,7 +253,7 @@
 // 	}
 // 	this->isNull = this->value == NULL;
 // }
-// template <> void MsgpackCommonValue<TJsonRawData>::InitValue(const TJsonRawData value, size_t valueLen) {
+// template <> void MsgpackCommonValue<TMsgpackRawData>::InitValue(const TMsgpackRawData value, size_t valueLen) {
 // 	this->value = value;
 // 	this->isNull = this->value.Data == NULL;
 // }
@@ -329,7 +329,7 @@
 // 	InitValue(newValue, newValueLen);
 // 	presented = true;
 // }
-// template <> void MsgpackCommonValue<TJsonRawData>::Set(const TJsonRawData newValue, size_t newValueLen) {
+// template <> void MsgpackCommonValue<TMsgpackRawData>::Set(const TMsgpackRawData newValue, size_t newValueLen) {
 // 	DeleteValue();
 // 	InitValue(newValue, newValueLen);
 // 	presented = true;
@@ -357,7 +357,7 @@
 
 
 // */
-// template <> bool MsgpackCommonValue<bool>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<bool>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -374,7 +374,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<int8_t>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<int8_t>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -391,7 +391,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<int16_t>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<int16_t>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -408,7 +408,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<int32_t>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<int32_t>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -425,7 +425,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<int64_t>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<int64_t>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -442,7 +442,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<uint8_t>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<uint8_t>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -459,7 +459,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<uint16_t>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<uint16_t>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -476,7 +476,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<uint32_t>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<uint32_t>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -493,7 +493,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<uint64_t>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<uint64_t>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -510,7 +510,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<float>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<float>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -527,7 +527,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<double>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<double>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -544,7 +544,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<char *>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<char *>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -561,7 +561,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<TJsonRawData>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<TMsgpackRawData>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -569,7 +569,7 @@
 // 	}
 // 	presented = true;
 // 	if (jsonVal->IsString()) {
-// 		TJsonRawData rawData = {(uint8_t *)jsonVal->GetString(), jsonVal->GetStringLength()};
+// 		TMsgpackRawData rawData = {(uint8_t *)jsonVal->GetString(), jsonVal->GetStringLength()};
 // 		Set(rawData);
 // 		return true;
 // 	}
@@ -579,7 +579,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<MsgpackObject *>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<MsgpackObject *>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -587,7 +587,7 @@
 // 	}
 // 	presented = true;
 // 	if (jsonVal->IsObject()) {
-// 		value->TryParse((TJsonDocument *)jsonVal);
+// 		value->TryParse((TMsgpackDocument *)jsonVal);
 // 		isNull = false;
 // 		return true;
 // 	}
@@ -597,7 +597,7 @@
 // 	}
 // 	return false;
 // }
-// template <> bool MsgpackCommonValue<MsgpackArrayBase *>::TryParse(TJsonDocument *doc) {
+// template <> bool MsgpackCommonValue<MsgpackArrayBase *>::TryParse(TMsgpackDocument *doc) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	if (jsonVal == NULL) {
 // 		presented = false;
@@ -605,7 +605,7 @@
 // 	}
 // 	presented = true;
 // 	if (jsonVal->IsArray()) {
-// 		value->TryDocParse((TJsonDocument *)jsonVal);
+// 		value->TryDocParse((TMsgpackDocument *)jsonVal);
 // 		isNull = false;
 // 		return true;
 // 	}
@@ -632,7 +632,7 @@
 // template <> void MsgpackCommonValue<float>::CloneTo(MsgpackValueBase *other) { ((MsgpackCommonValue<float> *)other)->Set(this->value); }
 // template <> void MsgpackCommonValue<double>::CloneTo(MsgpackValueBase *other) { ((MsgpackCommonValue<double> *)other)->Set(this->value); }
 // template <> void MsgpackCommonValue<char *>::CloneTo(MsgpackValueBase *other) { ((MsgpackCommonValue<char *> *)other)->Set(this->value); }
-// template <> void MsgpackCommonValue<TJsonRawData>::CloneTo(MsgpackValueBase *other) { ((MsgpackCommonValue<TJsonRawData> *)other)->Set((TJsonRawData)this->value); }
+// template <> void MsgpackCommonValue<TMsgpackRawData>::CloneTo(MsgpackValueBase *other) { ((MsgpackCommonValue<TMsgpackRawData> *)other)->Set((TMsgpackRawData)this->value); }
 // template <> void MsgpackCommonValue<MsgpackObject *>::CloneTo(MsgpackValueBase *other) {
 // 	auto thisObject = ((MsgpackObject *)value);
 // 	auto otherObject = ((MsgpackObject *)((MsgpackCommonValue<MsgpackObject *> *)other)->value);
@@ -659,7 +659,7 @@
 // template <> bool MsgpackCommonValue<float>::IsNull() { return isNull; }
 // template <> bool MsgpackCommonValue<double>::IsNull() { return isNull; }
 // template <> bool MsgpackCommonValue<char *>::IsNull() { return isNull || (char *)value == NULL; }
-// template <> bool MsgpackCommonValue<TJsonRawData>::IsNull() { return isNull; }
+// template <> bool MsgpackCommonValue<TMsgpackRawData>::IsNull() { return isNull; }
 // template <> bool MsgpackCommonValue<MsgpackObject *>::IsNull() { return isNull; }
 // template <> bool MsgpackCommonValue<MsgpackArrayBase *>::IsNull() { return isNull; }
 // /*
@@ -679,6 +679,6 @@
 // template <> void MsgpackCommonValue<float>::ResetToNull() { isNull = true; }
 // template <> void MsgpackCommonValue<double>::ResetToNull() { isNull = true; }
 // template <> void MsgpackCommonValue<char *>::ResetToNull() { Set(NULL); }
-// template <> void MsgpackCommonValue<TJsonRawData>::ResetToNull() { isNull = true; }
+// template <> void MsgpackCommonValue<TMsgpackRawData>::ResetToNull() { isNull = true; }
 // template <> void MsgpackCommonValue<MsgpackObject *>::ResetToNull() { isNull = true; }
 // template <> void MsgpackCommonValue<MsgpackArrayBase *>::ResetToNull() { isNull = true; }

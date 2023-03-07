@@ -8,31 +8,31 @@
 
 int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
-// TEST_GROUP(JsonDataValueGroup){void setup(){} void teardown(){}};
+// TEST_GROUP(MsgpackDataValueGroup){void setup(){} void teardown(){}};
 
-// TEST(JsonDataValueGroup, JsonDataValue_TryParse_Test) {
-// 	JsonFieldsContainer container;
-// 	MsgpackValue<TJsonRawData> testable(&container, "testString");
+// TEST(MsgpackDataValueGroup, MsgpackDataValue_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
+// 	MsgpackValue<TMsgpackRawData> testable(&container, "testString");
 
 // 	rapidjson::Document doc;
 // 	doc.Parse("{\"testString\":\"User1\"}");
 // 	CHECK_TRUE(testable.TryParse(&doc));
 
-// 	MEMCMP_EQUAL(((TJsonRawData)testable.Get()).Data, "User1", ((TJsonRawData)testable.Get()).Size);
+// 	MEMCMP_EQUAL(((TMsgpackRawData)testable.Get()).Data, "User1", ((TMsgpackRawData)testable.Get()).Size);
 
 // 	doc.Parse("{\"testString\":null}");
 // 	CHECK_TRUE(testable.TryParse(&doc));
-// 	CHECK_EQUAL(((TJsonRawData)testable.Get()).Data, NULL);
-// 	CHECK_EQUAL(((TJsonRawData)testable.Get()).Size, 0);
+// 	CHECK_EQUAL(((TMsgpackRawData)testable.Get()).Data, NULL);
+// 	CHECK_EQUAL(((TMsgpackRawData)testable.Get()).Size, 0);
 // }
 
-// TEST(JsonDataValueGroup, JsonDataValue_WriteTo_Test) {
+// TEST(MsgpackDataValueGroup, MsgpackDataValue_WriteTo_Test) {
 // 	uint8_t data[32];
 // 	memset(data, '*', sizeof(data));
 // 	for (size_t i = 0; i < 16; i++) { data[i] = 'A' + (uint8_t)i; }
 // 	data[sizeof(data) - 1] = 0;
-// 	JsonFieldsContainer container;
-// 	MsgpackValue<TJsonRawData> testable(&container, "testString", {data, 16});
+// 	MsgpackFieldsContainer container;
+// 	MsgpackValue<TMsgpackRawData> testable(&container, "testString", {data, 16});
 
 // 	rapidjson::Document doc;
 // 	doc.SetObject();
@@ -48,11 +48,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(jsonStr, "{\"testString\":\"ABCDEFGHIJKLMNOP\"}");
 // }
 
-// TEST(JsonDataValueGroup, JsonDataValue_WriteToJson_Binary_Test) {
+// TEST(MsgpackDataValueGroup, MsgpackDataValue_WriteToMsgpack_Binary_Test) {
 // 	uint8_t data[256];
 // 	for (size_t i = 0; i < sizeof(data); i++) { data[i] = (uint8_t)i; }
-// 	JsonFieldsContainer container;
-// 	MsgpackValue<TJsonRawData> testable(&container, "testString", {data, sizeof(data)});
+// 	MsgpackFieldsContainer container;
+// 	MsgpackValue<TMsgpackRawData> testable(&container, "testString", {data, sizeof(data)});
 
 // 	rapidjson::Document doc;
 // 	doc.SetObject();
@@ -75,19 +75,19 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 						  "\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF\xE0\xE1\xE2"
 // 						  "\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF\xF0\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF\"}");
 
-// 	MsgpackValue<TJsonRawData> readTestable(&container, "testString", {NULL, 0});
+// 	MsgpackValue<TMsgpackRawData> readTestable(&container, "testString", {NULL, 0});
 
 // 	rapidjson::Document readDoc;
 // 	doc.Parse(jsonStr);
 // 	CHECK(readTestable.TryParse(&doc));
-// 	CHECK(((TJsonRawData)readTestable.Get()).Data != NULL);
-// 	CHECK_EQUAL(((TJsonRawData)readTestable.Get()).Size, sizeof(data));
-// 	MEMCMP_EQUAL(data, ((TJsonRawData)readTestable.Get()).Data, ((TJsonRawData)readTestable.Get()).Size);
+// 	CHECK(((TMsgpackRawData)readTestable.Get()).Data != NULL);
+// 	CHECK_EQUAL(((TMsgpackRawData)readTestable.Get()).Size, sizeof(data));
+// 	MEMCMP_EQUAL(data, ((TMsgpackRawData)readTestable.Get()).Data, ((TMsgpackRawData)readTestable.Get()).Size);
 // }
 
-// TEST(JsonDataValueGroup, JsonDataValue_WriteTo_For_Null_Test) {
-// 	JsonFieldsContainer container;
-// 	MsgpackValue<TJsonRawData> testable(&container, "testString", {NULL, 0});
+// TEST(MsgpackDataValueGroup, MsgpackDataValue_WriteTo_For_Null_Test) {
+// 	MsgpackFieldsContainer container;
+// 	MsgpackValue<TMsgpackRawData> testable(&container, "testString", {NULL, 0});
 
 // 	rapidjson::Document doc;
 // 	doc.SetObject();
@@ -102,22 +102,22 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(jsonStr, "{\"testString\":null}");
 // }
 
-// TEST(JsonDataValueGroup, JsonDataValue_SetValue_Test) {
-// 	JsonFieldsContainer container;
-// 	MsgpackValue<TJsonRawData> testable(&container, "testString");
-// 	CHECK_EQUAL(((TJsonRawData)testable.Get()).Data, NULL);
-// 	CHECK_EQUAL(((TJsonRawData)testable.Get()).Size, 0);
+// TEST(MsgpackDataValueGroup, MsgpackDataValue_SetValue_Test) {
+// 	MsgpackFieldsContainer container;
+// 	MsgpackValue<TMsgpackRawData> testable(&container, "testString");
+// 	CHECK_EQUAL(((TMsgpackRawData)testable.Get()).Data, NULL);
+// 	CHECK_EQUAL(((TMsgpackRawData)testable.Get()).Size, 0);
 
 // 	testable.Set({(uint8_t *)"0123456789", sizeof("0123456789") - 1});
-// 	STRCMP_EQUAL((char *)((TJsonRawData)testable.Get()).Data, "0123456789");
-// 	CHECK_EQUAL(((TJsonRawData)testable.Get()).Size, sizeof("0123456789") - 1);
+// 	STRCMP_EQUAL((char *)((TMsgpackRawData)testable.Get()).Data, "0123456789");
+// 	CHECK_EQUAL(((TMsgpackRawData)testable.Get()).Size, sizeof("0123456789") - 1);
 // }
 
-// TEST(JsonDataValueGroup, JsonDataValue_Equals_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackDataValueGroup, MsgpackDataValue_Equals_Test) {
+// 	MsgpackFieldsContainer container;
 // 	const char *str = "testString";
-// 	MsgpackValue<TJsonRawData> testable1(&container, "test", {(uint8_t *)str, strlen(str) + 1});
-// 	MsgpackValue<TJsonRawData> testable01(&container, "test", {(uint8_t *)str, strlen(str) + 1});
+// 	MsgpackValue<TMsgpackRawData> testable1(&container, "test", {(uint8_t *)str, strlen(str) + 1});
+// 	MsgpackValue<TMsgpackRawData> testable01(&container, "test", {(uint8_t *)str, strlen(str) + 1});
 
 // 	CHECK_TRUE(testable1 == testable01);
 // 	CHECK_FALSE(testable1 != testable01);
@@ -126,20 +126,20 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable1 == testable01);
 // }
 
-// TEST(JsonDataValueGroup, JsonDataValue_CloneTo_Test) {
-// 	JsonFieldsContainer container;
-// 	MsgpackValue<TJsonRawData> testable1(&container, "test", {(uint8_t *)"0123456789", sizeof("0123456789")});
+// TEST(MsgpackDataValueGroup, MsgpackDataValue_CloneTo_Test) {
+// 	MsgpackFieldsContainer container;
+// 	MsgpackValue<TMsgpackRawData> testable1(&container, "test", {(uint8_t *)"0123456789", sizeof("0123456789")});
 
-// 	MsgpackValue<TJsonRawData> clone1(&container, "test");
+// 	MsgpackValue<TMsgpackRawData> clone1(&container, "test");
 
 // 	testable1.CloneTo((MsgpackValueBase *)&clone1);
 // 	testable1.Set({(uint8_t *)"check the full data buffer is cloned", sizeof("check the full data buffer is cloned")});
-// 	STRCMP_EQUAL((char *)((TJsonRawData)clone1.Get()).Data, "0123456789");
+// 	STRCMP_EQUAL((char *)((TMsgpackRawData)clone1.Get()).Data, "0123456789");
 // }
 
-// TEST(JsonDataValueGroup, JsonDataValue_Common_TryParse_Test) {
-// 	JsonFieldsContainer container;
-// 	MsgpackCommonValue<TJsonRawData> testable1(&container, "test", {(uint8_t *)"0123456789", sizeof("0123456789")});
+// TEST(MsgpackDataValueGroup, MsgpackDataValue_Common_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
+// 	MsgpackCommonValue<TMsgpackRawData> testable1(&container, "test", {(uint8_t *)"0123456789", sizeof("0123456789")});
 
 // 	CHECK_FALSE(testable1.Presented());
 // 	CHECK_FALSE(testable1.IsNull());
@@ -153,8 +153,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	testable1.ResetToNull();
 // 	doc.Parse("{\"test\":\"01234\"}");
 // 	CHECK_TRUE(testable1.TryParse(&doc));
-// 	STRCMP_EQUAL((char *)((TJsonRawData)testable1.Get()).Data, "01234");
-// 	CHECK_EQUAL(((TJsonRawData)testable1.Get()).Size, sizeof("01234") - 1);
+// 	STRCMP_EQUAL((char *)((TMsgpackRawData)testable1.Get()).Data, "01234");
+// 	CHECK_EQUAL(((TMsgpackRawData)testable1.Get()).Size, sizeof("01234") - 1);
 // 	CHECK_TRUE(testable1.Presented());
 // 	CHECK_FALSE(testable1.IsNull());
 

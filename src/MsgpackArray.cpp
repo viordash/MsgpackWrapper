@@ -82,7 +82,7 @@
 
 
 // */
-// template <> void MsgpackArray<char *>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<char *>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
@@ -95,67 +95,67 @@
 // 		}
 // 	}
 // }
-// template <> void MsgpackArray<TBoolArray>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<TBoolArray>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	for (const auto &item : Items) { doc->PushBack(rapidjson::Value((bool)item).Move(), allocator); }
 // }
-// template <> void MsgpackArray<int64_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<int64_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	for (const auto &item : Items) { doc->PushBack(rapidjson::Value(item).Move(), allocator); }
 // }
-// template <> void MsgpackArray<uint64_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<uint64_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	for (const auto &item : Items) { doc->PushBack(rapidjson::Value(item).Move(), allocator); }
 // }
-// template <> void MsgpackArray<int32_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<int32_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	for (const auto &item : Items) { doc->PushBack(rapidjson::Value(item).Move(), allocator); }
 // }
-// template <> void MsgpackArray<uint32_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<uint32_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	for (const auto &item : Items) { doc->PushBack(rapidjson::Value(item).Move(), allocator); }
 // }
-// template <> void MsgpackArray<int16_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<int16_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	for (const auto &item : Items) { doc->PushBack(rapidjson::Value(item).Move(), allocator); }
 // }
-// template <> void MsgpackArray<uint16_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<uint16_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	for (const auto &item : Items) { doc->PushBack(rapidjson::Value(item).Move(), allocator); }
 // }
-// template <> void MsgpackArray<int8_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<int8_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	for (const auto &item : Items) { doc->PushBack(rapidjson::Value(item).Move(), allocator); }
 // }
-// template <> void MsgpackArray<uint8_t>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<uint8_t>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	for (const auto &item : Items) { doc->PushBack(rapidjson::Value(item).Move(), allocator); }
 // }
-// template <> void MsgpackArray<double>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<double>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
 // 	for (const auto &item : Items) { doc->PushBack(rapidjson::Value(item).Move(), allocator); }
 // }
-// template <> void MsgpackArray<float>::WriteToDoc(TJsonDocument *doc) {
+// template <> void MsgpackArray<float>::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetArray();
 // 	doc->Reserve(Items.size(), doc->GetAllocator());
 // 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
@@ -589,7 +589,7 @@
 
 
 // */
-// template <> bool MsgpackArray<char *>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<char *>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -612,7 +612,7 @@
 // 	Items.shrink_to_fit();
 // 	return true;
 // }
-// template <> bool MsgpackArray<TBoolArray>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<TBoolArray>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -625,7 +625,7 @@
 // 	Items.shrink_to_fit();
 // 	return true;
 // }
-// template <> bool MsgpackArray<int64_t>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<int64_t>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -638,7 +638,7 @@
 // 	Items.shrink_to_fit();
 // 	return true;
 // }
-// template <> bool MsgpackArray<uint64_t>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<uint64_t>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -651,7 +651,7 @@
 // 	Items.shrink_to_fit();
 // 	return true;
 // }
-// template <> bool MsgpackArray<int32_t>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<int32_t>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -664,7 +664,7 @@
 // 	Items.shrink_to_fit();
 // 	return true;
 // }
-// template <> bool MsgpackArray<uint32_t>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<uint32_t>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -677,7 +677,7 @@
 // 	Items.shrink_to_fit();
 // 	return true;
 // }
-// template <> bool MsgpackArray<int16_t>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<int16_t>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -690,7 +690,7 @@
 // 	Items.shrink_to_fit();
 // 	return true;
 // }
-// template <> bool MsgpackArray<uint16_t>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<uint16_t>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -703,7 +703,7 @@
 // 	Items.shrink_to_fit();
 // 	return true;
 // }
-// template <> bool MsgpackArray<int8_t>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<int8_t>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -716,7 +716,7 @@
 // 	Items.shrink_to_fit();
 // 	return true;
 // }
-// template <> bool MsgpackArray<uint8_t>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<uint8_t>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -729,7 +729,7 @@
 // 	Items.shrink_to_fit();
 // 	return true;
 // }
-// template <> bool MsgpackArray<double>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<double>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());
@@ -742,7 +742,7 @@
 // 	Items.shrink_to_fit();
 // 	return true;
 // }
-// template <> bool MsgpackArray<float>::TryDocParse(TJsonDocument *doc) {
+// template <> bool MsgpackArray<float>::TryDocParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsArray()) { return false; }
 // 	auto jArray = doc->GetArray();
 // 	Items.reserve(jArray.Size());

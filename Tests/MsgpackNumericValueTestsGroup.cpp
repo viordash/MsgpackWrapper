@@ -8,10 +8,10 @@
 
 int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
-// TEST_GROUP(JsonNumericValueGroup){void setup(){} void teardown(){}};
+// TEST_GROUP(MsgpackNumericValueGroup){void setup(){} void teardown(){}};
 
-// TEST(JsonNumericValueGroup, JsonField_Equals_By_Name_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackField_Equals_By_Name_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<unsigned int> testable1(&container, "test", 100);
 // 	MsgpackValue<unsigned int> testable01(&container, "test", 100);
 // 	MsgpackValue<unsigned int> testable02(&container, "other", 100);
@@ -24,8 +24,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable1 == testable02);
 // }
 
-// TEST(JsonNumericValueGroup, JsonUIntField_SetValue_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackUIntField_SetValue_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<unsigned int> testable1(&container, "test");
 // 	MsgpackValue<uint32_t> testable2(&container, "test");
 // 	MsgpackValue<uint16_t> testable3(&container, "test");
@@ -41,8 +41,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(testable4.Get(), 255);
 // }
 
-// TEST(JsonNumericValueGroup, JsonUIntField_TryParse_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackUIntField_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<unsigned int> testable1(&container, "test");
 // 	MsgpackValue<uint32_t> testable2(&container, "test");
 // 	MsgpackValue<uint16_t> testable3(&container, "test");
@@ -72,8 +72,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable4.TryParse(&doc));
 // }
 
-// TEST(JsonNumericValueGroup, JsonUIntField_WriteTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackUIntField_WriteTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<unsigned int> testable1(&container, "test", 19);
 // 	MsgpackValue<uint32_t> testable2(&container, "test", 20);
 // 	MsgpackValue<uint16_t> testable3(&container, "test", 21);
@@ -117,8 +117,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	}
 // }
 
-// TEST(JsonNumericValueGroup, JsonUIntField_Equals_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackUIntField_Equals_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<unsigned int> testable1(&container, "test", 100);
 // 	MsgpackValue<unsigned int> testable01(&container, "test", 100);
 // 	MsgpackValue<unsigned int> testable001(&container, "testOtherField", 100);
@@ -192,8 +192,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable4.Equals(&testable004));
 // }
 
-// TEST(JsonNumericValueGroup, JsonUIntField_CloneTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackUIntField_CloneTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<unsigned int> testable1(&container, "test", 100);
 // 	MsgpackValue<uint32_t> testable2(&container, "test", 101);
 // 	MsgpackValue<uint16_t> testable3(&container, "test", 102);
@@ -215,8 +215,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(clone4.Get(), 103);
 // }
 
-// TEST(JsonNumericValueGroup, JsonIntField_SetValue_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackIntField_SetValue_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<int> testable1(&container, "test");
 // 	MsgpackValue<int32_t> testable2(&container, "test");
 // 	MsgpackValue<int16_t> testable3(&container, "test");
@@ -232,8 +232,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(testable4.Get(), -1);
 // }
 
-// TEST(JsonNumericValueGroup, JsonIntField_TryParse_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackIntField_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<int> testable1(&container, "test");
 // 	MsgpackValue<int32_t> testable2(&container, "test");
 // 	MsgpackValue<int16_t> testable3(&container, "test");
@@ -263,8 +263,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable4.TryParse(&doc));
 // }
 
-// TEST(JsonNumericValueGroup, JsonIntField_WriteTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackIntField_WriteTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<int> testable1(&container, "test", 19);
 // 	MsgpackValue<int32_t> testable2(&container, "test", 20);
 // 	MsgpackValue<int16_t> testable3(&container, "test", 21);
@@ -308,8 +308,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	}
 // }
 
-// TEST(JsonNumericValueGroup, JsonIntField_Equals_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackIntField_Equals_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<int> testable1(&container, "test", 100);
 // 	MsgpackValue<int> testable01(&container, "test", 100);
 // 	MsgpackValue<int> testable001(&container, "testOtherField", 100);
@@ -383,8 +383,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable4.Equals(&testable004));
 // }
 
-// TEST(JsonNumericValueGroup, JsonIntField_CloneTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackIntField_CloneTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<int> testable1(&container, "test", 100);
 // 	MsgpackValue<int32_t> testable2(&container, "test", 101);
 // 	MsgpackValue<int16_t> testable3(&container, "test", 102);
@@ -412,8 +412,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // */
 
-// TEST(JsonNumericValueGroup, JsonBoolField_SetValue_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackBoolField_SetValue_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<bool> testable1(&container, "test");
 // 	testable1.Set(0xFFFFFFFF);
 // 	CHECK_EQUAL(testable1.Get(), true);
@@ -427,8 +427,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(testable1.Get(), true);
 // }
 
-// TEST(JsonNumericValueGroup, JsonBoolField_TryParse_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackBoolField_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<bool> testable1(&container, "test");
 
 // 	rapidjson::Document doc;
@@ -440,8 +440,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable1.TryParse(&doc));
 // }
 
-// TEST(JsonNumericValueGroup, JsonBoolField_WriteTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackBoolField_WriteTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<bool> testable1(&container, "test", true);
 
 // 	rapidjson::Document doc;
@@ -453,8 +453,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer.GetString(), "{\"test\":true}");
 // }
 
-// TEST(JsonNumericValueGroup, JsonBoolField_Equals_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackBoolField_Equals_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<bool> testable1(&container, "test", true);
 // 	MsgpackValue<bool> testable01(&container, "test", true);
 // 	MsgpackValue<bool> testable001(&container, "testOtherField", true);
@@ -474,8 +474,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable1.Equals(&testable001));
 // }
 
-// TEST(JsonNumericValueGroup, JsonBoolField_CloneTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackBoolField_CloneTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<bool> testable1(&container, "test", true);
 // 	MsgpackValue<bool> clone1(&container, "test");
 
@@ -487,8 +487,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 
 // */
-// TEST(JsonNumericValueGroup, JsonFloatField_SetValue_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackFloatField_SetValue_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<float> testable1(&container, "test");
 // 	MsgpackValue<double> testable2(&container, "test");
 // 	testable1.Set(429496729.5);
@@ -498,8 +498,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(testable2.Get(), 42949672.95);
 // }
 
-// TEST(JsonNumericValueGroup, JsonFloatField_TryParse_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackFloatField_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<float> testable1(&container, "test");
 // 	MsgpackValue<double> testable2(&container, "test");
 
@@ -519,8 +519,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable2.TryParse(&doc));
 // }
 
-// TEST(JsonNumericValueGroup, JsonFloatField_WriteTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackFloatField_WriteTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<float> testable1(&container, "test", 19.25);
 // 	MsgpackValue<double> testable2(&container, "test", 20.5);
 
@@ -544,8 +544,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	}
 // }
 
-// TEST(JsonNumericValueGroup, JsonFloatField_Equals_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackFloatField_Equals_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<float> testable1(&container, "test", 100.5);
 // 	MsgpackValue<float> testable01(&container, "test", 100.5);
 // 	MsgpackValue<float> testable001(&container, "testOtherField", 100.5);
@@ -583,8 +583,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable2.Equals(&testable002));
 // }
 
-// TEST(JsonNumericValueGroup, JsonFloatField_CloneTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackFloatField_CloneTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackValue<float> testable1(&container, "test", 100.5);
 // 	MsgpackValue<double> testable2(&container, "test", 101.15);
 
@@ -601,8 +601,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 
 // */
-// TEST(JsonNumericValueGroup, JsonUIntField_Common_TryParse_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackUIntField_Common_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<unsigned int> testable1(&container, "test", 100);
 // 	MsgpackCommonValue<uint32_t> testable2(&container, "test", 101);
 // 	MsgpackCommonValue<uint16_t> testable3(&container, "test", 102);
@@ -678,8 +678,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(testable5.IsNull());
 // }
 
-// TEST(JsonNumericValueGroup, JsonUIntField_Common_WriteTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackUIntField_Common_WriteTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<unsigned int> testable1(&container, "test", 19);
 // 	MsgpackCommonValue<uint32_t> testable2(&container, "test", 20);
 // 	MsgpackCommonValue<uint16_t> testable3(&container, "test", 21);
@@ -783,8 +783,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	}
 // }
 
-// TEST(JsonNumericValueGroup, JsonUIntField_Common_Change_Presented_After_Set_Value_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackUIntField_Common_Change_Presented_After_Set_Value_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<unsigned int> testable1(&container, "test");
 // 	MsgpackCommonValue<uint32_t> testable2(&container, "test");
 // 	MsgpackCommonValue<uint16_t> testable3(&container, "test");
@@ -809,8 +809,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(testable5.Presented());
 // }
 
-// TEST(JsonNumericValueGroup, JsonUIntField_Common_Change_IsNull_After_Set_Value_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackUIntField_Common_Change_IsNull_After_Set_Value_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<unsigned int> testable1(&container, "test");
 // 	MsgpackCommonValue<uint32_t> testable2(&container, "test");
 // 	MsgpackCommonValue<uint16_t> testable3(&container, "test");
@@ -842,8 +842,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable5.IsNull());
 // }
 
-// TEST(JsonNumericValueGroup, JsonIntField_Common_TryParse_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackIntField_Common_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<int> testable1(&container, "test", 100);
 // 	MsgpackCommonValue<int32_t> testable2(&container, "test", 101);
 // 	MsgpackCommonValue<int16_t> testable3(&container, "test", 102);
@@ -919,8 +919,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(testable5.IsNull());
 // }
 
-// TEST(JsonNumericValueGroup, JsonIntField_Common_WriteTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackIntField_Common_WriteTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<int> testable1(&container, "test", 19);
 // 	MsgpackCommonValue<int32_t> testable2(&container, "test", 20);
 // 	MsgpackCommonValue<int16_t> testable3(&container, "test", 21);
@@ -1024,8 +1024,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	}
 // }
 
-// TEST(JsonNumericValueGroup, JsonIntField_Common_Change_Presented_After_Set_Value_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackIntField_Common_Change_Presented_After_Set_Value_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<int> testable1(&container, "test");
 // 	MsgpackCommonValue<int32_t> testable2(&container, "test");
 // 	MsgpackCommonValue<int16_t> testable3(&container, "test");
@@ -1050,8 +1050,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(testable5.Presented());
 // }
 
-// TEST(JsonNumericValueGroup, JsonIntField_Common_Change_IsNull_After_Set_Value_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackIntField_Common_Change_IsNull_After_Set_Value_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<int> testable1(&container, "test");
 // 	MsgpackCommonValue<int32_t> testable2(&container, "test");
 // 	MsgpackCommonValue<int16_t> testable3(&container, "test");
@@ -1083,8 +1083,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable5.IsNull());
 // }
 
-// TEST(JsonNumericValueGroup, JsonBoolField_Common_TryParse_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackBoolField_Common_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<bool> testable1(&container, "test", false);
 
 // 	CHECK_FALSE(testable1.Presented());
@@ -1109,8 +1109,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(testable1.IsNull());
 // }
 
-// TEST(JsonNumericValueGroup, JsonBoolField_Common_WriteTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackBoolField_Common_WriteTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<bool> testable1(&container, "test", true);
 
 // 	{
@@ -1134,8 +1134,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	}
 // }
 
-// TEST(JsonNumericValueGroup, JsonBoolField_Common_Change_Presented_After_Set_Value_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackBoolField_Common_Change_Presented_After_Set_Value_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<bool> testable1(&container, "test");
 
 // 	CHECK_FALSE(testable1.Presented());
@@ -1144,8 +1144,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(testable1.Presented());
 // }
 
-// TEST(JsonNumericValueGroup, JsonBoolField_Common_Change_IsNull_After_Set_Value_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackBoolField_Common_Change_IsNull_After_Set_Value_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<bool> testable1(&container, "test");
 
 // 	rapidjson::Document doc;
@@ -1157,8 +1157,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testable1.IsNull());
 // }
 
-// TEST(JsonNumericValueGroup, JsonFloatField_Common_TryParse_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackFloatField_Common_TryParse_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<float> testable1(&container, "test", 100);
 // 	MsgpackCommonValue<double> testable2(&container, "test", 101);
 
@@ -1195,8 +1195,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(testable2.IsNull());
 // }
 
-// TEST(JsonNumericValueGroup, JsonFloatField_Common_WriteTo_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackFloatField_Common_WriteTo_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<float> testable1(&container, "test", 19);
 // 	MsgpackCommonValue<double> testable2(&container, "test", 20);
 
@@ -1240,8 +1240,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	}
 // }
 
-// TEST(JsonNumericValueGroup, JsonFloatField_Common_Change_Presented_After_Set_Value_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackFloatField_Common_Change_Presented_After_Set_Value_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<float> testable1(&container, "test");
 // 	MsgpackCommonValue<double> testable2(&container, "test");
 
@@ -1254,8 +1254,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(testable2.Presented());
 // }
 
-// TEST(JsonNumericValueGroup, JsonFloatField_Common_Change_IsNull_After_Set_Value_Test) {
-// 	JsonFieldsContainer container;
+// TEST(MsgpackNumericValueGroup, MsgpackFloatField_Common_Change_IsNull_After_Set_Value_Test) {
+// 	MsgpackFieldsContainer container;
 // 	MsgpackCommonValue<float> testable1(&container, "test");
 // 	MsgpackCommonValue<double> testable2(&container, "test");
 

@@ -12,47 +12,83 @@
 #include <msgpack.h>
 #include <stdio.h>
 
-void print(char const* buf,size_t len)
-{
-    size_t i = 0;
-    for(; i < len ; ++i)
-        printf("%02x ", 0xff & buf[i]);
-    printf("\n");
+void print(char const *buf, size_t len) {
+	size_t i = 0;
+	for (; i < len; ++i) printf("%02x ", 0xff & buf[i]);
+	printf("\n");
 }
 
-int main(void)
-{
-    msgpack_sbuffer sbuf;
-    msgpack_packer pk;
-    msgpack_zone mempool;
-    msgpack_object deserialized;
+typedef enum { uAdmin, uViewer } TUserRole;
 
-    /* msgpack::sbuffer is a simple buffer implementation. */
-    msgpack_sbuffer_init(&sbuf);
+class UserDto : MsgpackObject {
+  public:
+	MsgpackValue<char *> Name;
+	MsgpackValue<uint32_t> Role;
 
-    /* serialize values into the buffer using msgpack_sbuffer_write callback function. */
-    msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	UserDto(const char *name = {}, const TUserRole role = {})
+		: Name(this, 0, name), //
+		  Role(this, 1, role){};
 
-    msgpack_pack_array(&pk, 3);
-    msgpack_pack_int(&pk, 1);
-    msgpack_pack_true(&pk);
-    msgpack_pack_str(&pk, 7);
-    msgpack_pack_str_body(&pk, "example", 7);
+	size_t WriteTo(char *outBuffer, size_t outBufferSize) {
+		TMsgpackBuffer sbuf;
+		msgpack_packer packer;
+		MsgpackBufferInit(&sbuf);
+		msgpack_packer_init(&packer, &sbuf, msgpack_sbuffer_write);
 
-    print(sbuf.data, sbuf.size);
+		for (const auto &field : Fields) {
+			if (!field->Write(&packer)) {
+				MsgpackBufferDestroy(&sbuf);
+				return 0;
+			};
+		}
 
-    /* deserialize the buffer into msgpack_object instance. */
-    /* deserialized object is valid during the msgpack_zone instance alive. */
-    msgpack_zone_init(&mempool, 2048);
+		size_t size;
+		if (sbuf.size > outBufferSize) {
+			size = outBufferSize;
+		} else {
+			size = sbuf.size;
+		}
+		memcpy(outBuffer, sbuf.data, size);
 
-    msgpack_unpack(sbuf.data, sbuf.size, NULL, &mempool, &deserialized);
+		MsgpackBufferDestroy(&sbuf);
+		return size;
+	}
+};
 
-    /* print the deserialized object. */
-    msgpack_object_print(stdout, deserialized);
-    puts("");
+int main(void) {
+	UserDto userDto;
 
-    msgpack_zone_destroy(&mempool);
-    msgpack_sbuffer_destroy(&sbuf);
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
 
-    return 0;
+	/* msgpack::sbuffer is a simple buffer implementation. */
+	msgpack_sbuffer_init(&sbuf);
+
+	/* serialize values into the buffer using msgpack_sbuffer_write callback function. */
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 3);
+	msgpack_pack_int(&pk, 1);
+	msgpack_pack_true(&pk);
+	msgpack_pack_str(&pk, 7);
+	msgpack_pack_str_body(&pk, "example", 7);
+
+	print(sbuf.data, sbuf.size);
+
+	msgpack_zone mempool;
+	msgpack_object deserialized;
+	/* deserialize the buffer into msgpack_object instance. */
+	/* deserialized object is valid during the msgpack_zone instance alive. */
+	msgpack_zone_init(&mempool, 2048);
+
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, &mempool, &deserialized);
+
+	/* print the deserialized object. */
+	msgpack_object_print(stdout, deserialized);
+	puts("");
+
+	msgpack_zone_destroy(&mempool);
+	msgpack_sbuffer_destroy(&sbuf);
+
+	return 0;
 }

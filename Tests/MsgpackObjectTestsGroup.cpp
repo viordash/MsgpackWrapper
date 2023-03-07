@@ -9,9 +9,9 @@
 
 int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
-// TEST_GROUP(MsgpackObjectTestsGroup){void setup(){} void teardown(){}};
+TEST_GROUP(MsgpackObjectTestsGroup){void setup(){} void teardown(){}};
 
-// typedef enum { uAdmin, uViewer } TUserRole;
+typedef enum { uAdmin, uViewer } TUserRole;
 
 // class UserDto : public MsgpackObject {
 //   public:
@@ -19,8 +19,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	MsgpackCommonValue<uint32_t> Role;
 
 // 	UserDto(const char *name = {}, const TUserRole role = {})
-// 		: Name(this, "name", name), //
-// 		  Role(this, "role", role){};
+// 		: Name(this, 0, name), //
+// 		  Role(this, 1, role){};
 
 // 	bool Validate() override { return Role.Get() < 1000; }
 // };
@@ -83,11 +83,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 //   public:
 // 	MsgpackValue<uint64_t> Id;
 // 	MsgpackValue<char *> Name;
-// 	MsgpackCommonValue<TJsonRawData> Blob;
+// 	MsgpackCommonValue<TMsgpackRawData> Blob;
 // 	MsgpackValue<MsgpackArrayBase *> Orders;
 // 	OrdersList ordersList;
 
-// 	CustomerDto(const uint64_t id = {}, const char *name = {}, const TJsonRawData blob = {})
+// 	CustomerDto(const uint64_t id = {}, const char *name = {}, const TMsgpackRawData blob = {})
 // 		: Id(this, "id", id),		//
 // 		  Name(this, "name", name), //
 // 		  Blob(this, "blob", blob), //
@@ -96,10 +96,10 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // class ValuesWoInstance : public MsgpackObject {
 //   public:
-// 	ValuesWoInstance(const uint64_t id = {}, const char *name = {}, const TJsonRawData blob = {}) {
+// 	ValuesWoInstance(const uint64_t id = {}, const char *name = {}, const TMsgpackRawData blob = {}) {
 // 		new MsgpackValue<uint64_t>(this, "id", id);
 // 		new MsgpackValue<char *>(this, "name", name);
-// 		new MsgpackValue<TJsonRawData>(this, "blob", blob);
+// 		new MsgpackValue<TMsgpackRawData>(this, "blob", blob);
 // 	};
 
 // 	~ValuesWoInstance() {
@@ -368,9 +368,9 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(customerDto1->ordersList.Item<OrderDto *>(1)->goodsList.Size(), 2);
 // 	CHECK_EQUAL(customerDto1->ordersList.Item<OrderDto *>(2)->goodsList.Size(), 3);
 // 	CHECK_EQUAL(customerDto1->ordersList.Item<OrderDto *>(3)->goodsList.Size(), 2);
-// 	CHECK_EQUAL(((TJsonRawData)customerDto1->Blob.Get()).Size, pictureSize);
-// 	CHECK_FALSE(((TJsonRawData)customerDto1->Blob.Get()).Data == picture);
-// 	for (size_t i = 0; i < pictureSize; i++) { CHECK_EQUAL(((TJsonRawData)customerDto1->Blob.Get()).Data[i], 'A' + (i % 58)); }
+// 	CHECK_EQUAL(((TMsgpackRawData)customerDto1->Blob.Get()).Size, pictureSize);
+// 	CHECK_FALSE(((TMsgpackRawData)customerDto1->Blob.Get()).Data == picture);
+// 	for (size_t i = 0; i < pictureSize; i++) { CHECK_EQUAL(((TMsgpackRawData)customerDto1->Blob.Get()).Data[i], 'A' + (i % 58)); }
 // 	customerDto1->EndTryStringParse(doc);
 
 // 	delete customerDto1;
@@ -385,9 +385,9 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(customerDto2.ordersList.Size(), 2);
 // 	CHECK_EQUAL(customerDto2.ordersList.Item<OrderDto *>(0)->goodsList.Size(), 3);
 // 	CHECK_EQUAL(customerDto2.ordersList.Item<OrderDto *>(1)->goodsList.Size(), 2);
-// 	CHECK_EQUAL(((TJsonRawData)customerDto2.Blob.Get()).Size, pictureSize);
-// 	CHECK_FALSE(((TJsonRawData)customerDto2.Blob.Get()).Data == picture);
-// 	for (size_t i = 0; i < pictureSize; i++) { CHECK_EQUAL(((TJsonRawData)customerDto2.Blob.Get()).Data[i], 'A' + (i % 58)); }
+// 	CHECK_EQUAL(((TMsgpackRawData)customerDto2.Blob.Get()).Size, pictureSize);
+// 	CHECK_FALSE(((TMsgpackRawData)customerDto2.Blob.Get()).Data == picture);
+// 	for (size_t i = 0; i < pictureSize; i++) { CHECK_EQUAL(((TMsgpackRawData)customerDto2.Blob.Get()).Data[i], 'A' + (i % 58)); }
 // 	customerDto2.EndTryStringParse(doc);
 
 // 	delete[] DirectWriteTestBuffer;
@@ -472,9 +472,9 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(name == NULL);
 // 	STRCMP_EQUAL(name->Get(), "Tomato");
 
-// 	auto blob = (MsgpackValue<TJsonRawData> *)valuesWoInstance.GetField("blob");
+// 	auto blob = (MsgpackValue<TMsgpackRawData> *)valuesWoInstance.GetField("blob");
 // 	CHECK_FALSE(blob == NULL);
-// 	STRCMP_EQUAL((char *)((TJsonRawData)(blob->Get())).Data, "ABCDEFGHIJKLMNOPQR");
+// 	STRCMP_EQUAL((char *)((TMsgpackRawData)(blob->Get())).Data, "ABCDEFGHIJKLMNOPQR");
 
 // 	auto notExistsValue = (MsgpackValue<uint32_t> *)valuesWoInstance.GetField("notExistsValue");
 // 	CHECK_TRUE(notExistsValue == NULL);

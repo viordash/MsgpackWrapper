@@ -4,7 +4,7 @@
 // #include <stdlib.h>
 // #include "MsgpackWrapper.h"
 
-// MsgpackValueBase *JsonFieldsContainer::GetField(const char *name) {
+// MsgpackValueBase *MsgpackFieldsContainer::GetField(const char *name) {
 // 	for (std::vector<MsgpackValueBase *>::iterator item = Fields.begin(); item != Fields.end(); item++) {
 // 		auto field = *item;
 // 		if (field->Name == name || strcmp(field->Name, name) == 0) { return field; }
@@ -12,7 +12,7 @@
 // 	return NULL;
 // }
 
-// bool MsgpackObject::TryParse(TJsonDocument *doc) {
+// bool MsgpackObject::TryParse(TMsgpackDocument *doc) {
 // 	if (!doc->IsObject()) { return false; }
 
 // 	for (std::vector<MsgpackValueBase *>::iterator item = Fields.begin(); item != Fields.end(); item++) {
@@ -23,7 +23,7 @@
 // 	return true;
 // }
 
-// TJsonDocument *MsgpackObject::BeginTryStringParse(const char *jsonStr, size_t length) {
+// TMsgpackDocument *MsgpackObject::BeginTryStringParse(const char *jsonStr, size_t length) {
 // 	if (jsonStr == NULL) { return NULL; }
 
 // 	auto doc = new rapidjson::Document();
@@ -39,7 +39,7 @@
 // 	return doc;
 // }
 
-// void MsgpackObject::EndTryStringParse(TJsonDocument *doc) { delete doc; }
+// void MsgpackObject::EndTryStringParse(TMsgpackDocument *doc) { delete doc; }
 
 // bool MsgpackObject::TryStringParse(const char *jsonStr, size_t length) {
 // 	auto doc = BeginTryStringParse(jsonStr, length);
@@ -48,7 +48,7 @@
 // 	return true;
 // }
 
-// void MsgpackObject::WriteToDoc(TJsonDocument *doc) {
+// void MsgpackObject::WriteToDoc(TMsgpackDocument *doc) {
 // 	doc->SetObject();
 // 	for (const auto &field : Fields) { field->WriteToDoc(doc); }
 // }

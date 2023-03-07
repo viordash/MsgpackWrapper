@@ -184,7 +184,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	DirectWriteTestBuffer[size] = 0;
 // }
 
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Direct_Write_From_Json_Memory_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Direct_Write_From_Msgpack_Memory_Test) {
 // 	UsersList list;
 // 	list.Add(new UserDto("user 1", 0));
 // 	list.Add(new UserDto("user 2", 10));
@@ -331,7 +331,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // }
 
 // TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Field_Optional_Test) {
-// 	JsonFieldsContainer container;
+// 	MsgpackFieldsContainer container;
 // 	rapidjson::Document doc;
 // 	StringsList stringArray;
 // 	auto testableFieldMustExists = new MsgpackValue<MsgpackArrayBase *>(&container, "testStringArray", &stringArray);
@@ -484,7 +484,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Size(), 3);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Parse_Test) {
 // 	StringsList list;
 
 // 	CHECK_TRUE(list.TryStringParse("[\"User1\",\"User2\",\"User3\"]"));
@@ -494,7 +494,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(list.Item(2), "User3");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_Parse_With_Null_Values_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Parse_With_Null_Values_Test) {
 // 	StringsList list;
 
 // 	CHECK_TRUE(list.TryStringParse("[\"User1\",null,\"User3\"]"));
@@ -505,7 +505,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(list.Item(2), "User3");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_WriteTo_Test) {
 // 	char buffer[2048];
 // 	StringsList list;
 // 	CHECK_TRUE(list.Add("user 1"));
@@ -518,7 +518,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[\"user 1\",\"user 2\",\"user 3\",\"user 4\"]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_WriteTo_With_Null_Values_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_WriteTo_With_Null_Values_Test) {
 // 	char buffer[2048];
 // 	StringsList list;
 // 	CHECK_TRUE(list.Add("user 1"));
@@ -529,7 +529,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[\"user 1\",null,\"user 3\"]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Equals_Test) {
 // 	StringsList list1;
 // 	list1.Add("user 1");
 // 	list1.Add("user 2");
@@ -568,7 +568,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 != list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Clone_Test) {
 // 	auto list1 = new StringsList();
 // 	list1->Add("user 1");
 // 	list1->Add("user 2");
@@ -588,7 +588,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(list2.Item(4), NULL);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Find_Test) {
 // 	StringsList list1;
 // 	list1.Add("user 1");
 // 	list1.Add("user 2");
@@ -607,7 +607,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	strcpy(item, str);
 // 	return item;
 // }
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Remove_Test) {
 // 	StringsList list1;
 // 	list1.Add("user 1");
 // 	list1.Add("user 2");
@@ -623,7 +623,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Add_Test) {
 // 	StringsList list1;
 // 	CHECK_TRUE(list1.Add("user 1"));
 
@@ -638,7 +638,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(2), NULL);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_Incorrect_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Incorrect_Add_Test) {
 // 	StringsList list1;
 // 	auto item1 = CreateTestString("user 1");
 // 	CHECK_TRUE(list1.Add(item1));
@@ -652,7 +652,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(list1.Item(0), "user 1");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Update_Test) {
 // 	StringsList list1;
 // 	list1.Add("user 1");
 // 	list1.Add("user 2");
@@ -668,7 +668,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(list1.Item(1), NULL);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Incorrect_Update_Test) {
 // 	StringsList list1;
 // 	list1.Add("user 1");
 // 	list1.Add("user 2");
@@ -686,7 +686,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(list1.Item(0), "user 1");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonStringArray_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Clear_Test) {
 // 	StringsList list;
 // 	CHECK_TRUE(list.Add("user 1"));
 // 	CHECK_TRUE(list.Add("user 2"));
@@ -698,7 +698,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Size(), 3);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonBoolArray_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Parse_Test) {
 // 	BoolList list;
 
 // 	CHECK_TRUE(list.TryStringParse("[true,false,true,false]"));
@@ -710,7 +710,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list.TryStringParse("[false,1,true,0]"));
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonBoolArray_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_WriteTo_Test) {
 // 	char buffer[2048];
 // 	BoolList list;
 // 	list.Add(true);
@@ -723,7 +723,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[true,false,false,true,true]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonBoolArray_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Equals_Test) {
 // 	BoolList list1;
 // 	list1.Add(true);
 // 	list1.Add(false);
@@ -743,7 +743,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 == list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonBoolArray_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Clone_Test) {
 // 	auto list1 = new BoolList();
 // 	list1->Add(true);
 // 	list1->Add(false);
@@ -761,7 +761,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Item(3), (TBoolArray) true);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonBoolArray_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Find_Test) {
 // 	BoolList list1;
 // 	list1.Add(true);
 
@@ -770,7 +770,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list1.Find(false) == list1.End());
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonBoolArray_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Remove_Test) {
 // 	BoolList list1;
 // 	list1.Add(true);
 // 	list1.Add(true);
@@ -784,7 +784,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonBoolArray_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Add_Test) {
 // 	BoolList list1;
 // 	CHECK_TRUE(list1.Add(true));
 // 	CHECK_TRUE(list1.Add(false));
@@ -793,7 +793,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), (TBoolArray) true);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonBoolArray_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Update_Test) {
 // 	BoolList list1;
 // 	list1.Add(true);
 // 	list1.Add(true);
@@ -803,7 +803,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), false);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonBoolArray_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Incorrect_Update_Test) {
 // 	BoolList list1;
 // 	list1.Add(true);
 // 	list1.Add(true);
@@ -813,7 +813,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), (TBoolArray) true);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonBoolArray_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Clear_Test) {
 // 	BoolList list;
 // 	CHECK_TRUE(list.Add(true));
 // 	CHECK_TRUE(list.Add(false));
@@ -825,7 +825,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Size(), 4);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt64Array_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Parse_Test) {
 // 	Int64List list;
 // 	CHECK_TRUE(list.TryStringParse("[0,1,-5188146770730811392,5188146770730811392]"));
 // 	CHECK_EQUAL(list.Size(), 4);
@@ -835,7 +835,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Item(3), 5188146770730811392LL);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt64Array_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_WriteTo_Test) {
 // 	char buffer[2048];
 // 	Int64List list;
 // 	list.Add(-5188146770730811392LL);
@@ -846,7 +846,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[-5188146770730811392,5188146770730811392,0]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt64Array_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Equals_Test) {
 // 	Int64List list1;
 // 	list1.Add(-5188146770730811392LL);
 // 	list1.Add(5188146770730811392LL);
@@ -864,7 +864,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 == list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt64Array_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Clone_Test) {
 // 	auto list1 = new Int64List();
 // 	list1->Add(-5188146770730811392LL);
 // 	list1->Add(5188146770730811392LL);
@@ -881,7 +881,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Item(2), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt64Array_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Find_Test) {
 // 	Int64List list1;
 // 	list1.Add(-5188146770730811392LL);
 // 	list1.Add(5188146770730811392LL);
@@ -892,7 +892,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list1.Find(-1) == list1.End());
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt64Array_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Remove_Test) {
 // 	Int64List list1;
 // 	list1.Add(-5188146770730811392LL);
 // 	list1.Add(5188146770730811392LL);
@@ -902,7 +902,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt64Array_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Add_Test) {
 // 	Int64List list1;
 // 	CHECK_TRUE(list1.Add(5188146770730811392LL));
 // 	CHECK_TRUE(list1.Add(-5188146770730811392LL));
@@ -911,7 +911,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 5188146770730811392LL);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt64Array_Incorrect_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Incorrect_Add_Test) {
 // 	Int64List list1;
 // 	CHECK_TRUE(list1.Add(5188146770730811392LL));
 // 	CHECK_FALSE(list1.Add(5188146770730811392LL + 1LL));
@@ -920,7 +920,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 5188146770730811392LL);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt64Array_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Update_Test) {
 // 	Int64List list1;
 // 	list1.Add(5188146770730811392LL);
 // 	list1.Add(-5188146770730811392LL);
@@ -931,7 +931,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt64Array_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Incorrect_Update_Test) {
 // 	Int64List list1;
 // 	list1.Add(5188146770730811392LL);
 // 	list1.Add(-5188146770730811392LL);
@@ -943,7 +943,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 5188146770730811392LL);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt64Array_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Clear_Test) {
 // 	Int64List list;
 // 	CHECK_TRUE(list.Add(5188146770730811392LL));
 // 	CHECK_TRUE(list.Add(-5188146770730811392LL));
@@ -955,7 +955,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Size(), 4);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint64Array_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Parse_Test) {
 // 	Uint64List list;
 // 	CHECK_TRUE(list.TryStringParse("[1,0,10188146770730811392]"));
 // 	CHECK_EQUAL(list.Size(), 3);
@@ -964,7 +964,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list.Item(2) == 10188146770730811392ULL);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint64Array_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_WriteTo_Test) {
 // 	char buffer[2048];
 // 	Uint64List list;
 // 	list.Add(0);
@@ -975,7 +975,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[0,10188146770730811392,1]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint64Array_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Equals_Test) {
 // 	Uint64List list1;
 // 	list1.Add(0);
 // 	list1.Add(10188146770730811392ULL);
@@ -993,7 +993,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 == list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint64Array_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Clone_Test) {
 // 	auto list1 = new Uint64List();
 // 	list1->Add(0);
 // 	list1->Add(10188146770730811392ULL);
@@ -1010,7 +1010,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Item(2), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint64Array_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Find_Test) {
 // 	Uint64List list1;
 // 	list1.Add(10188146770730811392ULL);
 // 	list1.Add(5188146770730811392LL);
@@ -1021,7 +1021,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list1.Find(1) == list1.End());
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint64Array_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Remove_Test) {
 // 	Uint64List list1;
 // 	list1.Add(10188146770730811392ULL);
 // 	list1.Add(5188146770730811392LL);
@@ -1031,7 +1031,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint64Array_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Add_Test) {
 // 	Uint64List list1;
 // 	CHECK_TRUE(list1.Add(5188146770730811392LL));
 // 	CHECK_TRUE(list1.Add(10188146770730811392ULL));
@@ -1040,7 +1040,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 5188146770730811392LL);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint64Array_Incorrect_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Incorrect_Add_Test) {
 // 	Uint64List list1;
 // 	CHECK_TRUE(list1.Add(5188146770730811392LL));
 // 	CHECK_FALSE(list1.Add(10188146770730811392ULL + 1LL));
@@ -1049,7 +1049,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 5188146770730811392LL);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint64Array_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Update_Test) {
 // 	Uint64List list1;
 // 	list1.Add(5188146770730811392LL);
 // 	list1.Add(10188146770730811392ULL);
@@ -1060,7 +1060,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint64Array_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Incorrect_Update_Test) {
 // 	Uint64List list1;
 // 	list1.Add(5188146770730811392LL);
 // 	list1.Add(10188146770730811392ULL);
@@ -1072,7 +1072,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 5188146770730811392LL);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint64Array_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Clear_Test) {
 // 	Uint64List list;
 // 	CHECK_TRUE(list.Add(5188146770730811392LL));
 // 	CHECK_TRUE(list.Add(-10188146770730811392ULL));
@@ -1084,7 +1084,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Size(), 3);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt32Array_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Parse_Test) {
 // 	Int32List list;
 // 	CHECK_TRUE(list.TryStringParse("[0,-2147483647,2147483647]"));
 // 	CHECK_EQUAL(list.Size(), 3);
@@ -1093,7 +1093,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Item(2), 2147483647);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt32Array_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_WriteTo_Test) {
 // 	char buffer[2048];
 // 	Int32List list;
 // 	list.Add(-2147483647);
@@ -1104,7 +1104,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[-2147483647,2147483647,0]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt32Array_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Equals_Test) {
 // 	Int32List list1;
 // 	list1.Add(-2147483647);
 // 	list1.Add(2147483647);
@@ -1122,7 +1122,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 == list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt32Array_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Clone_Test) {
 // 	auto list1 = new Int32List();
 // 	list1->Add(-2147483647);
 // 	list1->Add(2147483647);
@@ -1139,7 +1139,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Item(2), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt32Array_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Find_Test) {
 // 	Int32List list1;
 // 	list1.Add(-2147483647);
 // 	list1.Add(2147483647);
@@ -1150,7 +1150,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list1.Find(1) == list1.End());
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt32Array_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Remove_Test) {
 // 	Int32List list1;
 // 	list1.Add(-2147483647);
 // 	list1.Add(2147483647);
@@ -1160,7 +1160,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt32Array_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Add_Test) {
 // 	Int32List list1;
 // 	CHECK_TRUE(list1.Add(-2147483647));
 // 	CHECK_TRUE(list1.Add(2147483647));
@@ -1169,7 +1169,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), -2147483647);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt32Array_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Update_Test) {
 // 	Int32List list1;
 // 	list1.Add(-2147483647);
 // 	list1.Add(2147483647);
@@ -1180,7 +1180,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt32Array_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Incorrect_Update_Test) {
 // 	Int32List list1;
 // 	list1.Add(-2147483647);
 // 	list1.Add(2147483647);
@@ -1191,7 +1191,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), -2147483647);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt32Array_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Clear_Test) {
 // 	Int32List list;
 // 	CHECK_TRUE(list.Add(2147483647));
 // 	CHECK_TRUE(list.Add(-2147483647));
@@ -1203,7 +1203,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Size(), 3);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint32Array_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Parse_Test) {
 // 	Uint32List list;
 // 	CHECK_TRUE(list.TryStringParse("[0,4294967295]"));
 // 	CHECK_EQUAL(list.Size(), 2);
@@ -1211,7 +1211,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Item(1), 4294967295);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint32Array_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_WriteTo_Test) {
 // 	char buffer[2048];
 // 	Uint32List list;
 // 	list.Add(0);
@@ -1222,7 +1222,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[0,4294967295,1]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint32Array_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Equals_Test) {
 // 	Uint32List list1;
 // 	list1.Add(147483647);
 // 	list1.Add(2147483647);
@@ -1240,7 +1240,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 == list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint32Array_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Clone_Test) {
 // 	auto list1 = new Uint32List();
 // 	list1->Add(147483647);
 // 	list1->Add(2147483647);
@@ -1257,7 +1257,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Item(2), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint32Array_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Find_Test) {
 // 	Uint32List list1;
 // 	list1.Add(147483647);
 // 	list1.Add(2147483647);
@@ -1268,7 +1268,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list1.Find(1) == list1.End());
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint32Array_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Remove_Test) {
 // 	Uint32List list1;
 // 	list1.Add(147483647);
 // 	list1.Add(2147483647);
@@ -1278,7 +1278,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint32Array_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Add_Test) {
 // 	Uint32List list1;
 // 	CHECK_TRUE(list1.Add(147483647));
 // 	CHECK_TRUE(list1.Add(2147483647));
@@ -1287,7 +1287,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 147483647);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint32Array_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Update_Test) {
 // 	Uint32List list1;
 // 	list1.Add(147483647);
 // 	list1.Add(2147483647);
@@ -1298,7 +1298,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint32Array_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Incorrect_Update_Test) {
 // 	Uint32List list1;
 // 	list1.Add(147483647);
 // 	list1.Add(2147483647);
@@ -1309,7 +1309,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 147483647);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint32Array_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Clear_Test) {
 // 	Uint32List list;
 // 	CHECK_TRUE(list.Add(2147483647));
 // 	CHECK_TRUE(list.Add(147483647));
@@ -1321,7 +1321,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt16Array_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Parse_Test) {
 // 	Int16List list;
 // 	CHECK_TRUE(list.TryStringParse("[0,-32768,32767,-2147483647,2147483647]"));
 // 	CHECK_EQUAL(list.Size(), 5);
@@ -1332,7 +1332,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Item(4), -1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt16Array_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_WriteTo_Test) {
 // 	char buffer[2048];
 // 	Int16List list;
 // 	list.Add(-32768);
@@ -1345,7 +1345,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[-32768,32767,0,1,-1]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt16Array_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Equals_Test) {
 // 	Int16List list1;
 // 	list1.Add(-32768);
 // 	list1.Add(32767);
@@ -1363,7 +1363,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 == list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt16Array_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Clone_Test) {
 // 	auto list1 = new Int16List();
 // 	list1->Add(-32768);
 // 	list1->Add(32767);
@@ -1380,7 +1380,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Item(2), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt16Array_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Find_Test) {
 // 	Int16List list1;
 // 	list1.Add(-32768);
 // 	list1.Add(32767);
@@ -1391,7 +1391,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list1.Find(1) == list1.End());
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt16Array_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Remove_Test) {
 // 	Int16List list1;
 // 	list1.Add(-32768);
 // 	list1.Add(32767);
@@ -1401,7 +1401,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt16Array_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Add_Test) {
 // 	Int16List list1;
 // 	CHECK_TRUE(list1.Add(-32768));
 // 	CHECK_TRUE(list1.Add(32767));
@@ -1410,7 +1410,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), -32768);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt16Array_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Update_Test) {
 // 	Int16List list1;
 // 	list1.Add(-32768);
 // 	list1.Add(32767);
@@ -1421,7 +1421,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt16Array_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Incorrect_Update_Test) {
 // 	Int16List list1;
 // 	list1.Add(-32768);
 // 	list1.Add(32767);
@@ -1432,7 +1432,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), -32768);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt16Array_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Clear_Test) {
 // 	Int16List list;
 // 	CHECK_TRUE(list.Add(-32768));
 // 	CHECK_TRUE(list.Add(32767));
@@ -1444,7 +1444,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Size(), 5);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint16Array_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Parse_Test) {
 // 	Uint16List list;
 // 	CHECK_TRUE(list.TryStringParse("[0,65535,2147483647]"));
 // 	CHECK_EQUAL(list.Size(), 3);
@@ -1453,7 +1453,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Item(2), 65535);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint16Array_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_WriteTo_Test) {
 // 	char buffer[2048];
 // 	Uint16List list;
 // 	list.Add(0);
@@ -1465,7 +1465,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[0,65535,1,65535]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint16Array_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Equals_Test) {
 // 	Uint16List list1;
 // 	list1.Add(0);
 // 	list1.Add(65535);
@@ -1483,7 +1483,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 == list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint16Array_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Clone_Test) {
 // 	auto list1 = new Uint16List();
 // 	list1->Add(65535);
 // 	list1->Add(32767);
@@ -1500,7 +1500,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Item(2), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint16Array_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Find_Test) {
 // 	Uint16List list1;
 // 	list1.Add(0);
 // 	list1.Add(65535);
@@ -1511,7 +1511,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list1.Find(10) == list1.End());
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint16Array_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Remove_Test) {
 // 	Uint16List list1;
 // 	list1.Add(0);
 // 	list1.Add(65535);
@@ -1521,7 +1521,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint16Array_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Add_Test) {
 // 	Uint16List list1;
 // 	CHECK_TRUE(list1.Add(0));
 // 	CHECK_TRUE(list1.Add(65535));
@@ -1530,7 +1530,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint16Array_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Update_Test) {
 // 	Uint16List list1;
 // 	list1.Add(0);
 // 	list1.Add(65535);
@@ -1541,7 +1541,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint16Array_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Incorrect_Update_Test) {
 // 	Uint16List list1;
 // 	list1.Add(0);
 // 	list1.Add(65535);
@@ -1552,7 +1552,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint16Array_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Clear_Test) {
 // 	Uint16List list;
 // 	CHECK_TRUE(list.Add(0));
 // 	CHECK_TRUE(list.Add(65535));
@@ -1564,7 +1564,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Size(), 3);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt8Array_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Parse_Test) {
 // 	Int8List list;
 // 	CHECK_TRUE(list.TryStringParse("[0,-128,127,-2147483647,2147483647]"));
 // 	CHECK_EQUAL(list.Size(), 5);
@@ -1575,7 +1575,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Item(4), -1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt8Array_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_WriteTo_Test) {
 // 	char buffer[2048];
 // 	Int8List list;
 // 	list.Add(-128);
@@ -1590,7 +1590,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[-128,127,0,-1,0,1,-1]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt8Array_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Equals_Test) {
 // 	Int8List list1;
 // 	list1.Add(0);
 // 	list1.Add(-128);
@@ -1608,7 +1608,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 == list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt8Array_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Clone_Test) {
 // 	auto list1 = new Int8List();
 // 	list1->Add(0);
 // 	list1->Add(-128);
@@ -1625,7 +1625,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Item(2), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt8Array_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Find_Test) {
 // 	Int8List list1;
 // 	list1.Add(0);
 // 	list1.Add(-128);
@@ -1636,7 +1636,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list1.Find(2) == list1.End());
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt8Array_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Remove_Test) {
 // 	Int8List list1;
 // 	list1.Add(0);
 // 	list1.Add(-128);
@@ -1646,7 +1646,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt8Array_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Add_Test) {
 // 	Int8List list1;
 // 	CHECK_TRUE(list1.Add(-128));
 // 	CHECK_TRUE(list1.Add(0));
@@ -1655,7 +1655,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), -128);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt8Array_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Update_Test) {
 // 	Int8List list1;
 // 	list1.Add(-128);
 // 	list1.Add(0);
@@ -1666,7 +1666,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt8Array_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Incorrect_Update_Test) {
 // 	Int8List list1;
 // 	list1.Add(-128);
 // 	list1.Add(0);
@@ -1677,7 +1677,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), -128);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonInt8Array_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Clear_Test) {
 // 	Int8List list;
 // 	CHECK_TRUE(list.Add(-128));
 // 	CHECK_TRUE(list.Add(0));
@@ -1689,7 +1689,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Size(), 5);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint8Array_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Parse_Test) {
 // 	Uint8List list;
 // 	CHECK_TRUE(list.TryStringParse("[0,254,65535,2147483647]"));
 // 	CHECK_EQUAL(list.Size(), 4);
@@ -1699,7 +1699,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Item(3), 255);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint8Array_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_WriteTo_Test) {
 // 	char buffer[2048];
 // 	Uint8List list;
 // 	list.Add(0);
@@ -1712,7 +1712,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[0,254,255,1,255]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint8Array_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Equals_Test) {
 // 	Uint8List list1;
 // 	list1.Add(0);
 // 	list1.Add(254);
@@ -1730,7 +1730,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 == list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint8Array_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Clone_Test) {
 // 	auto list1 = new Uint8List();
 // 	list1->Add(0);
 // 	list1->Add(254);
@@ -1747,7 +1747,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Item(2), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint8Array_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Find_Test) {
 // 	Uint8List list1;
 // 	list1.Add(0);
 // 	list1.Add(254);
@@ -1758,7 +1758,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list1.Find(2) == list1.End());
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint8Array_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Remove_Test) {
 // 	Uint8List list1;
 // 	list1.Add(0);
 // 	list1.Add(254);
@@ -1768,7 +1768,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint8Array_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Add_Test) {
 // 	Uint8List list1;
 // 	CHECK_TRUE(list1.Add(0));
 // 	CHECK_TRUE(list1.Add(254));
@@ -1777,7 +1777,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint8Array_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Update_Test) {
 // 	Uint8List list1;
 // 	list1.Add(0);
 // 	list1.Add(254);
@@ -1788,7 +1788,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint8Array_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Incorrect_Update_Test) {
 // 	Uint8List list1;
 // 	list1.Add(0);
 // 	list1.Add(254);
@@ -1799,7 +1799,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonUint8Array_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Clear_Test) {
 // 	Uint8List list;
 // 	CHECK_TRUE(list.Add(0));
 // 	CHECK_TRUE(list.Add(254));
@@ -1811,7 +1811,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Size(), 4);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonDoubleArray_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Parse_Test) {
 // 	DoubleList list;
 // 	CHECK_TRUE(list.TryStringParse("[0.00001,254.123,-65535.523,2147483647.1]"));
 // 	CHECK_EQUAL(list.Size(), 4);
@@ -1821,7 +1821,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Item(3), 2147483647.1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonDoubleArray_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_WriteTo_Test) {
 // 	char buffer[2048];
 // 	DoubleList list;
 // 	list.Add(-0.05);
@@ -1834,7 +1834,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[-0.05,1.254,65535.15,0.1,2147.483647]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonDoubleArray_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Equals_Test) {
 // 	DoubleList list1;
 // 	list1.Add(-0.05);
 // 	list1.Add(1.254);
@@ -1852,7 +1852,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 == list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonDoubleArray_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Clone_Test) {
 // 	auto list1 = new DoubleList();
 // 	list1->Add(-0.05);
 // 	list1->Add(1.254);
@@ -1869,7 +1869,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Item(2), 65535.15);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonDoubleArray_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Find_Test) {
 // 	DoubleList list1;
 // 	list1.Add(-0.05);
 // 	list1.Add(1.254);
@@ -1880,7 +1880,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list1.Find(2) == list1.End());
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonDoubleArray_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Remove_Test) {
 // 	DoubleList list1;
 // 	list1.Add(-0.05);
 // 	list1.Add(1.254);
@@ -1890,7 +1890,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonDoubleArray_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Add_Test) {
 // 	DoubleList list1;
 // 	CHECK_TRUE(list1.Add(0));
 // 	CHECK_TRUE(list1.Add(1.254));
@@ -1899,7 +1899,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonDoubleArray_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Update_Test) {
 // 	DoubleList list1;
 // 	list1.Add(0);
 // 	list1.Add(1.254);
@@ -1910,7 +1910,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonDoubleArray_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Incorrect_Update_Test) {
 // 	DoubleList list1;
 // 	list1.Add(0);
 // 	list1.Add(1.254);
@@ -1921,7 +1921,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonDoubleArray_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Clear_Test) {
 // 	DoubleList list;
 // 	CHECK_TRUE(list.Add(0));
 // 	CHECK_TRUE(list.Add(1.254));
@@ -1933,7 +1933,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Size(), 4);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonFloatArray_Parse_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Parse_Test) {
 // 	FloatList list;
 // 	CHECK_TRUE(list.TryStringParse("[0.1,254.1,-65535.5,214748.1]"));
 // 	CHECK_EQUAL(list.Size(), 4);
@@ -1943,7 +1943,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list.Item(3), 214748.1f);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonFloatArray_WriteTo_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_WriteTo_Test) {
 // 	char buffer[2048];
 // 	FloatList list;
 // 	list.Add(-1.5f);
@@ -1956,7 +1956,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	STRCMP_EQUAL(buffer, "[-1.5,1.25,1000.25,-100.75,214789.5625]");
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonFloatArray_Equals_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Equals_Test) {
 // 	FloatList list1;
 // 	list1.Add(-0.05f);
 // 	list1.Add(1.254f);
@@ -1974,7 +1974,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(list1 == list2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonFloatArray_Clone_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Clone_Test) {
 // 	auto list1 = new FloatList();
 // 	list1->Add(-0.05f);
 // 	list1->Add(1.254f);
@@ -1991,7 +1991,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Item(2), 65535.15f);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonFloatArray_Find_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Find_Test) {
 // 	FloatList list1;
 // 	list1.Add(-0.05f);
 // 	list1.Add(1.254f);
@@ -2002,7 +2002,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_TRUE(list1.Find(2) == list1.End());
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonFloatArray_Remove_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Remove_Test) {
 // 	FloatList list1;
 // 	list1.Add(-0.05f);
 // 	list1.Add(1.254f);
@@ -2012,7 +2012,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Size(), 2);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonFloatArray_Add_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Add_Test) {
 // 	FloatList list1;
 // 	CHECK_TRUE(list1.Add(0));
 // 	CHECK_TRUE(list1.Add(1.254f));
@@ -2021,7 +2021,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonFloatArray_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Update_Test) {
 // 	FloatList list1;
 // 	list1.Add(0);
 // 	list1.Add(1.254f);
@@ -2032,7 +2032,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 1);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonFloatArray_Incorrect_Update_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Incorrect_Update_Test) {
 // 	FloatList list1;
 // 	list1.Add(0);
 // 	list1.Add(1.254f);
@@ -2043,7 +2043,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list1.Item(0), 0);
 // }
 
-// TEST(MsgpackArrayTestsGroup, JsonFloatArray_Clear_Test) {
+// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Clear_Test) {
 // 	DoubleList list;
 // 	CHECK_TRUE(list.Add(0));
 // 	CHECK_TRUE(list.Add(1.254f));

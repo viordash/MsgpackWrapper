@@ -4,17 +4,22 @@
 #include <vector>
 #include <algorithm>
 
-typedef int TJsonDocument; // typedef rapidjson::Document TJsonDocument;
-// typedef rapidjson::Value::Array TMsgpackArray;
-typedef char TMsgpackValue; // typedef rapidjson::Value TMsgpackValue;
+typedef msgpack_sbuffer TMsgpackBuffer;
+#define MsgpackBufferInit msgpack_sbuffer_init
+#define MsgpackBufferDestroy msgpack_sbuffer_destroy
+// typedef char TMsgpackValue; // typedef rapidjson::Value TMsgpackValue;
 
 typedef char TMsgpackValueName; // typedef rapidjson::GenericStringRef<char> TMsgpackValueName;
 
 class MsgpackValueBase;
 template <class T> class MsgpackValue;
 
-class JsonFieldsContainer {
+class MsgpackFieldsContainer {
   public:
+	// msgpack_sbuffer sbuf;
+	// msgpack_packer pk;
+	// MsgpackFieldsContainer() { printf("MsgpackFieldsContainer ctor \n"); msgpack_sbuffer_init(&sbuf); }
+
 	std::vector<MsgpackValueBase *> Fields;
 	void Add(MsgpackValueBase *field) { Fields.push_back(field); }
 	MsgpackValueBase *GetField(const char *name);
@@ -22,22 +27,20 @@ class JsonFieldsContainer {
 
 class MsgpackValueBase {
   public:
-	TMsgpackValueName Name;
+	int Id;
 	MsgpackValueBase(MsgpackValueBase &&) = delete;
 	MsgpackValueBase(const MsgpackValueBase &) = delete;
 
-	MsgpackValueBase(JsonFieldsContainer *container, const char *name, size_t nameLen) /*: Name(name, nameLen)*/ { container->Add(this); }
+	MsgpackValueBase(MsgpackFieldsContainer *container, int id) : Id(id) { container->Add(this); }
 	virtual ~MsgpackValueBase(){};
 
-	virtual bool TryParse(TJsonDocument *doc) = 0;
-	virtual void WriteToDoc(TJsonDocument *doc) = 0;
-	virtual bool Equals(MsgpackValueBase *other) = 0;
-	virtual void CloneTo(MsgpackValueBase *other) = 0;
+	// virtual bool Parse(TMsgpackBuffer *buffer) = 0;
+	virtual bool Write(msgpack_packer *packer) = 0;
+	// virtual bool Equals(MsgpackValueBase *other) = 0;
+	// virtual void CloneTo(MsgpackValueBase *other) = 0;
 
-	friend bool operator!=(const MsgpackValueBase &v1, const MsgpackValueBase &v2) { return !((MsgpackValueBase *)&v1)->Equals((MsgpackValueBase *)&v2); }
-	friend bool operator==(const MsgpackValueBase &v1, const MsgpackValueBase &v2) { return !(v1 != v2); }
+	// friend bool operator!=(const MsgpackValueBase &v1, const MsgpackValueBase &v2) { return !((MsgpackValueBase *)&v1)->Equals((MsgpackValueBase *)&v2); }
+	// friend bool operator==(const MsgpackValueBase &v1, const MsgpackValueBase &v2) { return !(v1 != v2); }
 
   protected:
-	static TMsgpackValue *GetMember(TJsonDocument *doc, const char *name);
-	static bool NamesCompare(const char *name1, const char *name2);
 };
