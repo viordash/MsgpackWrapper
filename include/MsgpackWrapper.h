@@ -12,22 +12,21 @@ template <class T> class MsgpackValue : public MsgpackValueBase {
   public:
 	typedef typename std::conditional<std::is_same<T, char *>::value, const char *, typename std::add_const<T>::type>::type ConstT;
 
-	MsgpackValue(MsgpackFieldsContainer *container, int id, size_t valueLen, ConstT value) : MsgpackValueBase(container, id) { InitValue(value, valueLen); }
-	MsgpackValue(MsgpackFieldsContainer *container, int id, ConstT value = T()) : MsgpackValue(container, id, size_t(), value) {}
+	MsgpackValue(MsgpackFieldsContainer *container, unsigned int id, size_t valueLen, ConstT value) : MsgpackValueBase(container, id) { InitValue(value, valueLen); }
+	MsgpackValue(MsgpackFieldsContainer *container, unsigned int id, ConstT value = T()) : MsgpackValue(container, id, size_t(), value) {}
 
 	virtual ~MsgpackValue() { DeleteValue(); }
 
-	// bool Parse(TMsgpackBuffer *buffer) override final;
+	bool Parse(msgpack_object *deserialized) override final;
 
 	bool Write(msgpack_packer *packer) override final;
-	// void WriteToDoc(TMsgpackDocument *doc) override final;
 
-	// bool Equals(MsgpackValueBase *other) override final;
-	// void CloneTo(MsgpackValueBase *other) override final;
+	bool Equals(MsgpackValueBase *other) override final;
+	void CloneTo(MsgpackValueBase *other) override final;
 
-	// ConstT Get() { return value; }
+	ConstT Get() { return value; }
 
-	// void Set(ConstT newValue, size_t newValueLen = size_t());
+	void Set(ConstT newValue, size_t newValueLen = size_t());
 
   protected:
 	T value;

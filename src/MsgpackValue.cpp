@@ -4,31 +4,30 @@
 #include <stdlib.h>
 #include "MsgpackWrapper.h"
 
-// template <> bool MsgpackValue<bool>::Equals(MsgpackValueBase *other) { return MsgpackValueBase::NamesCompare(Name, other->Name) && value == ((MsgpackValue<bool> *)other)->value; }
-// template <> bool MsgpackValue<int8_t>::Equals(MsgpackValueBase *other) { return MsgpackValueBase::NamesCompare(Name, other->Name) && value == ((MsgpackValue<int8_t> *)other)->value; }
-// template <> bool MsgpackValue<int16_t>::Equals(MsgpackValueBase *other) { return MsgpackValueBase::NamesCompare(Name, other->Name) && value == ((MsgpackValue<int16_t> *)other)->value; }
-// template <> bool MsgpackValue<int32_t>::Equals(MsgpackValueBase *other) { return MsgpackValueBase::NamesCompare(Name, other->Name) && value == ((MsgpackValue<int32_t> *)other)->value; }
-// template <> bool MsgpackValue<int64_t>::Equals(MsgpackValueBase *other) { return MsgpackValueBase::NamesCompare(Name, other->Name) && value == ((MsgpackValue<int64_t> *)other)->value; }
-// template <> bool MsgpackValue<uint8_t>::Equals(MsgpackValueBase *other) { return MsgpackValueBase::NamesCompare(Name, other->Name) && value == ((MsgpackValue<uint8_t> *)other)->value; }
-// template <> bool MsgpackValue<uint16_t>::Equals(MsgpackValueBase *other) { return MsgpackValueBase::NamesCompare(Name, other->Name) && value == ((MsgpackValue<uint16_t> *)other)->value; }
-// template <> bool MsgpackValue<uint32_t>::Equals(MsgpackValueBase *other) { return MsgpackValueBase::NamesCompare(Name, other->Name) && value == ((MsgpackValue<uint32_t> *)other)->value; }
-// template <> bool MsgpackValue<uint64_t>::Equals(MsgpackValueBase *other) { return MsgpackValueBase::NamesCompare(Name, other->Name) && value == ((MsgpackValue<uint64_t> *)other)->value; }
-// template <> bool MsgpackValue<float>::Equals(MsgpackValueBase *other) { return MsgpackValueBase::NamesCompare(Name, other->Name) && value == ((MsgpackValue<float> *)other)->value; }
-// template <> bool MsgpackValue<double>::Equals(MsgpackValueBase *other) { return MsgpackValueBase::NamesCompare(Name, other->Name) && value == ((MsgpackValue<double> *)other)->value; }
-// template <> bool MsgpackValue<char *>::Equals(MsgpackValueBase *other) { //
-// 	return MsgpackValueBase::NamesCompare(Name, other->Name)
-// 		&& (value == ((MsgpackValue<char *> *)other)->value || (value != NULL && ((MsgpackValue<char *> *)other)->value != NULL && strcmp(value, ((MsgpackValue<char *> *)other)->value) == 0));
-// }
-// template <> bool MsgpackValue<TMsgpackRawData>::Equals(MsgpackValueBase *other) {
-// 	return MsgpackValueBase::NamesCompare(Name, other->Name)												  //
-// 		&& ((TMsgpackRawData)value).Data == ((TMsgpackRawData)(((MsgpackValue<TMsgpackRawData> *)other)->value)).Data //
-// 		&& ((TMsgpackRawData)value).Size == ((TMsgpackRawData)(((MsgpackValue<TMsgpackRawData> *)other)->value)).Size;
-// }
+template <> bool MsgpackValue<bool>::Equals(MsgpackValueBase *other) { return value == ((MsgpackValue<bool> *)other)->value; }
+template <> bool MsgpackValue<int8_t>::Equals(MsgpackValueBase *other) { return value == ((MsgpackValue<int8_t> *)other)->value; }
+template <> bool MsgpackValue<int16_t>::Equals(MsgpackValueBase *other) { return value == ((MsgpackValue<int16_t> *)other)->value; }
+template <> bool MsgpackValue<int32_t>::Equals(MsgpackValueBase *other) { return value == ((MsgpackValue<int32_t> *)other)->value; }
+template <> bool MsgpackValue<int64_t>::Equals(MsgpackValueBase *other) { return value == ((MsgpackValue<int64_t> *)other)->value; }
+template <> bool MsgpackValue<uint8_t>::Equals(MsgpackValueBase *other) { return value == ((MsgpackValue<uint8_t> *)other)->value; }
+template <> bool MsgpackValue<uint16_t>::Equals(MsgpackValueBase *other) { return value == ((MsgpackValue<uint16_t> *)other)->value; }
+template <> bool MsgpackValue<uint32_t>::Equals(MsgpackValueBase *other) { return value == ((MsgpackValue<uint32_t> *)other)->value; }
+template <> bool MsgpackValue<uint64_t>::Equals(MsgpackValueBase *other) { return value == ((MsgpackValue<uint64_t> *)other)->value; }
+template <> bool MsgpackValue<float>::Equals(MsgpackValueBase *other) { return value == ((MsgpackValue<float> *)other)->value; }
+template <> bool MsgpackValue<double>::Equals(MsgpackValueBase *other) { return value == ((MsgpackValue<double> *)other)->value; }
+template <> bool MsgpackValue<char *>::Equals(MsgpackValueBase *other) { //
+	return (value == ((MsgpackValue<char *> *)other)->value				 //
+			|| (value != NULL && ((MsgpackValue<char *> *)other)->value != NULL && strcmp(value, ((MsgpackValue<char *> *)other)->value) == 0));
+}
+template <> bool MsgpackValue<TMsgpackRawData>::Equals(MsgpackValueBase *other) {
+	return ((TMsgpackRawData)value).Data == ((TMsgpackRawData)(((MsgpackValue<TMsgpackRawData> *)other)->value)).Data //
+		&& ((TMsgpackRawData)value).Size == ((TMsgpackRawData)(((MsgpackValue<TMsgpackRawData> *)other)->value)).Size;
+}
 // template <> bool MsgpackValue<MsgpackObject *>::Equals(MsgpackValueBase *other) {
-// 	return MsgpackValueBase::NamesCompare(Name, other->Name) && (MsgpackObject *)value->Equals((MsgpackObject *)((MsgpackValue<MsgpackObject *> *)other)->value);
+// 	return (MsgpackObject *)value->Equals((MsgpackObject *)((MsgpackValue<MsgpackObject *> *)other)->value);
 // }
 // template <> bool MsgpackValue<MsgpackArrayBase *>::Equals(MsgpackValueBase *other) {
-// 	return MsgpackValueBase::NamesCompare(Name, other->Name) && (MsgpackObject *)value->Equals((MsgpackArrayBase *)(((MsgpackValue<MsgpackArrayBase *> *)other)->value));
+// 	return (MsgpackObject *)value->Equals((MsgpackArrayBase *)(((MsgpackValue<MsgpackArrayBase *> *)other)->value));
 // }
 /*
 Write(msgpack_packer *packer)
@@ -125,61 +124,61 @@ template <> void MsgpackValue<char *>::InitValue(const char *value, size_t value
 template <> void MsgpackValue<TMsgpackRawData>::InitValue(const TMsgpackRawData value, size_t valueLen) { this->value = value; }
 // template <> void MsgpackValue<MsgpackObject *>::InitValue(MsgpackObject *value, size_t valueLen) { this->value = value; }
 // template <> void MsgpackValue<MsgpackArrayBase *>::InitValue(MsgpackArrayBase *value, size_t valueLen) { this->value = value; }
-// /*
+/*
 
-// */
-// template <> void MsgpackValue<bool>::Set(const bool newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<int8_t>::Set(const int8_t newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<int16_t>::Set(const int16_t newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<int32_t>::Set(const int32_t newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<int64_t>::Set(const int64_t newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<uint8_t>::Set(const uint8_t newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<uint16_t>::Set(const uint16_t newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<uint32_t>::Set(const uint32_t newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<uint64_t>::Set(const uint64_t newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<float>::Set(const float newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<double>::Set(const double newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<char *>::Set(const char *newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
-// template <> void MsgpackValue<TMsgpackRawData>::Set(const TMsgpackRawData newValue, size_t newValueLen) {
-// 	DeleteValue();
-// 	InitValue(newValue, newValueLen);
-// }
+*/
+template <> void MsgpackValue<bool>::Set(const bool newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<int8_t>::Set(const int8_t newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<int16_t>::Set(const int16_t newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<int32_t>::Set(const int32_t newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<int64_t>::Set(const int64_t newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<uint8_t>::Set(const uint8_t newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<uint16_t>::Set(const uint16_t newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<uint32_t>::Set(const uint32_t newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<uint64_t>::Set(const uint64_t newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<float>::Set(const float newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<double>::Set(const double newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<char *>::Set(const char *newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
+template <> void MsgpackValue<TMsgpackRawData>::Set(const TMsgpackRawData newValue, size_t newValueLen) {
+	DeleteValue();
+	InitValue(newValue, newValueLen);
+}
 // template <> void MsgpackValue<MsgpackObject *>::Set(MsgpackObject *newValue, size_t newValueLen) {
 // 	if (this->value == NULL) {
 // 		this->value = newValue;
@@ -197,123 +196,132 @@ template <> void MsgpackValue<TMsgpackRawData>::InitValue(const TMsgpackRawData 
 /*
 
 */
-// template <> bool MsgpackValue<bool>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL || !jsonVal->IsBool()) { return false; }
-// 	Set(jsonVal->GetBool());
-// 	return true;
-// }
-// template <> bool MsgpackValue<int8_t>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL || !jsonVal->IsInt()) { return false; }
-// 	Set(jsonVal->GetInt());
-// 	return true;
-// }
-// template <> bool MsgpackValue<int16_t>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL || !jsonVal->IsInt()) { return false; }
-// 	Set(jsonVal->GetInt());
-// 	return true;
-// }
-// template <> bool MsgpackValue<int32_t>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL || !jsonVal->IsInt()) { return false; }
-// 	Set(jsonVal->GetInt());
-// 	return true;
-// }
-// template <> bool MsgpackValue<int64_t>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL || !jsonVal->IsInt64()) { return false; }
-// 	Set(jsonVal->GetInt64());
-// 	return true;
-// }
-// template <> bool MsgpackValue<uint8_t>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL || !jsonVal->IsUint()) { return false; }
-// 	Set(jsonVal->GetUint());
-// 	return true;
-// }
-// template <> bool MsgpackValue<uint16_t>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL || !jsonVal->IsUint()) { return false; }
-// 	Set(jsonVal->GetUint());
-// 	return true;
-// }
-// template <> bool MsgpackValue<uint32_t>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL || !jsonVal->IsUint()) { return false; }
-// 	Set(jsonVal->GetUint());
-// 	return true;
-// }
-// template <> bool MsgpackValue<uint64_t>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL || !jsonVal->IsUint64()) { return false; }
-// 	Set(jsonVal->GetUint64());
-// 	return true;
-// }
-// template <> bool MsgpackValue<float>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL || !jsonVal->IsFloat()) { return false; }
-// 	Set((float)jsonVal->GetFloat());
-// 	return true;
-// }
-// template <> bool MsgpackValue<double>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL || !jsonVal->IsDouble()) { return false; }
-// 	Set(jsonVal->GetDouble());
-// 	return true;
-// }
-// template <> bool MsgpackValue<char *>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL) { return false; }
-// 	if (!jsonVal->IsString()) {
-// 		if (jsonVal->IsNull()) {
-// 			Set(NULL);
-// 			return true;
-// 		}
-// 		return false;
-// 	}
-// 	Set(jsonVal->GetString(), jsonVal->GetStringLength());
-// 	return true;
-// }
-// template <> bool MsgpackValue<TMsgpackRawData>::Parse(TMsgpackBuffer *buffer) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	if (jsonVal == NULL) { return false; }
-// 	if (!jsonVal->IsString()) {
-// 		if (jsonVal->IsNull()) {
-// 			Set({});
-// 			return true;
-// 		}
-// 		return false;
-// 	}
-// 	TMsgpackRawData rawData = {(uint8_t *)jsonVal->GetString(), jsonVal->GetStringLength()};
-// 	Set(rawData);
-// 	return true;
-// }
-// template <> bool MsgpackValue<MsgpackObject *>::Parse(TMsgpackBuffer *buffer) {
+template <> bool MsgpackValue<bool>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type != MSGPACK_OBJECT_BOOLEAN) { return false; }
+	Set(object.via.boolean);
+	return true;
+}
+template <> bool MsgpackValue<int8_t>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER || object.via.i64 < INT8_MIN || object.via.i64 > INT8_MAX) { return false; }
+	Set((int8_t)object.via.i64);
+	return true;
+}
+template <> bool MsgpackValue<int16_t>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER || object.via.i64 < INT16_MIN || object.via.i64 > INT16_MAX) { return false; }
+	Set((int16_t)object.via.i64);
+	return true;
+}
+template <> bool MsgpackValue<int32_t>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER || object.via.i64 < INT32_MIN || object.via.i64 > INT32_MAX) { return false; }
+	Set((int32_t)object.via.i64);
+	return true;
+}
+template <> bool MsgpackValue<int64_t>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER) { return false; }
+	Set(object.via.i64);
+	return true;
+}
+template <> bool MsgpackValue<uint8_t>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type != MSGPACK_OBJECT_POSITIVE_INTEGER || object.via.u64 > UINT8_MAX) { return false; }
+	Set((uint8_t)object.via.u64);
+	return true;
+}
+template <> bool MsgpackValue<uint16_t>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type != MSGPACK_OBJECT_POSITIVE_INTEGER || object.via.u64 > UINT16_MAX) { return false; }
+	Set((uint16_t)object.via.u64);
+	return true;
+}
+template <> bool MsgpackValue<uint32_t>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type != MSGPACK_OBJECT_POSITIVE_INTEGER || object.via.u64 > UINT32_MAX) { return false; }
+	Set((uint32_t)object.via.u64);
+	return true;
+}
+template <> bool MsgpackValue<uint64_t>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
+	Set(object.via.u64);
+	return true;
+}
+template <> bool MsgpackValue<float>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type != MSGPACK_OBJECT_FLOAT32) { return false; }
+	Set((float)object.via.f64);
+	return true;
+}
+template <> bool MsgpackValue<double>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type != MSGPACK_OBJECT_FLOAT64) { return false; }
+	Set((double)object.via.f64);
+	return true;
+}
+template <> bool MsgpackValue<char *>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type == MSGPACK_OBJECT_NIL) {
+		Set(NULL);
+		return true;
+	}
+	if (object.type != MSGPACK_OBJECT_STR) { return false; }
+
+	Set(object.via.str.ptr, object.via.str.size);
+	return true;
+}
+template <> bool MsgpackValue<TMsgpackRawData>::Parse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	if (object.type == MSGPACK_OBJECT_NIL) {
+		Set({});
+		return true;
+	}
+	if (object.type != MSGPACK_OBJECT_BIN) { return false; }
+
+	TMsgpackRawData rawData = {(uint8_t *)object.via.bin.ptr, object.via.bin.size};
+	Set(rawData);
+	return true;
+}
+// template <> bool MsgpackValue<MsgpackObject *>::Parse(msgpack_object *deserialized) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	return jsonVal != NULL && jsonVal->IsObject() && (/*jsonVal->ObjectEmpty() ||*/ value->TryParse((TMsgpackDocument *)jsonVal));
 // }
-// template <> bool MsgpackValue<MsgpackArrayBase *>::Parse(TMsgpackBuffer *buffer) {
+// template <> bool MsgpackValue<MsgpackArrayBase *>::Parse(msgpack_object *deserialized) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	return jsonVal != NULL && jsonVal->IsArray() && value->TryDocParse((TMsgpackDocument *)jsonVal);
 // }
-// /*
+/*
 
-// */
-// template <> void MsgpackValue<bool>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<bool> *)other)->Set(this->value); }
-// template <> void MsgpackValue<int8_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<int8_t> *)other)->Set(this->value); }
-// template <> void MsgpackValue<int16_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<int16_t> *)other)->Set(this->value); }
-// template <> void MsgpackValue<int32_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<int32_t> *)other)->Set(this->value); }
-// template <> void MsgpackValue<int64_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<int64_t> *)other)->Set(this->value); }
-// template <> void MsgpackValue<uint8_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<uint8_t> *)other)->Set(this->value); }
-// template <> void MsgpackValue<uint16_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<uint16_t> *)other)->Set(this->value); }
-// template <> void MsgpackValue<uint32_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<uint32_t> *)other)->Set(this->value); }
-// template <> void MsgpackValue<uint64_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<uint64_t> *)other)->Set(this->value); }
-// template <> void MsgpackValue<float>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<float> *)other)->Set(this->value); }
-// template <> void MsgpackValue<double>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<double> *)other)->Set(this->value); }
-// template <> void MsgpackValue<char *>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<char *> *)other)->Set(this->value); }
-// template <> void MsgpackValue<TMsgpackRawData>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<TMsgpackRawData> *)other)->Set((TMsgpackRawData)this->value); }
+*/
+template <> void MsgpackValue<bool>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<bool> *)other)->Set(this->value); }
+template <> void MsgpackValue<int8_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<int8_t> *)other)->Set(this->value); }
+template <> void MsgpackValue<int16_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<int16_t> *)other)->Set(this->value); }
+template <> void MsgpackValue<int32_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<int32_t> *)other)->Set(this->value); }
+template <> void MsgpackValue<int64_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<int64_t> *)other)->Set(this->value); }
+template <> void MsgpackValue<uint8_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<uint8_t> *)other)->Set(this->value); }
+template <> void MsgpackValue<uint16_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<uint16_t> *)other)->Set(this->value); }
+template <> void MsgpackValue<uint32_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<uint32_t> *)other)->Set(this->value); }
+template <> void MsgpackValue<uint64_t>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<uint64_t> *)other)->Set(this->value); }
+template <> void MsgpackValue<float>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<float> *)other)->Set(this->value); }
+template <> void MsgpackValue<double>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<double> *)other)->Set(this->value); }
+template <> void MsgpackValue<char *>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<char *> *)other)->Set(this->value); }
+template <> void MsgpackValue<TMsgpackRawData>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<TMsgpackRawData> *)other)->Set((TMsgpackRawData)this->value); }
 // template <> void MsgpackValue<MsgpackObject *>::CloneTo(MsgpackValueBase *other) {
 // 	auto thisObject = ((MsgpackObject *)value);
 // 	auto otherObject = ((MsgpackObject *)((MsgpackValue<MsgpackObject *> *)other)->value);

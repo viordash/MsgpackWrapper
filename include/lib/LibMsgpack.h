@@ -16,10 +16,6 @@ template <class T> class MsgpackValue;
 
 class MsgpackFieldsContainer {
   public:
-	// msgpack_sbuffer sbuf;
-	// msgpack_packer pk;
-	// MsgpackFieldsContainer() { printf("MsgpackFieldsContainer ctor \n"); msgpack_sbuffer_init(&sbuf); }
-
 	std::vector<MsgpackValueBase *> Fields;
 	void Add(MsgpackValueBase *field) { Fields.push_back(field); }
 	MsgpackValueBase *GetField(const char *name);
@@ -27,20 +23,20 @@ class MsgpackFieldsContainer {
 
 class MsgpackValueBase {
   public:
-	int Id;
+	unsigned int Id;
 	MsgpackValueBase(MsgpackValueBase &&) = delete;
 	MsgpackValueBase(const MsgpackValueBase &) = delete;
 
-	MsgpackValueBase(MsgpackFieldsContainer *container, int id) : Id(id) { container->Add(this); }
+	MsgpackValueBase(MsgpackFieldsContainer *container, unsigned int id) : Id(id) { container->Add(this); }
 	virtual ~MsgpackValueBase(){};
 
-	// virtual bool Parse(TMsgpackBuffer *buffer) = 0;
+	virtual bool Parse(msgpack_object *deserialized) = 0;
 	virtual bool Write(msgpack_packer *packer) = 0;
-	// virtual bool Equals(MsgpackValueBase *other) = 0;
-	// virtual void CloneTo(MsgpackValueBase *other) = 0;
+	virtual bool Equals(MsgpackValueBase *other) = 0;
+	virtual void CloneTo(MsgpackValueBase *other) = 0;
 
-	// friend bool operator!=(const MsgpackValueBase &v1, const MsgpackValueBase &v2) { return !((MsgpackValueBase *)&v1)->Equals((MsgpackValueBase *)&v2); }
-	// friend bool operator==(const MsgpackValueBase &v1, const MsgpackValueBase &v2) { return !(v1 != v2); }
+	friend bool operator!=(const MsgpackValueBase &v1, const MsgpackValueBase &v2) { return !((MsgpackValueBase *)&v1)->Equals((MsgpackValueBase *)&v2); }
+	friend bool operator==(const MsgpackValueBase &v1, const MsgpackValueBase &v2) { return !(v1 != v2); }
 
   protected:
 };
