@@ -45,6 +45,7 @@ bool MsgpackObject::TryParse(const char *buffer, size_t length) {
 }
 
 bool MsgpackObject::Write(msgpack_packer *packer) {
+	msgpack_pack_array(packer, Fields.size());
 	for (const auto &field : Fields) {
 		if (!field->Write(packer)) { return false; };
 	}
