@@ -4,18 +4,10 @@
 #include <stdlib.h>
 #include "MsgpackWrapper.h"
 
-// MsgpackValueBase *MsgpackFieldsContainer::GetField(const char *name) {
-// 	for (std::vector<MsgpackValueBase *>::iterator item = Fields.begin(); item != Fields.end(); item++) {
-// 		auto field = *item;
-// 		if (field->Name == name || strcmp(field->Name, name) == 0) { return field; }
-// 	}
-// 	return NULL;
-// }
-
 bool MsgpackObject::TryParse(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 
-	for (std::set<MsgpackValueBase *>::iterator item = Fields.begin(); item != Fields.end(); item++) {
+	for (auto item = Fields.begin(); item != Fields.end(); item++) {
 		auto field = *item;
 		if (!field->TryParse(deserialized)) { return false; }
 	}
@@ -95,21 +87,32 @@ size_t MsgpackObject::DirectWriteTo(void *parent, TOnReady onReady) {
 	return sbuf.size;
 }
 
-// bool operator!=(const MsgpackObject &v1, const MsgpackObject &v2) { return !((MsgpackObject *)&v1)->Equals((MsgpackObject *)&v2); }
-// bool operator==(const MsgpackObject &v1, const MsgpackObject &v2) { return !(v1 != v2); }
+bool operator!=(const MsgpackObject &v1, const MsgpackObject &v2) { return !((MsgpackObject *)&v1)->Equals((MsgpackObject *)&v2); }
+bool operator==(const MsgpackObject &v1, const MsgpackObject &v2) { return !(v1 != v2); }
 
-// bool MsgpackObject::Equals(MsgpackObject *other) {
-// 	if (Fields.size() != other->Fields.size()) { return false; }
+bool MsgpackObject::Equals(MsgpackObject *other) {
+	if (Fields.size() != other->Fields.size()) { return false; }
 
-// 	for (size_t i = 0; i < other->Fields.size(); i++) {
-// 		if (!Fields[i]->Equals(other->Fields[i])) { return false; }
-// 	}
-// 	return true;
-// }
+	auto item = Fields.begin();
+	auto otherItem = Fields.begin();
+	while (item != Fields.end() && otherItem != other->Fields.end()) {
+		auto field = *item;
+		auto otherField = *otherItem;
+		if (!field->Equals(otherField)) { return false; }
+		item++;
+		otherItem++;
+	}
+	return true;
+}
 
-// void MsgpackObject::CloneTo(MsgpackObject *other) {
-// 	for (const auto &field : Fields) {
-// 		auto otherField = other->GetField(field->Name);
-// 		if (otherField != NULL) { field->CloneTo(otherField); }
-// 	}
-// }
+void MsgpackObject::CloneTo(MsgpackObject *other) {
+	auto item = Fields.begin();
+	auto otherItem = Fields.begin();
+	while (item != Fields.end() && otherItem != other->Fields.end()) {
+		auto field = *item;
+		auto otherField = *otherItem;
+		field->CloneTo(otherField);
+		item++;
+		otherItem++;
+	}
+}

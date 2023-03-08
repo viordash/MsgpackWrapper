@@ -48,11 +48,11 @@ class MsgpackObject : public MsgpackFieldsContainer {
 	size_t DirectWriteTo(void *parent, TOnReady onReady);
 
 	virtual bool Validate() { return true; }
-	// virtual bool Equals(MsgpackObject *other);
-	// virtual void CloneTo(MsgpackObject *other);
+	virtual bool Equals(MsgpackObject *other);
+	virtual void CloneTo(MsgpackObject *other);
 
-	// friend bool operator!=(const MsgpackObject &v1, const MsgpackObject &v2);
-	// friend bool operator==(const MsgpackObject &v1, const MsgpackObject &v2);
+	friend bool operator!=(const MsgpackObject &v1, const MsgpackObject &v2);
+	friend bool operator==(const MsgpackObject &v1, const MsgpackObject &v2);
 
   protected:
   private:
