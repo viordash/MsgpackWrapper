@@ -9,8 +9,8 @@
 // 	return EXIT_SUCCESS;
 // }
 
-#include <msgpack.h>
-#include <stdio.h>
+// #include <msgpack.h>
+// #include <stdio.h>
 
 void print(char const *buf, size_t len) {
 	size_t i = 0;
@@ -30,14 +30,14 @@ class UserDto : MsgpackObject {
 		  Role(this, 1, role){};
 
 	size_t WriteTo(char *outBuffer, size_t outBufferSize) {
-		TMsgpackBuffer sbuf;
+		msgpack_sbuffer sbuf;
 		msgpack_packer packer;
-		MsgpackBufferInit(&sbuf);
+		msgpack_sbuffer_init(&sbuf);
 		msgpack_packer_init(&packer, &sbuf, msgpack_sbuffer_write);
 
 		for (const auto &field : Fields) {
 			if (!field->Write(&packer)) {
-				MsgpackBufferDestroy(&sbuf);
+				msgpack_sbuffer_destroy(&sbuf);
 				return 0;
 			};
 		}
@@ -50,13 +50,46 @@ class UserDto : MsgpackObject {
 		}
 		memcpy(outBuffer, sbuf.data, size);
 
-		MsgpackBufferDestroy(&sbuf);
+		msgpack_sbuffer_destroy(&sbuf);
 		return size;
 	}
+
+	msgpack_unpacker *BeginTryParse(const char *buffer, size_t length) {
+		if (buffer == NULL) { return NULL; }
+
+		auto unpacker = msgpack_unpacker_new(length);
+		if (unpacker == NULL) { return NULL; }
+
+		msgpack_unpacked unpacked;
+		msgpack_unpack_return ret;
+		msgpack_unpacked_init(&unpacked);
+		ret = msgpack_unpacker_next(unpacker, &unpacked);
+		switch (ret) {
+			case MSGPACK_UNPACK_SUCCESS:
+				if (TryParse(&unpacked.data)) { break; }
+				msgpack_unpacked_destroy(&unpacked);
+				EndTryParse(unpacker);
+				return NULL;
+
+			case MSGPACK_UNPACK_CONTINUE:
+			case MSGPACK_UNPACK_PARSE_ERROR:
+			default:
+				msgpack_unpacked_destroy(&unpacked);
+				EndTryParse(unpacker);
+				return NULL;
+		}
+
+		msgpack_unpacked_destroy(&unpacked);
+		return unpacker;
+	}
+	void EndTryParse(msgpack_unpacker *unpacker) { msgpack_unpacker_free(unpacker); }
 };
 
 int main(void) {
 	UserDto userDto;
+
+	auto unpacker = msgpack_unpacker_new(1234);
+	userDto.EndTryParse(unpacker);
 
 	msgpack_sbuffer sbuf;
 	msgpack_packer pk;

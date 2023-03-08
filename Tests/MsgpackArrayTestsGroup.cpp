@@ -339,7 +339,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_FALSE(testableFieldMustExists->TryParse(&doc));
 // 	delete testableFieldMustExists;
 
-// 	auto testableWithOptional = new MsgpackCommonValue<MsgpackArrayBase *>(&container, "testStringArray", &stringArray);
+// 	auto testableWithOptional = new MsgpackValue<MsgpackArrayBase *>(&container, "testStringArray", &stringArray);
 // 	doc.Parse("{\"otherField\":[\"Item4\"]}");
 // 	CHECK_TRUE(testableWithOptional->TryParse(&doc));
 // 	CHECK_FALSE(testableWithOptional->Presented());

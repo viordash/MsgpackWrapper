@@ -54,13 +54,11 @@ template <> bool MsgpackValue<char *>::Write(msgpack_packer *packer) {
 	}
 }
 template <> bool MsgpackValue<TMsgpackRawData>::Write(msgpack_packer *packer) {
-
-	TMsgpackRawData rawData = value;
-	if (rawData.Data == NULL) {
+	if (value.Data == NULL) {
 		return msgpack_pack_nil(packer) == 0;
 	} else {
-		return msgpack_pack_v4raw(packer, rawData.Size) == 0 //
-			&& msgpack_pack_v4raw_body(packer, rawData.Data, rawData.Size) == 0;
+		return msgpack_pack_v4raw(packer, value.Size) == 0 //
+			&& msgpack_pack_v4raw_body(packer, value.Data, value.Size) == 0;
 	}
 }
 // template <> bool MsgpackValue<MsgpackObject *>::Write(msgpack_packer *packer) {
@@ -92,7 +90,7 @@ template <> void MsgpackValue<float>::DeleteValue() {}
 template <> void MsgpackValue<double>::DeleteValue() {}
 template <> void MsgpackValue<char *>::DeleteValue() { delete[] this->value; }
 template <> void MsgpackValue<TMsgpackRawData>::DeleteValue() {}
-template <> void MsgpackValue<MsgpackObject *>::DeleteValue() {}
+// template <> void MsgpackValue<MsgpackObject *>::DeleteValue() {}
 // template <> void MsgpackValue<MsgpackArrayBase *>::DeleteValue() {}
 /*
 
@@ -196,84 +194,84 @@ template <> void MsgpackValue<TMsgpackRawData>::Set(const TMsgpackRawData newVal
 /*
 
 */
-template <> bool MsgpackValue<bool>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<bool>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type != MSGPACK_OBJECT_BOOLEAN) { return false; }
 	Set(object.via.boolean);
 	return true;
 }
-template <> bool MsgpackValue<int8_t>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<int8_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER || object.via.i64 < INT8_MIN || object.via.i64 > INT8_MAX) { return false; }
 	Set((int8_t)object.via.i64);
 	return true;
 }
-template <> bool MsgpackValue<int16_t>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<int16_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER || object.via.i64 < INT16_MIN || object.via.i64 > INT16_MAX) { return false; }
 	Set((int16_t)object.via.i64);
 	return true;
 }
-template <> bool MsgpackValue<int32_t>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<int32_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER || object.via.i64 < INT32_MIN || object.via.i64 > INT32_MAX) { return false; }
 	Set((int32_t)object.via.i64);
 	return true;
 }
-template <> bool MsgpackValue<int64_t>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<int64_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER) { return false; }
 	Set(object.via.i64);
 	return true;
 }
-template <> bool MsgpackValue<uint8_t>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<uint8_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type != MSGPACK_OBJECT_POSITIVE_INTEGER || object.via.u64 > UINT8_MAX) { return false; }
 	Set((uint8_t)object.via.u64);
 	return true;
 }
-template <> bool MsgpackValue<uint16_t>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<uint16_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type != MSGPACK_OBJECT_POSITIVE_INTEGER || object.via.u64 > UINT16_MAX) { return false; }
 	Set((uint16_t)object.via.u64);
 	return true;
 }
-template <> bool MsgpackValue<uint32_t>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<uint32_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type != MSGPACK_OBJECT_POSITIVE_INTEGER || object.via.u64 > UINT32_MAX) { return false; }
 	Set((uint32_t)object.via.u64);
 	return true;
 }
-template <> bool MsgpackValue<uint64_t>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<uint64_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
 	Set(object.via.u64);
 	return true;
 }
-template <> bool MsgpackValue<float>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<float>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type != MSGPACK_OBJECT_FLOAT32) { return false; }
 	Set((float)object.via.f64);
 	return true;
 }
-template <> bool MsgpackValue<double>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<double>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type != MSGPACK_OBJECT_FLOAT64) { return false; }
 	Set((double)object.via.f64);
 	return true;
 }
-template <> bool MsgpackValue<char *>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<char *>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type == MSGPACK_OBJECT_NIL) {
@@ -285,7 +283,7 @@ template <> bool MsgpackValue<char *>::Parse(msgpack_object *deserialized) {
 	Set(object.via.str.ptr, object.via.str.size);
 	return true;
 }
-template <> bool MsgpackValue<TMsgpackRawData>::Parse(msgpack_object *deserialized) {
+template <> bool MsgpackValue<TMsgpackRawData>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
 	if (object.type == MSGPACK_OBJECT_NIL) {
@@ -298,11 +296,11 @@ template <> bool MsgpackValue<TMsgpackRawData>::Parse(msgpack_object *deserializ
 	Set(rawData);
 	return true;
 }
-// template <> bool MsgpackValue<MsgpackObject *>::Parse(msgpack_object *deserialized) {
+// template <> bool MsgpackValue<MsgpackObject *>::TryParse(msgpack_object *deserialized) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	return jsonVal != NULL && jsonVal->IsObject() && (/*jsonVal->ObjectEmpty() ||*/ value->TryParse((TMsgpackDocument *)jsonVal));
 // }
-// template <> bool MsgpackValue<MsgpackArrayBase *>::Parse(msgpack_object *deserialized) {
+// template <> bool MsgpackValue<MsgpackArrayBase *>::TryParse(msgpack_object *deserialized) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
 // 	return jsonVal != NULL && jsonVal->IsArray() && value->TryDocParse((TMsgpackDocument *)jsonVal);
 // }

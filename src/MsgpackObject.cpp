@@ -1,8 +1,8 @@
 
-// #include <iostream>
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include "MsgpackWrapper.h"
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include "MsgpackWrapper.h"
 
 // MsgpackValueBase *MsgpackFieldsContainer::GetField(const char *name) {
 // 	for (std::vector<MsgpackValueBase *>::iterator item = Fields.begin(); item != Fields.end(); item++) {
@@ -12,74 +12,88 @@
 // 	return NULL;
 // }
 
-// bool MsgpackObject::TryParse(TMsgpackDocument *doc) {
-// 	if (!doc->IsObject()) { return false; }
+bool MsgpackObject::TryParse(msgpack_object *deserialized) {
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 
-// 	for (std::vector<MsgpackValueBase *>::iterator item = Fields.begin(); item != Fields.end(); item++) {
-// 		auto field = *item;
-// 		if (!field->TryParse(doc)) { return false; }
-// 	}
-// 	if (!this->Validate()) { return false; }
-// 	return true;
-// }
+	for (std::set<MsgpackValueBase *>::iterator item = Fields.begin(); item != Fields.end(); item++) {
+		auto field = *item;
+		if (!field->TryParse(deserialized)) { return false; }
+	}
+	if (!this->Validate()) { return false; }
+	return true;
+}
 
-// TMsgpackDocument *MsgpackObject::BeginTryStringParse(const char *jsonStr, size_t length) {
-// 	if (jsonStr == NULL) { return NULL; }
+msgpack_unpacker *MsgpackObject::BeginTryParse(const char *buffer, size_t length) {
+	if (buffer == NULL) { return NULL; }
 
-// 	auto doc = new rapidjson::Document();
-// 	if (length == 0) {
-// 		doc->Parse(jsonStr);
-// 	} else {
-// 		doc->Parse(jsonStr, length);
-// 	}
-// 	if (doc->HasParseError() || !TryParse(doc)) {
-// 		delete doc;
-// 		return NULL;
-// 	}
-// 	return doc;
-// }
+	auto unpacker = msgpack_unpacker_new(length);
+	if (unpacker == NULL) { return NULL; }
 
-// void MsgpackObject::EndTryStringParse(TMsgpackDocument *doc) { delete doc; }
+	msgpack_unpacked unpacked;
+	msgpack_unpack_return ret;
+	msgpack_unpacked_init(&unpacked);
+	ret = msgpack_unpacker_next(unpacker, &unpacked);
+	if (ret == MSGPACK_UNPACK_SUCCESS && TryParse(&unpacked.data)) {
+		msgpack_unpacked_destroy(&unpacked);
+		return unpacker;
+	}
 
-// bool MsgpackObject::TryStringParse(const char *jsonStr, size_t length) {
-// 	auto doc = BeginTryStringParse(jsonStr, length);
-// 	if (doc == NULL) { return false; }
-// 	EndTryStringParse(doc);
-// 	return true;
-// }
+	msgpack_unpacked_destroy(&unpacked);
+	EndTryParse(unpacker);
+	return NULL;
+}
 
-// void MsgpackObject::WriteToDoc(TMsgpackDocument *doc) {
-// 	doc->SetObject();
-// 	for (const auto &field : Fields) { field->WriteToDoc(doc); }
-// }
+void MsgpackObject::EndTryParse(msgpack_unpacker *unpacker) { msgpack_unpacker_free(unpacker); }
 
-// size_t MsgpackObject::WriteToString(char *outBuffer, size_t outBufferSize) {
-// 	rapidjson::Document doc;
-// 	WriteToDoc(&doc);
-// 	rapidjson::StringBuffer buffer;
-// 	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-// 	doc.Accept(writer);
+bool MsgpackObject::TryParse(const char *buffer, size_t length) {
+	auto unpacker = BeginTryParse(buffer, length);
+	if (unpacker == NULL) { return false; }
+	EndTryParse(unpacker);
+	return true;
+}
 
-// 	const char *jsonStr = buffer.GetString();
-// 	size_t size = buffer.GetSize();
-// 	if (size > outBufferSize - 1) { size = outBufferSize - 1; }
-// 	strncpy(outBuffer, jsonStr, size);
-// 	outBuffer[size] = 0;
-// 	return size;
-// }
+bool MsgpackObject::Write(msgpack_packer *packer) {
+	for (const auto &field : Fields) {
+		if (!field->Write(packer)) { return false; };
+	}
+	return true;
+}
 
-// size_t MsgpackObject::DirectWriteTo(void *parent, TOnReady onReady) {
-// 	rapidjson::Document doc;
-// 	WriteToDoc(&doc);
-// 	rapidjson::StringBuffer buffer;
-// 	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-// 	doc.Accept(writer);
+size_t MsgpackObject::Write(char *outBuffer, size_t outBufferSize) {
+	msgpack_sbuffer sbuf;
+	msgpack_packer packer;
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&packer, &sbuf, msgpack_sbuffer_write);
 
-// 	const char *json = buffer.GetString();
-// 	size_t size = buffer.GetSize();
-// 	onReady(parent, json, size);
-// 	return size;
-// }
+	if (!Write(&packer)) {
+		msgpack_sbuffer_destroy(&sbuf);
+		return 0;
+	};
+
+	if (sbuf.size > outBufferSize) {
+		msgpack_sbuffer_destroy(&sbuf);
+		return 0;
+	}
+	memcpy(outBuffer, sbuf.data, sbuf.size);
+
+	msgpack_sbuffer_destroy(&sbuf);
+	return sbuf.size;
+}
+
+size_t MsgpackObject::DirectWriteTo(void *parent, TOnReady onReady) {
+	msgpack_sbuffer sbuf;
+	msgpack_packer packer;
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&packer, &sbuf, msgpack_sbuffer_write);
+
+	if (!Write(&packer)) {
+		msgpack_sbuffer_destroy(&sbuf);
+		return 0;
+	};
+
+	onReady(parent, sbuf.data, sbuf.size);
+	return sbuf.size;
+}
 
 // bool operator!=(const MsgpackObject &v1, const MsgpackObject &v2) { return !((MsgpackObject *)&v1)->Equals((MsgpackObject *)&v2); }
 // bool operator==(const MsgpackObject &v1, const MsgpackObject &v2) { return !(v1 != v2); }

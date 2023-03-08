@@ -16,7 +16,7 @@ typedef enum { uAdmin, uViewer } TUserRole;
 // class UserDto : public MsgpackObject {
 //   public:
 // 	MsgpackValue<char *> Name;
-// 	MsgpackCommonValue<uint32_t> Role;
+// 	MsgpackValue<uint32_t> Role;
 
 // 	UserDto(const char *name = {}, const TUserRole role = {})
 // 		: Name(this, 0, name), //
@@ -33,8 +33,8 @@ typedef enum { uAdmin, uViewer } TUserRole;
 // 	MsgpackValue<char *> Name;
 // 	MsgpackValue<float> Price;
 // 	MsgpackValue<double> Quantity;
-// 	MsgpackCommonValue<bool> Deleted;
-// 	MsgpackCommonValue<char *> StoreName;
+// 	MsgpackValue<bool> Deleted;
+// 	MsgpackValue<char *> StoreName;
 
 // 	GoodsDto(const int id = {}, uint32_t created = {}, const char *group = {}, const char *name = {}, const float price = {}, const double quantity = {}, const bool deleted = {},
 // 			 const char *storeName = {})
@@ -57,7 +57,7 @@ typedef enum { uAdmin, uViewer } TUserRole;
 // class OrderDto : public MsgpackObject {
 //   public:
 // 	MsgpackValue<char *> Supplier;
-// 	MsgpackCommonValue<uint32_t> DateTime;
+// 	MsgpackValue<uint32_t> DateTime;
 // 	MsgpackValue<MsgpackArrayBase *> Goods;
 // 	MsgpackValue<MsgpackObject *> User;
 // 	GoodsList goodsList;
@@ -83,7 +83,7 @@ typedef enum { uAdmin, uViewer } TUserRole;
 //   public:
 // 	MsgpackValue<uint64_t> Id;
 // 	MsgpackValue<char *> Name;
-// 	MsgpackCommonValue<TMsgpackRawData> Blob;
+// 	MsgpackValue<TMsgpackRawData> Blob;
 // 	MsgpackValue<MsgpackArrayBase *> Orders;
 // 	OrdersList ordersList;
 
@@ -408,8 +408,8 @@ typedef enum { uAdmin, uViewer } TUserRole;
 // class OptionalObjectDto : public MsgpackObject {
 //   public:
 // 	MsgpackValue<int> Id;
-// 	MsgpackCommonValue<MsgpackArrayBase *> Goods;
-// 	MsgpackCommonValue<MsgpackObject *> User;
+// 	MsgpackValue<MsgpackArrayBase *> Goods;
+// 	MsgpackValue<MsgpackObject *> User;
 // 	GoodsList goodsList;
 // 	UserDto userDto;
 
@@ -502,8 +502,8 @@ typedef enum { uAdmin, uViewer } TUserRole;
 // class SetValueObjectDto : public MsgpackObject {
 //   public:
 // 	MsgpackValue<int> Id;
-// 	MsgpackCommonValue<MsgpackArrayBase *> Goods;
-// 	MsgpackCommonValue<MsgpackObject *> User;
+// 	MsgpackValue<MsgpackArrayBase *> Goods;
+// 	MsgpackValue<MsgpackObject *> User;
 // 	GoodsList goodsList;
 // 	UserDto userDto;
 
@@ -557,8 +557,8 @@ typedef enum { uAdmin, uViewer } TUserRole;
 // class NullValueObjectDto : public MsgpackObject {
 //   public:
 // 	MsgpackValue<int> Id;
-// 	MsgpackCommonValue<MsgpackArrayBase *> Goods;
-// 	MsgpackCommonValue<MsgpackObject *> User;
+// 	MsgpackValue<MsgpackArrayBase *> Goods;
+// 	MsgpackValue<MsgpackObject *> User;
 
 // 	NullValueObjectDto(int id = {})
 // 		: Id(this, "id", id),	//

@@ -25,7 +25,6 @@ set(CPPUTEST_SOURCE_DIRS
 set(CPPUTEST_SOURCE_FILES 	
 		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackValueBase.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackValue.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackCommonValue.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackObject.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackArrayBase.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/../src/MsgpackArray.cpp	
@@ -39,6 +38,7 @@ if(WIN32)
 	target_link_libraries(MsgpackStringValueTestsGroup Winmm.lib)
 endif(WIN32)
 target_link_libraries(MsgpackStringValueTestsGroup CppUTest)
+target_link_libraries(MsgpackStringValueTestsGroup msgpack-c)
 target_include_directories(MsgpackStringValueTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
 add_test(MsgpackStringValueTestsGroup MsgpackStringValueTestsGroup)
 
@@ -49,6 +49,7 @@ if(WIN32)
 	target_link_libraries(MsgpackDataValueTestsGroup Winmm.lib)
 endif(WIN32)
 target_link_libraries(MsgpackDataValueTestsGroup CppUTest)
+target_link_libraries(MsgpackDataValueTestsGroup msgpack-c)
 target_include_directories(MsgpackDataValueTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
 add_test(MsgpackDataValueTestsGroup MsgpackDataValueTestsGroup)
 
@@ -59,6 +60,7 @@ if(WIN32)
 	target_link_libraries(MsgpackNumericValueTestsGroup Winmm.lib)
 endif(WIN32)
 target_link_libraries(MsgpackNumericValueTestsGroup CppUTest)
+target_link_libraries(MsgpackNumericValueTestsGroup msgpack-c)
 target_include_directories(MsgpackNumericValueTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
 add_test(MsgpackNumericValueTestsGroup MsgpackNumericValueTestsGroup)
 
@@ -69,6 +71,7 @@ if(WIN32)
 	target_link_libraries(MsgpackObjectTestsGroup Winmm.lib)
 endif(WIN32)
 target_link_libraries(MsgpackObjectTestsGroup CppUTest)
+target_link_libraries(MsgpackObjectTestsGroup msgpack-c)
 target_include_directories(MsgpackObjectTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
 add_test(MsgpackObjectTestsGroup MsgpackObjectTestsGroup)
 
@@ -79,6 +82,7 @@ if(WIN32)
 	target_link_libraries(MsgpackArrayTestsGroup Winmm.lib)
 endif(WIN32)
 target_link_libraries(MsgpackArrayTestsGroup CppUTest)
+target_link_libraries(MsgpackArrayTestsGroup msgpack-c)
 target_include_directories(MsgpackArrayTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
 add_test(MsgpackArrayTestsGroup MsgpackArrayTestsGroup)
 
@@ -89,5 +93,6 @@ if(WIN32)
 	target_link_libraries(MsgpackHeavyDutyTestsGroup Winmm.lib)
 endif(WIN32)
 target_link_libraries(MsgpackHeavyDutyTestsGroup CppUTest)
+target_link_libraries(MsgpackHeavyDutyTestsGroup msgpack-c)
 target_include_directories(MsgpackHeavyDutyTestsGroup PRIVATE ${CPPUTEST_SOURCE_DIRS})
 add_test(MsgpackHeavyDutyTestsGroup MsgpackHeavyDutyTestsGroup)

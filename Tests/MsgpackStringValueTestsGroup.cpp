@@ -106,7 +106,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackStringValueGroup, MsgpackStringValue_Common_TryParse_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackCommonValue<char *> testable1(&container, "test", "0123456789");
+// 	MsgpackValue<char *> testable1(&container, "test", "0123456789");
 
 // 	CHECK_FALSE(testable1.Presented());
 // 	CHECK_FALSE(testable1.IsNull());
@@ -136,9 +136,9 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	MsgpackValue<char *> testNull(&container, "testNull", NULL);
 // 	MsgpackValue<char *> testEmpty(&container, "testEmpty", "");
 
-// 	MsgpackCommonValue<char *> testCommonDefault(&container, "testDefault");
-// 	MsgpackCommonValue<char *> testCommonNull(&container, "testNull", NULL);
-// 	MsgpackCommonValue<char *> testCommonEmpty(&container, "testEmpty", "");
+// 	MsgpackValue<char *> testCommonDefault(&container, "testDefault");
+// 	MsgpackValue<char *> testCommonNull(&container, "testNull", NULL);
+// 	MsgpackValue<char *> testCommonEmpty(&container, "testEmpty", "");
 
 // 	CHECK_EQUAL(testDefault.Get(), NULL);
 // 	CHECK_EQUAL(testNull.Get(), NULL);
@@ -166,7 +166,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackStringValueGroup, MsgpackStringValue_Common_Change_Presented_After_Set_Value_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackCommonValue<char *> testable1(&container, "test");
+// 	MsgpackValue<char *> testable1(&container, "test");
 
 // 	CHECK_FALSE(testable1.Presented());
 
@@ -176,7 +176,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackStringValueGroup, MsgpackStringValue_Common_Change_IsNull_After_Set_Value_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackCommonValue<char *> testable1(&container, "test");
+// 	MsgpackValue<char *> testable1(&container, "test");
 
 // 	rapidjson::Document doc;
 // 	doc.Parse("{\"test\":null}");

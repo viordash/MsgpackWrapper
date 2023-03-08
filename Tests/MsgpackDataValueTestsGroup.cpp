@@ -139,7 +139,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackDataValueGroup, MsgpackDataValue_Common_TryParse_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackCommonValue<TMsgpackRawData> testable1(&container, "test", {(uint8_t *)"0123456789", sizeof("0123456789")});
+// 	MsgpackValue<TMsgpackRawData> testable1(&container, "test", {(uint8_t *)"0123456789", sizeof("0123456789")});
 
 // 	CHECK_FALSE(testable1.Presented());
 // 	CHECK_FALSE(testable1.IsNull());

@@ -17,8 +17,7 @@ template <class T> class MsgpackValue : public MsgpackValueBase {
 
 	virtual ~MsgpackValue() { DeleteValue(); }
 
-	bool Parse(msgpack_object *deserialized) override final;
-
+	bool TryParse(msgpack_object *deserialized) override final;
 	bool Write(msgpack_packer *packer) override final;
 
 	bool Equals(MsgpackValueBase *other) override final;
@@ -38,17 +37,17 @@ class MsgpackObject : public MsgpackFieldsContainer {
   public:
 	virtual ~MsgpackObject(){};
 
-	// virtual bool TryParse(TMsgpackDocument *doc);
-	// virtual bool TryStringParse(const char *jsonStr, size_t length = 0);
-	// TMsgpackDocument *BeginTryStringParse(const char *jsonStr, size_t length = 0);
-	// void EndTryStringParse(TMsgpackDocument *doc);
+	virtual bool TryParse(msgpack_object *deserialized);
+	virtual bool TryParse(const char *buffer, size_t length);
+	msgpack_unpacker *BeginTryParse(const char *buffer, size_t length);
+	void EndTryParse(msgpack_unpacker *unpacker);
 
-	// void Write(msgpack_packer *packer);
-	// size_t WriteToString(char *outBuffer, size_t outBufferSize);
-	// typedef void (*TOnReady)(void *parent, const char *json, size_t size);
-	// size_t DirectWriteTo(void *parent, TOnReady onReady);
+	bool Write(msgpack_packer *packer);
+	size_t Write(char *outBuffer, size_t outBufferSize);
+	typedef void (*TOnReady)(void *parent, const char *json, size_t size);
+	size_t DirectWriteTo(void *parent, TOnReady onReady);
 
-	// virtual bool Validate() { return true; }
+	virtual bool Validate() { return true; }
 	// virtual bool Equals(MsgpackObject *other);
 	// virtual void CloneTo(MsgpackObject *other);
 

@@ -8,7 +8,7 @@ Objects are represented as DTOs with json serialization/deserialization support:
     class UserDto : public MsgpackObject {
       public:
     	MsgpackValue<char *> Name;
-    	MsgpackCommonValue<uint32_t> Role;
+    	MsgpackValue<uint32_t> Role;
     
     	UserDto(char *name = {}, TUserRole role = {})
     		: Name(this, "name", name), 
@@ -23,8 +23,8 @@ Objects are represented as DTOs with json serialization/deserialization support:
     	MsgpackValue<char *> Name;
     	MsgpackValue<float> Price;
     	MsgpackValue<double> Quantity;
-    	MsgpackCommonValue<bool> Deleted;
-    	MsgpackCommonValue<char *> StoreName;
+    	MsgpackValue<bool> Deleted;
+    	MsgpackValue<char *> StoreName;
     
     	GoodsDto(int id = {}, uint32_t created = {}, char *group = {}, char *name = {}, float price = {}, double quantity = {}, bool deleted = {}, char *storeName = {})
     		: Id(this, "Id", id),					
@@ -46,7 +46,7 @@ Objects are represented as DTOs with json serialization/deserialization support:
     class OrderDto : public MsgpackObject {
       public:
     	MsgpackValue<char *> Supplier;
-    	MsgpackCommonValue<uint32_t> DateTime;
+    	MsgpackValue<uint32_t> DateTime;
     	MsgpackValue<MsgpackArrayBase *> Goods;
     	MsgpackValue<MsgpackObject *> User;
     	GoodsList goodsList;

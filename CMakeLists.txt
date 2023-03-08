@@ -23,7 +23,6 @@ add_subdirectory(msgpack-c)
 set(CPP_SOURCE_FILES 
 src/MsgpackValueBase.cpp
 src/MsgpackValue.cpp
-src/MsgpackCommonValue.cpp
 src/MsgpackObject.cpp
 src/MsgpackArrayBase.cpp
 src/MsgpackArray.cpp
