@@ -10,7 +10,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 TEST_GROUP(MsgpackStringValueGroup){void setup(){} void teardown(){}};
 
-TEST(MsgpackStringValueGroup, MsgpackStringValue_TryParse_Test) {
+TEST(MsgpackStringValueGroup, TryParse_Test) {
 	MsgpackFieldsContainer container;
 	MsgpackValue<char *> testable(&container, 0, "testString");
 
@@ -35,7 +35,7 @@ TEST(MsgpackStringValueGroup, MsgpackStringValue_TryParse_Test) {
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
-TEST(MsgpackStringValueGroup, MsgpackStringValue_TryParse_When_Id_Exceed_Fields_Count_Test) {
+TEST(MsgpackStringValueGroup, TryParse_When_Id_Exceed_Fields_Count_Test) {
 	MsgpackFieldsContainer container;
 	MsgpackValue<char *> testable(&container, 99, "testString");
 
@@ -59,7 +59,7 @@ TEST(MsgpackStringValueGroup, MsgpackStringValue_TryParse_When_Id_Exceed_Fields_
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
-TEST(MsgpackStringValueGroup, MsgpackStringValue_TryParse_Null_Test) {
+TEST(MsgpackStringValueGroup, TryParse_Null_Test) {
 	MsgpackFieldsContainer container;
 	MsgpackValue<char *> testable(&container, 0, "testString");
 
@@ -82,7 +82,7 @@ TEST(MsgpackStringValueGroup, MsgpackStringValue_TryParse_Null_Test) {
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
-TEST(MsgpackStringValueGroup, MsgpackStringValue_Write_Test) {
+TEST(MsgpackStringValueGroup, Write_Test) {
 	MsgpackFieldsContainer container;
 	MsgpackValue<char *> testable(&container, 0, "1234567");
 
@@ -105,7 +105,7 @@ TEST(MsgpackStringValueGroup, MsgpackStringValue_Write_Test) {
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
-TEST(MsgpackStringValueGroup, MsgpackStringValue_Write_Null_Test) {
+TEST(MsgpackStringValueGroup, Write_Null_Test) {
 	MsgpackFieldsContainer container;
 	MsgpackValue<char *> testable(&container, 0, NULL);
 
@@ -126,7 +126,7 @@ TEST(MsgpackStringValueGroup, MsgpackStringValue_Write_Null_Test) {
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
-TEST(MsgpackStringValueGroup, MsgpackStringValue_SetValue_Test) {
+TEST(MsgpackStringValueGroup, SetValue_Test) {
 	MsgpackFieldsContainer container;
 	MsgpackValue<char *> testable(&container, 0);
 	STRCMP_EQUAL(testable.Get(), NULL);
@@ -135,7 +135,7 @@ TEST(MsgpackStringValueGroup, MsgpackStringValue_SetValue_Test) {
 	STRCMP_EQUAL(testable.Get(), "0123456789");
 }
 
-TEST(MsgpackStringValueGroup, MsgpackStringValue_Equals_Test) {
+TEST(MsgpackStringValueGroup, Equals_Test) {
 	MsgpackFieldsContainer container;
 	MsgpackValue<char *> testable1(&container, 0, "testString");
 	MsgpackValue<char *> testable01(&container, 0, "testString");
@@ -167,7 +167,7 @@ TEST(MsgpackStringValueGroup, MsgpackStringValue_Equals_Test) {
 	CHECK_FALSE(testable2 == testable02);
 }
 
-TEST(MsgpackStringValueGroup, MsgpackStringValue_CloneTo_Test) {
+TEST(MsgpackStringValueGroup, CloneTo_Test) {
 	MsgpackFieldsContainer container;
 	MsgpackValue<char *> testable1(&container, 0, "0123456789");
 
@@ -178,7 +178,7 @@ TEST(MsgpackStringValueGroup, MsgpackStringValue_CloneTo_Test) {
 	STRCMP_EQUAL(clone1.Get(), "0123456789");
 }
 
-TEST(MsgpackStringValueGroup, MsgpackStringValue_Null_And_Empty_Value_Test) {
+TEST(MsgpackStringValueGroup, Null_And_Empty_Value_Test) {
 	MsgpackFieldsContainer container;
 	MsgpackValue<char *> testDefault(&container, 0);
 	MsgpackValue<char *> testNull(&container, 0, NULL);

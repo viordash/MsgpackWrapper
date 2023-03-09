@@ -287,15 +287,26 @@ template <> bool MsgpackValue<char *>::TryParse(msgpack_object *deserialized) {
 template <> bool MsgpackValue<TMsgpackRawData>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
-	if (object.type == MSGPACK_OBJECT_NIL) {
-		Set({});
-		return true;
-	}
-	if (object.type != MSGPACK_OBJECT_BIN) { return false; }
+	TMsgpackRawData rawData;
+	switch (object.type) {
+		case MSGPACK_OBJECT_NIL:
+			Set({});
+			return true;
 
-	TMsgpackRawData rawData = {(uint8_t *)object.via.bin.ptr, object.via.bin.size};
-	Set(rawData);
-	return true;
+		case MSGPACK_OBJECT_BIN:
+			rawData = {(uint8_t *)object.via.bin.ptr, object.via.bin.size};
+			Set(rawData);
+			return true;
+
+		case MSGPACK_OBJECT_STR:
+			rawData = {(uint8_t *)object.via.str.ptr, object.via.str.size};
+			Set(rawData);
+			return true;
+		default:
+			break;
+	}
+
+	return false;
 }
 // template <> bool MsgpackValue<MsgpackObject *>::TryParse(msgpack_object *deserialized) {
 // 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
