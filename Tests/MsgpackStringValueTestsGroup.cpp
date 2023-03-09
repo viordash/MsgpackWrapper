@@ -16,22 +16,19 @@ TEST(MsgpackStringValueGroup, TryParse_Test) {
 
 	msgpack_sbuffer sbuf;
 	msgpack_packer pk;
-	msgpack_zone mempool;
 	msgpack_object deserialized;
 
-	msgpack_zone_init(&mempool, 2048);
 	msgpack_sbuffer_init(&sbuf);
 	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
 
 	msgpack_pack_array(&pk, 1);
 	msgpack_pack_str(&pk, 5);
 	msgpack_pack_str_body(&pk, "User1", 5);
-	msgpack_unpack(sbuf.data, sbuf.size, NULL, &mempool, &deserialized);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
 
 	CHECK_TRUE(testable.TryParse(&deserialized));
 	STRCMP_EQUAL(testable.Get(), "User1");
 
-	msgpack_zone_destroy(&mempool);
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -41,21 +38,18 @@ TEST(MsgpackStringValueGroup, TryParse_When_Id_Exceed_Fields_Count_Test) {
 
 	msgpack_sbuffer sbuf;
 	msgpack_packer pk;
-	msgpack_zone mempool;
 	msgpack_object deserialized;
 
-	msgpack_zone_init(&mempool, 2048);
 	msgpack_sbuffer_init(&sbuf);
 	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
 
 	msgpack_pack_array(&pk, 1);
 	msgpack_pack_str(&pk, 5);
 	msgpack_pack_str_body(&pk, "User1", 5);
-	msgpack_unpack(sbuf.data, sbuf.size, NULL, &mempool, &deserialized);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
 
 	CHECK_FALSE(testable.TryParse(&deserialized));
 
-	msgpack_zone_destroy(&mempool);
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -65,20 +59,17 @@ TEST(MsgpackStringValueGroup, TryParse_Null_Test) {
 
 	msgpack_sbuffer sbuf;
 	msgpack_packer pk;
-	msgpack_zone mempool;
 	msgpack_object deserialized;
 
-	msgpack_zone_init(&mempool, 2048);
 	msgpack_sbuffer_init(&sbuf);
 	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
 	msgpack_pack_array(&pk, 1);
 	msgpack_pack_nil(&pk);
-	msgpack_unpack(sbuf.data, sbuf.size, NULL, &mempool, &deserialized);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
 
 	CHECK_TRUE(testable.TryParse(&deserialized));
 	CHECK_EQUAL(testable.Get(), NULL);
 
-	msgpack_zone_destroy(&mempool);
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -88,15 +79,13 @@ TEST(MsgpackStringValueGroup, Write_Test) {
 
 	msgpack_sbuffer sbuf;
 	msgpack_packer packer;
-	msgpack_zone mempool;
 	msgpack_object deserialized;
-	msgpack_zone_init(&mempool, 2048);
 	msgpack_sbuffer_init(&sbuf);
 	msgpack_packer_init(&packer, &sbuf, msgpack_sbuffer_write);
 
 	msgpack_pack_array(&packer, 1);
 	CHECK_TRUE(testable.Write(&packer));
-	msgpack_unpack(sbuf.data, sbuf.size, NULL, &mempool, &deserialized);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
 
 	msgpack_object object = deserialized.via.array.ptr[0];
 	CHECK_EQUAL(object.type, MSGPACK_OBJECT_STR);
@@ -111,15 +100,13 @@ TEST(MsgpackStringValueGroup, Write_Null_Test) {
 
 	msgpack_sbuffer sbuf;
 	msgpack_packer packer;
-	msgpack_zone mempool;
 	msgpack_object deserialized;
-	msgpack_zone_init(&mempool, 2048);
 	msgpack_sbuffer_init(&sbuf);
 	msgpack_packer_init(&packer, &sbuf, msgpack_sbuffer_write);
 
 	msgpack_pack_array(&packer, 1);
 	CHECK_TRUE(testable.Write(&packer));
-	msgpack_unpack(sbuf.data, sbuf.size, NULL, &mempool, &deserialized);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
 
 	msgpack_object object = deserialized.via.array.ptr[0];
 	CHECK_EQUAL(object.type, MSGPACK_OBJECT_NIL);

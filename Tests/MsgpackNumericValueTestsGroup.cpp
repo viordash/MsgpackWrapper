@@ -8,76 +8,320 @@
 
 int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
-// TEST_GROUP(MsgpackNumericValueGroup){void setup(){} void teardown(){}};
+TEST_GROUP(MsgpackNumericValueGroup){void setup(){} void teardown(){}};
 
-// TEST(MsgpackNumericValueGroup, MsgpackField_Equals_By_Name_Test) {
-// 	MsgpackFieldsContainer container;
-// 	MsgpackValue<unsigned int> testable1(&container, "test", 100);
-// 	MsgpackValue<unsigned int> testable01(&container, "test", 100);
-// 	MsgpackValue<unsigned int> testable02(&container, "other", 100);
+TEST(MsgpackNumericValueGroup, MsgpackUIntField_SetValue_Test) {
+	MsgpackFieldsContainer container;
+	MsgpackValue<unsigned int> testable1(&container, 0);
+	MsgpackValue<uint32_t> testable2(&container, 0);
+	MsgpackValue<uint16_t> testable3(&container, 0);
+	MsgpackValue<uint8_t> testable4(&container, 0);
+	testable1.Set(0xFFFFFFFF);
+	testable2.Set(0xFFFFFFFF);
+	testable3.Set(0xFFFFFFFF);
+	testable4.Set(0xFFFFFFFF);
 
-// 	CHECK_TRUE(testable1 == testable01);
-// 	testable01.Set(testable01.Get() + 1);
-// 	CHECK_FALSE(testable1 == testable01);
-// 	testable1.Set(testable1.Get() + 1);
-// 	CHECK_TRUE(testable1 == testable01);
-// 	CHECK_FALSE(testable1 == testable02);
-// }
+	CHECK_EQUAL(testable1.Get(), 4294967295);
+	CHECK_EQUAL(testable2.Get(), 4294967295);
+	CHECK_EQUAL(testable3.Get(), 65535);
+	CHECK_EQUAL(testable4.Get(), 255);
+}
 
-// TEST(MsgpackNumericValueGroup, MsgpackUIntField_SetValue_Test) {
-// 	MsgpackFieldsContainer container;
-// 	MsgpackValue<unsigned int> testable1(&container, "test");
-// 	MsgpackValue<uint32_t> testable2(&container, "test");
-// 	MsgpackValue<uint16_t> testable3(&container, "test");
-// 	MsgpackValue<uint8_t> testable4(&container, "test");
-// 	testable1.Set(0xFFFFFFFF);
-// 	testable2.Set(0xFFFFFFFF);
-// 	testable3.Set(0xFFFFFFFF);
-// 	testable4.Set(0xFFFFFFFF);
+TEST(MsgpackNumericValueGroup, Uint64_TryParse_Test) {
+	MsgpackFieldsContainer container;
+	MsgpackValue<uint64_t> testable0(&container, 0);
+	MsgpackValue<unsigned int> testable1(&container, 0);
+	MsgpackValue<uint32_t> testable2(&container, 0);
+	MsgpackValue<uint16_t> testable3(&container, 0);
+	MsgpackValue<uint8_t> testable4(&container, 0);
 
-// 	CHECK_EQUAL(testable1.Get(), 4294967295);
-// 	CHECK_EQUAL(testable2.Get(), 4294967295);
-// 	CHECK_EQUAL(testable3.Get(), 65535);
-// 	CHECK_EQUAL(testable4.Get(), 255);
-// }
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+	msgpack_object deserialized;
 
-// TEST(MsgpackNumericValueGroup, MsgpackUIntField_TryParse_Test) {
-// 	MsgpackFieldsContainer container;
-// 	MsgpackValue<unsigned int> testable1(&container, "test");
-// 	MsgpackValue<uint32_t> testable2(&container, "test");
-// 	MsgpackValue<uint16_t> testable3(&container, "test");
-// 	MsgpackValue<uint8_t> testable4(&container, "test");
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_uint64(&pk, 12345678901234567890LL);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
 
-// 	rapidjson::Document doc;
-// 	doc.Parse("{\"test\":153000}");
-// 	CHECK_TRUE(testable1.TryParse(&doc));
-// 	CHECK_TRUE(testable2.TryParse(&doc));
-// 	CHECK_TRUE(testable3.TryParse(&doc));
-// 	CHECK_TRUE(testable4.TryParse(&doc));
-// 	CHECK_EQUAL(testable1.Get(), 153000);
-// 	CHECK_EQUAL(testable2.Get(), 153000);
-// 	CHECK_EQUAL(testable3.Get(), 21928);
-// 	CHECK_EQUAL(testable4.Get(), 168);
+	CHECK_TRUE(testable0.TryParse(&deserialized));
+	CHECK_EQUAL(testable0.Get(), 12345678901234567890LL);
 
-// 	doc.Parse("{\"testOther\":42}");
-// 	CHECK_FALSE(testable1.TryParse(&doc));
-// 	CHECK_FALSE(testable2.TryParse(&doc));
-// 	CHECK_FALSE(testable3.TryParse(&doc));
-// 	CHECK_FALSE(testable4.TryParse(&doc));
+	CHECK_FALSE(testable1.TryParse(&deserialized));
+	CHECK_FALSE(testable2.TryParse(&deserialized));
+	CHECK_FALSE(testable3.TryParse(&deserialized));
+	CHECK_FALSE(testable4.TryParse(&deserialized));
+	msgpack_sbuffer_destroy(&sbuf);
+}
 
-// 	doc.Parse("{\"test\":null}");
-// 	CHECK_FALSE(testable1.TryParse(&doc));
-// 	CHECK_FALSE(testable2.TryParse(&doc));
-// 	CHECK_FALSE(testable3.TryParse(&doc));
-// 	CHECK_FALSE(testable4.TryParse(&doc));
-// }
+TEST(MsgpackNumericValueGroup, Uint32_TryParse_Test) {
+	MsgpackFieldsContainer container;
+	MsgpackValue<uint64_t> testable0(&container, 0);
+	MsgpackValue<unsigned int> testable1(&container, 0);
+	MsgpackValue<uint32_t> testable2(&container, 0);
+	MsgpackValue<uint16_t> testable3(&container, 0);
+	MsgpackValue<uint8_t> testable4(&container, 0);
+
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+	msgpack_object deserialized;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_uint32(&pk, 1234567890);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
+
+	CHECK_TRUE(testable0.TryParse(&deserialized));
+	CHECK_EQUAL(testable0.Get(), 1234567890);
+
+	CHECK_TRUE(testable1.TryParse(&deserialized));
+	CHECK_EQUAL(testable1.Get(), 1234567890);
+	CHECK_TRUE(testable2.TryParse(&deserialized));
+	CHECK_EQUAL(testable2.Get(), 1234567890);
+
+	CHECK_FALSE(testable3.TryParse(&deserialized));
+	CHECK_FALSE(testable4.TryParse(&deserialized));
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackNumericValueGroup, Uint16_TryParse_Test) {
+	MsgpackFieldsContainer container;
+	MsgpackValue<uint64_t> testable0(&container, 0);
+	MsgpackValue<unsigned int> testable1(&container, 0);
+	MsgpackValue<uint32_t> testable2(&container, 0);
+	MsgpackValue<uint16_t> testable3(&container, 0);
+	MsgpackValue<uint8_t> testable4(&container, 0);
+
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+	msgpack_object deserialized;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_uint16(&pk, 12345);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
+
+	CHECK_TRUE(testable0.TryParse(&deserialized));
+	CHECK_EQUAL(testable0.Get(), 12345);
+
+	CHECK_TRUE(testable1.TryParse(&deserialized));
+	CHECK_EQUAL(testable1.Get(), 12345);
+	CHECK_TRUE(testable2.TryParse(&deserialized));
+	CHECK_EQUAL(testable2.Get(), 12345);
+
+	CHECK_TRUE(testable3.TryParse(&deserialized));
+	CHECK_EQUAL(testable3.Get(), 12345);
+
+	CHECK_FALSE(testable4.TryParse(&deserialized));
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackNumericValueGroup, Uint8_TryParse_Test) {
+	MsgpackFieldsContainer container;
+	MsgpackValue<uint64_t> testable0(&container, 0);
+	MsgpackValue<unsigned int> testable1(&container, 0);
+	MsgpackValue<uint32_t> testable2(&container, 0);
+	MsgpackValue<uint16_t> testable3(&container, 0);
+	MsgpackValue<uint8_t> testable4(&container, 0);
+
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+	msgpack_object deserialized;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_uint8(&pk, 123);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
+
+	CHECK_TRUE(testable0.TryParse(&deserialized));
+	CHECK_EQUAL(testable0.Get(), 123);
+
+	CHECK_TRUE(testable1.TryParse(&deserialized));
+	CHECK_EQUAL(testable1.Get(), 123);
+	CHECK_TRUE(testable2.TryParse(&deserialized));
+	CHECK_EQUAL(testable2.Get(), 123);
+
+	CHECK_TRUE(testable3.TryParse(&deserialized));
+	CHECK_EQUAL(testable3.Get(), 123);
+
+	CHECK_TRUE(testable4.TryParse(&deserialized));
+	CHECK_EQUAL(testable4.Get(), 123);
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackNumericValueGroup, Int64_TryParse_Test) {
+	MsgpackFieldsContainer container;
+	MsgpackValue<int64_t> testable0(&container, 0);
+	MsgpackValue<int> testable1(&container, 0);
+	MsgpackValue<int32_t> testable2(&container, 0);
+	MsgpackValue<int16_t> testable3(&container, 0);
+	MsgpackValue<int8_t> testable4(&container, 0);
+
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+	msgpack_object deserialized;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_int64(&pk, 12345678901234567890LL);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
+
+	CHECK_TRUE(testable0.TryParse(&deserialized));
+	CHECK_EQUAL(testable0.Get(), 12345678901234567890LL);
+
+	CHECK_FALSE(testable1.TryParse(&deserialized));
+	CHECK_FALSE(testable2.TryParse(&deserialized));
+	CHECK_FALSE(testable3.TryParse(&deserialized));
+	CHECK_FALSE(testable4.TryParse(&deserialized));
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackNumericValueGroup, Int32_TryParse_Test) {
+	MsgpackFieldsContainer container;
+	MsgpackValue<int64_t> testable0(&container, 0);
+	MsgpackValue<int> testable1(&container, 0);
+	MsgpackValue<int32_t> testable2(&container, 0);
+	MsgpackValue<int16_t> testable3(&container, 0);
+	MsgpackValue<int8_t> testable4(&container, 0);
+
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+	msgpack_object deserialized;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_int32(&pk, 1234567890);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
+
+	CHECK_TRUE(testable0.TryParse(&deserialized));
+	CHECK_EQUAL(testable0.Get(), 1234567890);
+
+	CHECK_TRUE(testable1.TryParse(&deserialized));
+	CHECK_EQUAL(testable1.Get(), 1234567890);
+	CHECK_TRUE(testable2.TryParse(&deserialized));
+	CHECK_EQUAL(testable2.Get(), 1234567890);
+
+	CHECK_FALSE(testable3.TryParse(&deserialized));
+	CHECK_FALSE(testable4.TryParse(&deserialized));
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackNumericValueGroup, Int16_TryParse_Test) {
+	MsgpackFieldsContainer container;
+	MsgpackValue<int64_t> testable0(&container, 0);
+	MsgpackValue<int> testable1(&container, 0);
+	MsgpackValue<int32_t> testable2(&container, 0);
+	MsgpackValue<int16_t> testable3(&container, 0);
+	MsgpackValue<int8_t> testable4(&container, 0);
+
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+	msgpack_object deserialized;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_int16(&pk, 12345);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
+
+	CHECK_TRUE(testable0.TryParse(&deserialized));
+	CHECK_EQUAL(testable0.Get(), 12345);
+
+	CHECK_TRUE(testable1.TryParse(&deserialized));
+	CHECK_EQUAL(testable1.Get(), 12345);
+	CHECK_TRUE(testable2.TryParse(&deserialized));
+	CHECK_EQUAL(testable2.Get(), 12345);
+
+	CHECK_TRUE(testable3.TryParse(&deserialized));
+	CHECK_EQUAL(testable3.Get(), 12345);
+
+	CHECK_FALSE(testable4.TryParse(&deserialized));
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackNumericValueGroup, Int8_TryParse_Test) {
+	MsgpackFieldsContainer container;
+	MsgpackValue<int64_t> testable0(&container, 0);
+	MsgpackValue<int> testable1(&container, 0);
+	MsgpackValue<int32_t> testable2(&container, 0);
+	MsgpackValue<int16_t> testable3(&container, 0);
+	MsgpackValue<int8_t> testable4(&container, 0);
+
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+	msgpack_object deserialized;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_int8(&pk, 123);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
+
+	CHECK_TRUE(testable0.TryParse(&deserialized));
+	CHECK_EQUAL(testable0.Get(), 123);
+
+	CHECK_TRUE(testable1.TryParse(&deserialized));
+	CHECK_EQUAL(testable1.Get(), 123);
+	CHECK_TRUE(testable2.TryParse(&deserialized));
+	CHECK_EQUAL(testable2.Get(), 123);
+
+	CHECK_TRUE(testable3.TryParse(&deserialized));
+	CHECK_EQUAL(testable3.Get(), 123);
+
+	CHECK_TRUE(testable4.TryParse(&deserialized));
+	CHECK_EQUAL(testable4.Get(), 123);
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackNumericValueGroup, TryParse_NULL_Test) {
+	MsgpackFieldsContainer container;
+	MsgpackValue<uint64_t> testable0(&container, 0);
+	MsgpackValue<unsigned int> testable1(&container, 0);
+	MsgpackValue<uint32_t> testable2(&container, 0);
+	MsgpackValue<uint16_t> testable3(&container, 0);
+	MsgpackValue<uint8_t> testable4(&container, 0);
+
+	MsgpackValue<int64_t> testable5(&container, 0);
+	MsgpackValue<int> testable6(&container, 0);
+	MsgpackValue<int32_t> testable7(&container, 0);
+	MsgpackValue<int16_t> testable8(&container, 0);
+	MsgpackValue<int8_t> testable9(&container, 0);
+
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+	msgpack_object deserialized;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_nil(&pk);
+	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
+
+	CHECK_FALSE(testable0.TryParse(&deserialized));
+	CHECK_FALSE(testable1.TryParse(&deserialized));
+	CHECK_FALSE(testable2.TryParse(&deserialized));
+	CHECK_FALSE(testable3.TryParse(&deserialized));
+	CHECK_FALSE(testable4.TryParse(&deserialized));
+	CHECK_FALSE(testable5.TryParse(&deserialized));
+	CHECK_FALSE(testable6.TryParse(&deserialized));
+	CHECK_FALSE(testable7.TryParse(&deserialized));
+	CHECK_FALSE(testable8.TryParse(&deserialized));
+	CHECK_FALSE(testable9.TryParse(&deserialized));
+	msgpack_sbuffer_destroy(&sbuf);
+}
 
 // TEST(MsgpackNumericValueGroup, MsgpackUIntField_WriteTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<unsigned int> testable1(&container, "test", 19);
-// 	MsgpackValue<uint32_t> testable2(&container, "test", 20);
-// 	MsgpackValue<uint16_t> testable3(&container, "test", 21);
-// 	MsgpackValue<uint8_t> testable4(&container, "test", 22);
+// 	MsgpackValue<unsigned int> testable1(&container, 0, 19);
+// 	MsgpackValue<uint32_t> testable2(&container, 0, 20);
+// 	MsgpackValue<uint16_t> testable3(&container, 0, 21);
+// 	MsgpackValue<uint8_t> testable4(&container, 0, 22);
 
 // 	{
 // 		rapidjson::Document doc;
@@ -119,20 +363,20 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackUIntField_Equals_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<unsigned int> testable1(&container, "test", 100);
-// 	MsgpackValue<unsigned int> testable01(&container, "test", 100);
+// 	MsgpackValue<unsigned int> testable1(&container, 0, 100);
+// 	MsgpackValue<unsigned int> testable01(&container, 0, 100);
 // 	MsgpackValue<unsigned int> testable001(&container, "testOtherField", 100);
 
-// 	MsgpackValue<uint32_t> testable2(&container, "test", 101);
-// 	MsgpackValue<uint32_t> testable02(&container, "test", 101);
+// 	MsgpackValue<uint32_t> testable2(&container, 0, 101);
+// 	MsgpackValue<uint32_t> testable02(&container, 0, 101);
 // 	MsgpackValue<uint32_t> testable002(&container, "testOtherField", 101);
 
-// 	MsgpackValue<uint16_t> testable3(&container, "test", 102);
-// 	MsgpackValue<uint16_t> testable03(&container, "test", 102);
+// 	MsgpackValue<uint16_t> testable3(&container, 0, 102);
+// 	MsgpackValue<uint16_t> testable03(&container, 0, 102);
 // 	MsgpackValue<uint16_t> testable003(&container, "testOtherField", 102);
 
-// 	MsgpackValue<uint8_t> testable4(&container, "test", 103);
-// 	MsgpackValue<uint8_t> testable04(&container, "test", 103);
+// 	MsgpackValue<uint8_t> testable4(&container, 0, 103);
+// 	MsgpackValue<uint8_t> testable04(&container, 0, 103);
 // 	MsgpackValue<uint8_t> testable004(&container, "testOtherField", 103);
 
 // 	CHECK_TRUE(testable1 == testable01);
@@ -194,15 +438,15 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackUIntField_CloneTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<unsigned int> testable1(&container, "test", 100);
-// 	MsgpackValue<uint32_t> testable2(&container, "test", 101);
-// 	MsgpackValue<uint16_t> testable3(&container, "test", 102);
-// 	MsgpackValue<uint8_t> testable4(&container, "test", 103);
+// 	MsgpackValue<unsigned int> testable1(&container, 0, 100);
+// 	MsgpackValue<uint32_t> testable2(&container, 0, 101);
+// 	MsgpackValue<uint16_t> testable3(&container, 0, 102);
+// 	MsgpackValue<uint8_t> testable4(&container, 0, 103);
 
-// 	MsgpackValue<unsigned int> clone1(&container, "test");
-// 	MsgpackValue<uint32_t> clone2(&container, "test");
-// 	MsgpackValue<uint16_t> clone3(&container, "test");
-// 	MsgpackValue<uint8_t> clone4(&container, "test");
+// 	MsgpackValue<unsigned int> clone1(&container, 0);
+// 	MsgpackValue<uint32_t> clone2(&container, 0);
+// 	MsgpackValue<uint16_t> clone3(&container, 0);
+// 	MsgpackValue<uint8_t> clone4(&container, 0);
 
 // 	testable1.CloneTo((MsgpackValueBase *)&clone1);
 // 	testable2.CloneTo((MsgpackValueBase *)&clone2);
@@ -217,10 +461,10 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackIntField_SetValue_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<int> testable1(&container, "test");
-// 	MsgpackValue<int32_t> testable2(&container, "test");
-// 	MsgpackValue<int16_t> testable3(&container, "test");
-// 	MsgpackValue<int8_t> testable4(&container, "test");
+// 	MsgpackValue<int> testable1(&container, 0);
+// 	MsgpackValue<int32_t> testable2(&container, 0);
+// 	MsgpackValue<int16_t> testable3(&container, 0);
+// 	MsgpackValue<int8_t> testable4(&container, 0);
 // 	testable1.Set(0xFFFFFFFF);
 // 	testable2.Set(0xFFFFFFFF);
 // 	testable3.Set(0xFFFFFFFF);
@@ -234,10 +478,10 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackIntField_TryParse_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<int> testable1(&container, "test");
-// 	MsgpackValue<int32_t> testable2(&container, "test");
-// 	MsgpackValue<int16_t> testable3(&container, "test");
-// 	MsgpackValue<int8_t> testable4(&container, "test");
+// 	MsgpackValue<int> testable1(&container, 0);
+// 	MsgpackValue<int32_t> testable2(&container, 0);
+// 	MsgpackValue<int16_t> testable3(&container, 0);
+// 	MsgpackValue<int8_t> testable4(&container, 0);
 
 // 	rapidjson::Document doc;
 // 	doc.Parse("{\"test\":153000}");
@@ -265,10 +509,10 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackIntField_WriteTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<int> testable1(&container, "test", 19);
-// 	MsgpackValue<int32_t> testable2(&container, "test", 20);
-// 	MsgpackValue<int16_t> testable3(&container, "test", 21);
-// 	MsgpackValue<int8_t> testable4(&container, "test", 22);
+// 	MsgpackValue<int> testable1(&container, 0, 19);
+// 	MsgpackValue<int32_t> testable2(&container, 0, 20);
+// 	MsgpackValue<int16_t> testable3(&container, 0, 21);
+// 	MsgpackValue<int8_t> testable4(&container, 0, 22);
 
 // 	{
 // 		rapidjson::Document doc;
@@ -310,20 +554,20 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackIntField_Equals_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<int> testable1(&container, "test", 100);
-// 	MsgpackValue<int> testable01(&container, "test", 100);
+// 	MsgpackValue<int> testable1(&container, 0, 100);
+// 	MsgpackValue<int> testable01(&container, 0, 100);
 // 	MsgpackValue<int> testable001(&container, "testOtherField", 100);
 
-// 	MsgpackValue<int32_t> testable2(&container, "test", 101);
-// 	MsgpackValue<int32_t> testable02(&container, "test", 101);
+// 	MsgpackValue<int32_t> testable2(&container, 0, 101);
+// 	MsgpackValue<int32_t> testable02(&container, 0, 101);
 // 	MsgpackValue<int32_t> testable002(&container, "testOtherField", 101);
 
-// 	MsgpackValue<int16_t> testable3(&container, "test", 102);
-// 	MsgpackValue<int16_t> testable03(&container, "test", 102);
+// 	MsgpackValue<int16_t> testable3(&container, 0, 102);
+// 	MsgpackValue<int16_t> testable03(&container, 0, 102);
 // 	MsgpackValue<int16_t> testable003(&container, "testOtherField", 102);
 
-// 	MsgpackValue<int8_t> testable4(&container, "test", 103);
-// 	MsgpackValue<int8_t> testable04(&container, "test", 103);
+// 	MsgpackValue<int8_t> testable4(&container, 0, 103);
+// 	MsgpackValue<int8_t> testable04(&container, 0, 103);
 // 	MsgpackValue<int8_t> testable004(&container, "testOtherField", 103);
 
 // 	CHECK_TRUE(testable1 == testable01);
@@ -385,15 +629,15 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackIntField_CloneTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<int> testable1(&container, "test", 100);
-// 	MsgpackValue<int32_t> testable2(&container, "test", 101);
-// 	MsgpackValue<int16_t> testable3(&container, "test", 102);
-// 	MsgpackValue<int8_t> testable4(&container, "test", 103);
+// 	MsgpackValue<int> testable1(&container, 0, 100);
+// 	MsgpackValue<int32_t> testable2(&container, 0, 101);
+// 	MsgpackValue<int16_t> testable3(&container, 0, 102);
+// 	MsgpackValue<int8_t> testable4(&container, 0, 103);
 
-// 	MsgpackValue<int> clone1(&container, "test");
-// 	MsgpackValue<int32_t> clone2(&container, "test");
-// 	MsgpackValue<int16_t> clone3(&container, "test");
-// 	MsgpackValue<int8_t> clone4(&container, "test");
+// 	MsgpackValue<int> clone1(&container, 0);
+// 	MsgpackValue<int32_t> clone2(&container, 0);
+// 	MsgpackValue<int16_t> clone3(&container, 0);
+// 	MsgpackValue<int8_t> clone4(&container, 0);
 
 // 	testable1.CloneTo((MsgpackValueBase *)&clone1);
 // 	testable2.CloneTo((MsgpackValueBase *)&clone2);
@@ -408,13 +652,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // /*
 
-
-
 // */
 
 // TEST(MsgpackNumericValueGroup, MsgpackBoolField_SetValue_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<bool> testable1(&container, "test");
+// 	MsgpackValue<bool> testable1(&container, 0);
 // 	testable1.Set(0xFFFFFFFF);
 // 	CHECK_EQUAL(testable1.Get(), true);
 // 	testable1.Set(0);
@@ -429,7 +671,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackBoolField_TryParse_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<bool> testable1(&container, "test");
+// 	MsgpackValue<bool> testable1(&container, 0);
 
 // 	rapidjson::Document doc;
 // 	doc.Parse("{\"test\":true}");
@@ -442,7 +684,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackBoolField_WriteTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<bool> testable1(&container, "test", true);
+// 	MsgpackValue<bool> testable1(&container, 0, true);
 
 // 	rapidjson::Document doc;
 // 	doc.SetObject();
@@ -455,8 +697,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackBoolField_Equals_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<bool> testable1(&container, "test", true);
-// 	MsgpackValue<bool> testable01(&container, "test", true);
+// 	MsgpackValue<bool> testable1(&container, 0, true);
+// 	MsgpackValue<bool> testable01(&container, 0, true);
 // 	MsgpackValue<bool> testable001(&container, "testOtherField", true);
 
 // 	CHECK_TRUE(testable1 == testable01);
@@ -476,8 +718,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackBoolField_CloneTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<bool> testable1(&container, "test", true);
-// 	MsgpackValue<bool> clone1(&container, "test");
+// 	MsgpackValue<bool> testable1(&container, 0, true);
+// 	MsgpackValue<bool> clone1(&container, 0);
 
 // 	testable1.CloneTo((MsgpackValueBase *)&clone1);
 
@@ -485,12 +727,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // }
 // /*
 
-
 // */
 // TEST(MsgpackNumericValueGroup, MsgpackFloatField_SetValue_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<float> testable1(&container, "test");
-// 	MsgpackValue<double> testable2(&container, "test");
+// 	MsgpackValue<float> testable1(&container, 0);
+// 	MsgpackValue<double> testable2(&container, 0);
 // 	testable1.Set(429496729.5);
 // 	testable2.Set(42949672.95);
 
@@ -500,8 +741,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackFloatField_TryParse_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<float> testable1(&container, "test");
-// 	MsgpackValue<double> testable2(&container, "test");
+// 	MsgpackValue<float> testable1(&container, 0);
+// 	MsgpackValue<double> testable2(&container, 0);
 
 // 	rapidjson::Document doc;
 // 	doc.Parse("{\"test\":150.25}");
@@ -521,8 +762,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackFloatField_WriteTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<float> testable1(&container, "test", 19.25);
-// 	MsgpackValue<double> testable2(&container, "test", 20.5);
+// 	MsgpackValue<float> testable1(&container, 0, 19.25);
+// 	MsgpackValue<double> testable2(&container, 0, 20.5);
 
 // 	{
 // 		rapidjson::Document doc;
@@ -546,12 +787,12 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackFloatField_Equals_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<float> testable1(&container, "test", 100.5);
-// 	MsgpackValue<float> testable01(&container, "test", 100.5);
+// 	MsgpackValue<float> testable1(&container, 0, 100.5);
+// 	MsgpackValue<float> testable01(&container, 0, 100.5);
 // 	MsgpackValue<float> testable001(&container, "testOtherField", 100.5);
 
-// 	MsgpackValue<double> testable2(&container, "test", 101.75);
-// 	MsgpackValue<double> testable02(&container, "test", 101.75);
+// 	MsgpackValue<double> testable2(&container, 0, 101.75);
+// 	MsgpackValue<double> testable02(&container, 0, 101.75);
 // 	MsgpackValue<double> testable002(&container, "testOtherField", 101.75);
 
 // 	CHECK_TRUE(testable1 == testable01);
@@ -585,11 +826,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackFloatField_CloneTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<float> testable1(&container, "test", 100.5);
-// 	MsgpackValue<double> testable2(&container, "test", 101.15);
+// 	MsgpackValue<float> testable1(&container, 0, 100.5);
+// 	MsgpackValue<double> testable2(&container, 0, 101.15);
 
-// 	MsgpackValue<float> clone1(&container, "test");
-// 	MsgpackValue<double> clone2(&container, "test");
+// 	MsgpackValue<float> clone1(&container, 0);
+// 	MsgpackValue<double> clone2(&container, 0);
 
 // 	testable1.CloneTo((MsgpackValueBase *)&clone1);
 // 	testable2.CloneTo((MsgpackValueBase *)&clone2);
@@ -599,15 +840,14 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // }
 // /*
 
-
 // */
 // TEST(MsgpackNumericValueGroup, MsgpackUIntField_Common_TryParse_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<unsigned int> testable1(&container, "test", 100);
-// 	MsgpackValue<uint32_t> testable2(&container, "test", 101);
-// 	MsgpackValue<uint16_t> testable3(&container, "test", 102);
-// 	MsgpackValue<uint8_t> testable4(&container, "test", 103);
-// 	MsgpackValue<uint64_t> testable5(&container, "test", 104);
+// 	MsgpackValue<unsigned int> testable1(&container, 0, 100);
+// 	MsgpackValue<uint32_t> testable2(&container, 0, 101);
+// 	MsgpackValue<uint16_t> testable3(&container, 0, 102);
+// 	MsgpackValue<uint8_t> testable4(&container, 0, 103);
+// 	MsgpackValue<uint64_t> testable5(&container, 0, 104);
 
 // 	CHECK_FALSE(testable1.Presented());
 // 	CHECK_FALSE(testable2.Presented());
@@ -680,11 +920,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackUIntField_Common_WriteTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<unsigned int> testable1(&container, "test", 19);
-// 	MsgpackValue<uint32_t> testable2(&container, "test", 20);
-// 	MsgpackValue<uint16_t> testable3(&container, "test", 21);
-// 	MsgpackValue<uint8_t> testable4(&container, "test", 22);
-// 	MsgpackValue<uint64_t> testable5(&container, "test", 22);
+// 	MsgpackValue<unsigned int> testable1(&container, 0, 19);
+// 	MsgpackValue<uint32_t> testable2(&container, 0, 20);
+// 	MsgpackValue<uint16_t> testable3(&container, 0, 21);
+// 	MsgpackValue<uint8_t> testable4(&container, 0, 22);
+// 	MsgpackValue<uint64_t> testable5(&container, 0, 22);
 
 // 	{
 // 		rapidjson::Document doc;
@@ -785,11 +1025,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackUIntField_Common_Change_Presented_After_Set_Value_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<unsigned int> testable1(&container, "test");
-// 	MsgpackValue<uint32_t> testable2(&container, "test");
-// 	MsgpackValue<uint16_t> testable3(&container, "test");
-// 	MsgpackValue<uint8_t> testable4(&container, "test");
-// 	MsgpackValue<uint64_t> testable5(&container, "test");
+// 	MsgpackValue<unsigned int> testable1(&container, 0);
+// 	MsgpackValue<uint32_t> testable2(&container, 0);
+// 	MsgpackValue<uint16_t> testable3(&container, 0);
+// 	MsgpackValue<uint8_t> testable4(&container, 0);
+// 	MsgpackValue<uint64_t> testable5(&container, 0);
 
 // 	CHECK_FALSE(testable1.Presented());
 // 	CHECK_FALSE(testable2.Presented());
@@ -811,11 +1051,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackUIntField_Common_Change_IsNull_After_Set_Value_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<unsigned int> testable1(&container, "test");
-// 	MsgpackValue<uint32_t> testable2(&container, "test");
-// 	MsgpackValue<uint16_t> testable3(&container, "test");
-// 	MsgpackValue<uint8_t> testable4(&container, "test");
-// 	MsgpackValue<uint64_t> testable5(&container, "test");
+// 	MsgpackValue<unsigned int> testable1(&container, 0);
+// 	MsgpackValue<uint32_t> testable2(&container, 0);
+// 	MsgpackValue<uint16_t> testable3(&container, 0);
+// 	MsgpackValue<uint8_t> testable4(&container, 0);
+// 	MsgpackValue<uint64_t> testable5(&container, 0);
 
 // 	rapidjson::Document doc;
 // 	doc.Parse("{\"test\":null}");
@@ -844,11 +1084,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackIntField_Common_TryParse_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<int> testable1(&container, "test", 100);
-// 	MsgpackValue<int32_t> testable2(&container, "test", 101);
-// 	MsgpackValue<int16_t> testable3(&container, "test", 102);
-// 	MsgpackValue<int8_t> testable4(&container, "test", 103);
-// 	MsgpackValue<int64_t> testable5(&container, "test", 103);
+// 	MsgpackValue<int> testable1(&container, 0, 100);
+// 	MsgpackValue<int32_t> testable2(&container, 0, 101);
+// 	MsgpackValue<int16_t> testable3(&container, 0, 102);
+// 	MsgpackValue<int8_t> testable4(&container, 0, 103);
+// 	MsgpackValue<int64_t> testable5(&container, 0, 103);
 
 // 	CHECK_FALSE(testable1.Presented());
 // 	CHECK_FALSE(testable2.Presented());
@@ -921,11 +1161,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackIntField_Common_WriteTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<int> testable1(&container, "test", 19);
-// 	MsgpackValue<int32_t> testable2(&container, "test", 20);
-// 	MsgpackValue<int16_t> testable3(&container, "test", 21);
-// 	MsgpackValue<int8_t> testable4(&container, "test", 22);
-// 	MsgpackValue<int64_t> testable5(&container, "test", 22);
+// 	MsgpackValue<int> testable1(&container, 0, 19);
+// 	MsgpackValue<int32_t> testable2(&container, 0, 20);
+// 	MsgpackValue<int16_t> testable3(&container, 0, 21);
+// 	MsgpackValue<int8_t> testable4(&container, 0, 22);
+// 	MsgpackValue<int64_t> testable5(&container, 0, 22);
 
 // 	{
 // 		rapidjson::Document doc;
@@ -1026,11 +1266,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackIntField_Common_Change_Presented_After_Set_Value_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<int> testable1(&container, "test");
-// 	MsgpackValue<int32_t> testable2(&container, "test");
-// 	MsgpackValue<int16_t> testable3(&container, "test");
-// 	MsgpackValue<int8_t> testable4(&container, "test");
-// 	MsgpackValue<int64_t> testable5(&container, "test");
+// 	MsgpackValue<int> testable1(&container, 0);
+// 	MsgpackValue<int32_t> testable2(&container, 0);
+// 	MsgpackValue<int16_t> testable3(&container, 0);
+// 	MsgpackValue<int8_t> testable4(&container, 0);
+// 	MsgpackValue<int64_t> testable5(&container, 0);
 
 // 	CHECK_FALSE(testable1.Presented());
 // 	CHECK_FALSE(testable2.Presented());
@@ -1052,11 +1292,11 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackIntField_Common_Change_IsNull_After_Set_Value_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<int> testable1(&container, "test");
-// 	MsgpackValue<int32_t> testable2(&container, "test");
-// 	MsgpackValue<int16_t> testable3(&container, "test");
-// 	MsgpackValue<int8_t> testable4(&container, "test");
-// 	MsgpackValue<int64_t> testable5(&container, "test");
+// 	MsgpackValue<int> testable1(&container, 0);
+// 	MsgpackValue<int32_t> testable2(&container, 0);
+// 	MsgpackValue<int16_t> testable3(&container, 0);
+// 	MsgpackValue<int8_t> testable4(&container, 0);
+// 	MsgpackValue<int64_t> testable5(&container, 0);
 
 // 	rapidjson::Document doc;
 // 	doc.Parse("{\"test\":null}");
@@ -1085,7 +1325,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackBoolField_Common_TryParse_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<bool> testable1(&container, "test", false);
+// 	MsgpackValue<bool> testable1(&container, 0, false);
 
 // 	CHECK_FALSE(testable1.Presented());
 // 	CHECK_FALSE(testable1.IsNull());
@@ -1111,7 +1351,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackBoolField_Common_WriteTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<bool> testable1(&container, "test", true);
+// 	MsgpackValue<bool> testable1(&container, 0, true);
 
 // 	{
 // 		rapidjson::Document doc;
@@ -1136,7 +1376,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackBoolField_Common_Change_Presented_After_Set_Value_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<bool> testable1(&container, "test");
+// 	MsgpackValue<bool> testable1(&container, 0);
 
 // 	CHECK_FALSE(testable1.Presented());
 
@@ -1146,7 +1386,7 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackBoolField_Common_Change_IsNull_After_Set_Value_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<bool> testable1(&container, "test");
+// 	MsgpackValue<bool> testable1(&container, 0);
 
 // 	rapidjson::Document doc;
 // 	doc.Parse("{\"test\":null}");
@@ -1159,8 +1399,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackFloatField_Common_TryParse_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<float> testable1(&container, "test", 100);
-// 	MsgpackValue<double> testable2(&container, "test", 101);
+// 	MsgpackValue<float> testable1(&container, 0, 100);
+// 	MsgpackValue<double> testable2(&container, 0, 101);
 
 // 	CHECK_FALSE(testable1.Presented());
 // 	CHECK_FALSE(testable2.Presented());
@@ -1197,8 +1437,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackFloatField_Common_WriteTo_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<float> testable1(&container, "test", 19);
-// 	MsgpackValue<double> testable2(&container, "test", 20);
+// 	MsgpackValue<float> testable1(&container, 0, 19);
+// 	MsgpackValue<double> testable2(&container, 0, 20);
 
 // 	{
 // 		rapidjson::Document doc;
@@ -1242,8 +1482,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackFloatField_Common_Change_Presented_After_Set_Value_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<float> testable1(&container, "test");
-// 	MsgpackValue<double> testable2(&container, "test");
+// 	MsgpackValue<float> testable1(&container, 0);
+// 	MsgpackValue<double> testable2(&container, 0);
 
 // 	CHECK_FALSE(testable1.Presented());
 // 	CHECK_FALSE(testable2.Presented());
@@ -1256,8 +1496,8 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
 // TEST(MsgpackNumericValueGroup, MsgpackFloatField_Common_Change_IsNull_After_Set_Value_Test) {
 // 	MsgpackFieldsContainer container;
-// 	MsgpackValue<float> testable1(&container, "test");
-// 	MsgpackValue<double> testable2(&container, "test");
+// 	MsgpackValue<float> testable1(&container, 0);
+// 	MsgpackValue<double> testable2(&container, 0);
 
 // 	rapidjson::Document doc;
 // 	doc.Parse("{\"test\":null}");

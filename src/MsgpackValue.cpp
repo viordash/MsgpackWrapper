@@ -205,28 +205,37 @@ template <> bool MsgpackValue<bool>::TryParse(msgpack_object *deserialized) {
 template <> bool MsgpackValue<int8_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
-	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER || object.via.i64 < INT8_MIN || object.via.i64 > INT8_MAX) { return false; }
+	if ((object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER && object.type != MSGPACK_OBJECT_POSITIVE_INTEGER) //
+		|| object.via.i64 < INT8_MIN || object.via.i64 > INT8_MAX) {
+		return false;
+	}
 	Set((int8_t)object.via.i64);
 	return true;
 }
 template <> bool MsgpackValue<int16_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
-	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER || object.via.i64 < INT16_MIN || object.via.i64 > INT16_MAX) { return false; }
+	if ((object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER && object.type != MSGPACK_OBJECT_POSITIVE_INTEGER) //
+		|| object.via.i64 < INT16_MIN || object.via.i64 > INT16_MAX) {
+		return false;
+	}
 	Set((int16_t)object.via.i64);
 	return true;
 }
 template <> bool MsgpackValue<int32_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
-	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER || object.via.i64 < INT32_MIN || object.via.i64 > INT32_MAX) { return false; }
+	if ((object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER && object.type != MSGPACK_OBJECT_POSITIVE_INTEGER) //
+		|| object.via.i64 < INT32_MIN || object.via.i64 > INT32_MAX) {
+		return false;
+	}
 	Set((int32_t)object.via.i64);
 	return true;
 }
 template <> bool MsgpackValue<int64_t>::TryParse(msgpack_object *deserialized) {
 	if (this->Id >= deserialized->via.array.size) { return false; }
 	msgpack_object object = deserialized->via.array.ptr[this->Id];
-	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER) { return false; }
+	if (object.type != MSGPACK_OBJECT_NEGATIVE_INTEGER && object.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
 	Set(object.via.i64);
 	return true;
 }
