@@ -15,27 +15,28 @@ bool MsgpackObject::TryParse(msgpack_object *deserialized) {
 	return true;
 }
 
-msgpack_unpacker *MsgpackObject::BeginTryParse(const char *buffer, size_t length) {
+msgpack_unpacked *MsgpackObject::BeginTryParse(const char *buffer, size_t length) {
 	if (buffer == NULL) { return NULL; }
 
-	auto unpacker = msgpack_unpacker_new(length);
-	if (unpacker == NULL) { return NULL; }
+	msgpack_unpacked *unpacked = new msgpack_unpacked();
+	msgpack_unpacked_init(unpacked);
+	msgpack_unpack_return ret = msgpack_unpack_next(unpacked, buffer, length, NULL);
 
-	msgpack_unpacked unpacked;
-	msgpack_unpack_return ret;
-	msgpack_unpacked_init(&unpacked);
-	ret = msgpack_unpacker_next(unpacker, &unpacked);
-	if (ret == MSGPACK_UNPACK_SUCCESS && TryParse(&unpacked.data)) {
-		msgpack_unpacked_destroy(&unpacked);
-		return unpacker;
+	if (ret != MSGPACK_UNPACK_SUCCESS) {
+		EndTryParse(unpacked);
+		return NULL;
 	}
-
-	msgpack_unpacked_destroy(&unpacked);
-	EndTryParse(unpacker);
-	return NULL;
+	if (!TryParse(&unpacked->data)) {
+		EndTryParse(unpacked);
+		return NULL;
+	}
+	return unpacked;
 }
 
-void MsgpackObject::EndTryParse(msgpack_unpacker *unpacker) { msgpack_unpacker_free(unpacker); }
+void MsgpackObject::EndTryParse(msgpack_unpacked *unpacked) {
+	msgpack_unpacked_destroy(unpacked);
+	delete unpacked;
+}
 
 bool MsgpackObject::TryParse(const char *buffer, size_t length) {
 	auto unpacker = BeginTryParse(buffer, length);

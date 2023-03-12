@@ -39,8 +39,8 @@ class MsgpackObject : public MsgpackFieldsContainer {
 
 	virtual bool TryParse(msgpack_object *deserialized);
 	virtual bool TryParse(const char *buffer, size_t length);
-	msgpack_unpacker *BeginTryParse(const char *buffer, size_t length);
-	void EndTryParse(msgpack_unpacker *unpacker);
+	msgpack_unpacked *BeginTryParse(const char *buffer, size_t length);
+	void EndTryParse(msgpack_unpacked *unpacked);
 
 	bool Write(msgpack_packer *packer);
 	size_t Write(char *outBuffer, size_t outBufferSize);

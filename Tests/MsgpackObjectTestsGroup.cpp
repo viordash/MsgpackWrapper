@@ -13,40 +13,40 @@ TEST_GROUP(MsgpackObjectTestsGroup){void setup(){} void teardown(){}};
 
 typedef enum { uAdmin, uViewer } TUserRole;
 
-// class UserDto : public MsgpackObject {
-//   public:
-// 	MsgpackValue<char *> Name;
-// 	MsgpackValue<uint32_t> Role;
+class UserDto : public MsgpackObject {
+  public:
+	MsgpackValue<char *> Name;
+	MsgpackValue<uint32_t> Role;
 
-// 	UserDto(const char *name = {}, const TUserRole role = {})
-// 		: Name(this, 0, name), //
-// 		  Role(this, 1, role){};
+	UserDto(const char *name = {}, const TUserRole role = {})
+		: Name(this, 0, name), //
+		  Role(this, 1, role){};
 
-// 	bool Validate() override { return Role.Get() < 1000; }
-// };
+	bool Validate() override { return Role.Get() < 1000; }
+};
 
-// class GoodsDto : public MsgpackObject {
-//   public:
-// 	MsgpackValue<int> Id;
-// 	MsgpackValue<uint32_t> Created;
-// 	MsgpackValue<char *> Group;
-// 	MsgpackValue<char *> Name;
-// 	MsgpackValue<float> Price;
-// 	MsgpackValue<double> Quantity;
-// 	MsgpackValue<bool> Deleted;
-// 	MsgpackValue<char *> StoreName;
+class GoodsDto : public MsgpackObject {
+  public:
+	MsgpackValue<int> Id;
+	MsgpackValue<uint32_t> Created;
+	MsgpackValue<char *> Group;
+	MsgpackValue<char *> Name;
+	MsgpackValue<float> Price;
+	MsgpackValue<double> Quantity;
+	MsgpackValue<bool> Deleted;
+	MsgpackValue<char *> StoreName;
 
-// 	GoodsDto(const int id = {}, uint32_t created = {}, const char *group = {}, const char *name = {}, const float price = {}, const double quantity = {}, const bool deleted = {},
-// 			 const char *storeName = {})
-// 		: Id(this, "Id", id),					//
-// 		  Created(this, "Created", created),	//
-// 		  Group(this, "Group", group),			//
-// 		  Name(this, "Name", name),				//
-// 		  Price(this, "Price", price),			//
-// 		  Quantity(this, "Quantity", quantity), //
-// 		  Deleted(this, "Deleted", deleted),	//
-// 		  StoreName(this, "StoreName", storeName){};
-// };
+	GoodsDto(const int id = {}, uint32_t created = {}, const char *group = {}, const char *name = {}, const float price = {}, const double quantity = {}, const bool deleted = {},
+			 const char *storeName = {})
+		: Id(this, 0, id),			   //
+		  Created(this, 1, created),   //
+		  Group(this, 2, group),	   //
+		  Name(this, 3, name),		   //
+		  Price(this, 4, price),	   //
+		  Quantity(this, 5, quantity), //
+		  Deleted(this, 6, deleted),   //
+		  StoreName(this, 7, storeName){};
+};
 
 // class GoodsList : public MsgpackObjectsArray {
 //   public:
@@ -107,28 +107,51 @@ typedef enum { uAdmin, uViewer } TUserRole;
 // 	}
 // };
 
-// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Test) {
-// 	GoodsDto goods;
-// 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
+TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Test) {
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+	// msgpack_object deserialized;
 
-// 	CHECK_EQUAL(goods.Id.Get(), 1);
-// 	CHECK_EQUAL(goods.Created.Get(), 1657052045);
-// 	STRCMP_EQUAL(goods.Group.Get(), "Vegetables");
-// 	STRCMP_EQUAL(goods.Name.Get(), "Tomato");
-// 	CHECK_EQUAL(goods.Price.Get(), 123.25);
-// 	CHECK_EQUAL(goods.Quantity.Get(), 165.052045);
-// 	CHECK_EQUAL(goods.Deleted.Get(), false);
-// 	STRCMP_EQUAL(goods.StoreName.Get(), NULL);
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
 
-// 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052046,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045,"
-// 									"\"StoreName\":\"Store #1\"}               \t  \r\n"));
-// 	CHECK_EQUAL(goods.Created.Get(), 1657052046);
+	msgpack_pack_array(&pk, 8);
+	msgpack_pack_int(&pk, 1);
+	msgpack_pack_uint32(&pk, 1657052045);
+	msgpack_pack_str(&pk, 10);
+	msgpack_pack_str_body(&pk, "Vegetables", 10);
+	msgpack_pack_str(&pk, 6);
+	msgpack_pack_str_body(&pk, "Tomato", 6);
+	msgpack_pack_float(&pk, 123.25);
+	msgpack_pack_double(&pk, 165.052045);
+	msgpack_pack_false(&pk);
+	msgpack_pack_nil(&pk);
 
-// 	CHECK_TRUE(goods.TryStringParse("     \r\n    \t   "
-// 									"{\"Id\":1,\"Created\":1657052047,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045,"
-// 									"\"StoreName\":\"Store #1\"}               \t  \r\n"));
-// 	CHECK_EQUAL(goods.Created.Get(), 1657052047);
-// }
+	GoodsDto goods;
+	CHECK_TRUE(goods.TryParse(sbuf.data, sbuf.size
+							  // "{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"
+							  ));
+
+	msgpack_sbuffer_destroy(&sbuf);
+
+	CHECK_EQUAL(goods.Id.Get(), 1);
+	CHECK_EQUAL(goods.Created.Get(), 1657052045);
+	STRCMP_EQUAL(goods.Group.Get(), "Vegetables");
+	STRCMP_EQUAL(goods.Name.Get(), "Tomato");
+	CHECK_EQUAL(goods.Price.Get(), 123.25);
+	CHECK_EQUAL(goods.Quantity.Get(), 165.052045);
+	CHECK_EQUAL(goods.Deleted.Get(), false);
+	STRCMP_EQUAL(goods.StoreName.Get(), NULL);
+
+	// CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052046,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045,"
+	// 								"\"StoreName\":\"Store #1\"}               \t  \r\n"));
+	// CHECK_EQUAL(goods.Created.Get(), 1657052046);
+
+	// CHECK_TRUE(goods.TryStringParse("     \r\n    \t   "
+	// 								"{\"Id\":1,\"Created\":1657052047,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045,"
+	// 								"\"StoreName\":\"Store #1\"}               \t  \r\n"));
+	// CHECK_EQUAL(goods.Created.Get(), 1657052047);
+}
 
 // TEST(MsgpackObjectTestsGroup, MsgpackObject_Complex_TryParse_Test) {
 // 	OrderDto order;
