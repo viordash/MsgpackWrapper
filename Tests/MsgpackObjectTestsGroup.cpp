@@ -110,7 +110,6 @@ class GoodsDto : public MsgpackObject {
 TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Test) {
 	msgpack_sbuffer sbuf;
 	msgpack_packer pk;
-	// msgpack_object deserialized;
 
 	msgpack_sbuffer_init(&sbuf);
 	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
@@ -128,9 +127,7 @@ TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Test) {
 	msgpack_pack_nil(&pk);
 
 	GoodsDto goods;
-	CHECK_TRUE(goods.TryParse(sbuf.data, sbuf.size
-							  // "{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"
-							  ));
+	CHECK_TRUE(goods.TryParse(sbuf.data, sbuf.size));
 
 	msgpack_sbuffer_destroy(&sbuf);
 
@@ -142,15 +139,6 @@ TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Test) {
 	CHECK_EQUAL(goods.Quantity.Get(), 165.052045);
 	CHECK_EQUAL(goods.Deleted.Get(), false);
 	STRCMP_EQUAL(goods.StoreName.Get(), NULL);
-
-	// CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052046,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045,"
-	// 								"\"StoreName\":\"Store #1\"}               \t  \r\n"));
-	// CHECK_EQUAL(goods.Created.Get(), 1657052046);
-
-	// CHECK_TRUE(goods.TryStringParse("     \r\n    \t   "
-	// 								"{\"Id\":1,\"Created\":1657052047,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045,"
-	// 								"\"StoreName\":\"Store #1\"}               \t  \r\n"));
-	// CHECK_EQUAL(goods.Created.Get(), 1657052047);
 }
 
 // TEST(MsgpackObjectTestsGroup, MsgpackObject_Complex_TryParse_Test) {
@@ -166,105 +154,137 @@ TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Test) {
 // 	STRCMP_EQUAL(order.userDto.Name.Get(), "Joe Doe");
 // }
 
-// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Optionaly_Fields_Test) {
-// 	GoodsDto goods;
-// 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045,\"Deleted\":true}"));
-// 	CHECK_EQUAL(goods.Id.Get(), 1);
-// 	CHECK_EQUAL(goods.Created.Get(), 1657052045);
-// 	STRCMP_EQUAL(goods.Group.Get(), "Vegetables");
-// 	STRCMP_EQUAL(goods.Name.Get(), "Tomato");
-// 	CHECK_EQUAL(goods.Price.Get(), 123.25);
-// 	CHECK_EQUAL(goods.Quantity.Get(), 165.052045);
-// 	CHECK_EQUAL(goods.Deleted.Presented(), true);
-// 	CHECK_EQUAL(goods.Deleted.Get(), true);
-// 	STRCMP_EQUAL(goods.StoreName.Get(), NULL);
+TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Error_Test) {
+	msgpack_sbuffer sbuf = {};
+	msgpack_packer pk;
+	GoodsDto goods;
+	CHECK_FALSE(goods.TryParse(sbuf.data, sbuf.size));
+	CHECK_FALSE(goods.TryParse(NULL, 1));
 
-// 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045,\"StoreName\":\"Store #1\"}"));
-// 	CHECK_EQUAL(goods.Deleted.Presented(), false);
-// 	STRCMP_EQUAL(goods.StoreName.Get(), "Store #1");
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
 
-// 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045,"
-// 									"\"Deleted\":true,\"StoreName\":\"Store #2\"}"));
-// 	CHECK_EQUAL(goods.Deleted.Get(), true);
-// 	STRCMP_EQUAL(goods.StoreName.Get(), "Store #2");
-// }
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_int(&pk, 1);
 
-// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Error_Test) {
-// 	GoodsDto goods;
-// 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1  \"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
-// 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,,\"Quantity\":165.052045}"));
-// 	CHECK_FALSE(goods.TryStringParse("\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
-// 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045"));
-// 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
-// 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":}"));
-// 	CHECK_FALSE(goods.TryStringParse("     \r\n some text   \t   "
-// 									 "{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045,"
-// 									 "\"StoreName\":\"Store #1\"}               \t  \r\n"));
-// 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":} some text"));
-// 	CHECK_FALSE(goods.TryStringParse(NULL, 1));
+	CHECK_FALSE(goods.TryParse(sbuf.data, sbuf.size));
 
-// 	CHECK_EQUAL(goods.Id.Get(), 0);
-// 	CHECK_EQUAL(goods.Created.Get(), 0);
-// 	STRCMP_EQUAL(goods.Group.Get(), NULL);
-// 	STRCMP_EQUAL(goods.Name.Get(), NULL);
-// 	CHECK_EQUAL(goods.Price.Get(), 0.0);
-// 	CHECK_EQUAL(goods.Quantity.Get(), 0.0);
-// 	CHECK_EQUAL(goods.Deleted.Get(), false);
-// 	STRCMP_EQUAL(goods.StoreName.Get(), NULL);
-// }
+	msgpack_sbuffer_destroy(&sbuf);
+}
 
-// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Reordered_Fields_Test) {
-// 	GoodsDto goods;
-// 	CHECK_TRUE(goods.TryStringParse("{\"Created\":1657052045,\"Group\":\"Vegetables\",\"Id\":1,\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
-// 	CHECK_EQUAL(goods.Created.Get(), 1657052045);
-// 	CHECK_TRUE(goods.TryStringParse("{\"Created\":1657052046,\"Price\":123.25,\"Group\":\"Vegetables\",\"Id\":1,\"Name\":\"Tomato\",\"Quantity\":165.052045}"));
-// 	CHECK_EQUAL(goods.Created.Get(), 1657052046);
-// 	CHECK_TRUE(goods.TryStringParse("{\"Created\":1657052047,\"Price\":123.25,\"Id\":1,\"Name\":\"Tomato\",\"Quantity\":165.052045,\"StoreName\":\"Store #1\",\"Group\":\"Vegetables\"}"));
-// 	CHECK_EQUAL(goods.Created.Get(), 1657052047);
-// 	CHECK_TRUE(goods.TryStringParse("{\"Deleted\":true, \"Created\":1657052048,\"Price\":123.25,\"Id\":1,\"Name\":\"Tomato\",\"Quantity\":165.052045,\"StoreName\":\"Store "
-// 									"#1\",\"Group\":\"Vegetables\"}"));
+TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Reordered_Fields_Test) {
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
 
-// 	CHECK_EQUAL(goods.Id.Get(), 1);
-// 	CHECK_EQUAL(goods.Created.Get(), 1657052048);
-// 	STRCMP_EQUAL(goods.Group.Get(), "Vegetables");
-// 	STRCMP_EQUAL(goods.Name.Get(), "Tomato");
-// 	CHECK_EQUAL(goods.Price.Get(), 123.25);
-// 	CHECK_EQUAL(goods.Quantity.Get(), 165.052045);
-// 	CHECK_EQUAL(goods.Deleted.Get(), true);
-// 	STRCMP_EQUAL(goods.StoreName.Get(), "Store #1");
-// }
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
 
-// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_And_Length_Defined_Test) {
-// 	GoodsDto goods;
-// 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}", 103));
-// 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}", 2000));
-// 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}", 0));
-// 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}", 102));
-// 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}", 1));
-// }
+	msgpack_pack_array(&pk, 8);
+	msgpack_pack_int(&pk, 1);
 
-// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Nullable_Values_Test) {
-// 	GoodsDto goods;
-// 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,\"Created\":null,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
-// 	CHECK_TRUE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":null,\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}"));
-// 	CHECK_FALSE(goods.TryStringParse("{\"Id\":1,\"Created\":1657052045,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":null}"));
-// 	CHECK_FALSE(goods.TryStringParse("{\"Id\":null,\"Created\":null,\"Group\":null,\"Name\":null,\"Price\":null,\"Quantity\":null}"));
+	msgpack_pack_str(&pk, 10);
+	msgpack_pack_str_body(&pk, "Vegetables", 10);
 
-// 	CustomerDto customerDto;
-// 	CHECK_TRUE(customerDto.TryStringParse(
-// 		"{\"id\":123,\"name\":\"sh\",\"blob\":null,\"orders\":[{\"supplier\":\"Dell1\",\"dateTime\":1657058001,\"goods\":[{\"Id\":1,\"Created\":1657052789,"
-// 		"\"Group\":\"Keyboards\",\"Name\":\"K1-100\",\"Price\":58.25,\"Quantity\":48.2,\"Deleted\":false,\"StoreName\":\"\"}],\"user\":{\"name\":\"Joe Doe\",\"role\":1}}]}"));
-// }
+	msgpack_pack_uint32(&pk, 1657052045);
 
-// TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Begin_End_Stages_Test) {
-// 	GoodsDto goods;
-// 	auto doc = goods.BeginTryStringParse("{\"Id\":1,\"Created\":1657052048,\"Group\":\"Vegetables\",\"Name\":\"Tomato\",\"Price\":123.25,\"Quantity\":165.052045}");
+	msgpack_pack_str(&pk, 6);
+	msgpack_pack_str_body(&pk, "Tomato", 6);
+	msgpack_pack_float(&pk, 123.25);
+	msgpack_pack_double(&pk, 165.052045);
+	msgpack_pack_false(&pk);
+	msgpack_pack_nil(&pk);
 
-// 	CHECK(doc != NULL);
-// 	CHECK_EQUAL(goods.Created.Get(), 1657052048);
-// 	STRCMP_EQUAL(goods.Group.Get(), "Vegetables");
-// 	goods.EndTryStringParse(doc);
-// }
+	GoodsDto goods;
+	CHECK_FALSE(goods.TryParse(sbuf.data, sbuf.size));
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_And_Incorrect_Length_Test) {
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 8);
+	msgpack_pack_int(&pk, 1);
+	msgpack_pack_uint32(&pk, 1657052045);
+	msgpack_pack_str(&pk, 10);
+	msgpack_pack_str_body(&pk, "Vegetables", 10);
+	msgpack_pack_str(&pk, 6);
+	msgpack_pack_str_body(&pk, "Tomato", 6);
+	msgpack_pack_float(&pk, 123.25);
+	msgpack_pack_double(&pk, 165.052045);
+	msgpack_pack_false(&pk);
+	msgpack_pack_nil(&pk);
+
+	GoodsDto goods;
+	CHECK_TRUE(goods.TryParse(sbuf.data, sbuf.size));
+	CHECK_TRUE(goods.TryParse(sbuf.data, sbuf.size + 100));
+	CHECK_FALSE(goods.TryParse(sbuf.data, sbuf.size - 1));
+	CHECK_FALSE(goods.TryParse(sbuf.data, 0));
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Null_Values_Test) {
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 8);
+
+	msgpack_pack_nil(&pk);
+
+	msgpack_pack_uint32(&pk, 1657052045);
+	msgpack_pack_str(&pk, 10);
+	msgpack_pack_str_body(&pk, "Vegetables", 10);
+	msgpack_pack_str(&pk, 6);
+	msgpack_pack_str_body(&pk, "Tomato", 6);
+	msgpack_pack_float(&pk, 123.25);
+	msgpack_pack_double(&pk, 165.052045);
+	msgpack_pack_false(&pk);
+	msgpack_pack_nil(&pk);
+
+	GoodsDto goods;
+	CHECK_FALSE(goods.TryParse(sbuf.data, sbuf.size));
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Begin_End_Stages_Test) {
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 8);
+	msgpack_pack_int(&pk, 1);
+	msgpack_pack_uint32(&pk, 1657052048);
+	msgpack_pack_str(&pk, 10);
+	msgpack_pack_str_body(&pk, "Vegetables", 10);
+	msgpack_pack_str(&pk, 6);
+	msgpack_pack_str_body(&pk, "Tomato", 6);
+	msgpack_pack_float(&pk, 123.25);
+	msgpack_pack_double(&pk, 165.052045);
+	msgpack_pack_false(&pk);
+	msgpack_pack_nil(&pk);
+
+	GoodsDto goods;
+	CHECK_TRUE(goods.TryParse(sbuf.data, sbuf.size));
+	auto unpacked = goods.BeginTryParse(sbuf.data, sbuf.size);
+
+	CHECK(unpacked != NULL);
+	msgpack_sbuffer_destroy(&sbuf);
+
+	CHECK_EQUAL(goods.Created.Get(), 1657052048);
+	STRCMP_EQUAL(goods.Group.Get(), "Vegetables");
+	goods.EndTryParse(unpacked);
+}
 
 // TEST(MsgpackObjectTestsGroup, MsgpackObject_WriteTo_Test) {
 // 	char buffer[2048];
