@@ -286,41 +286,48 @@ TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Begin_End_Stages_Test) {
 	goods.EndTryParse(unpacked);
 }
 
-// TEST(MsgpackObjectTestsGroup, MsgpackObject_WriteTo_Test) {
-// 	char buffer[2048];
-// 	GoodsDto goods(2, 1657052789, "group", "name", 58.25, 48.2, false, "storeName");
-// 	CHECK_EQUAL(goods.WriteToString(buffer, sizeof(buffer)), 129);
+TEST(MsgpackObjectTestsGroup, MsgpackObject_WriteTo_Test) {
+	char buffer[2048];
+	GoodsDto goods(2, 1657052789, "group", "name", 58.25, 48.2, false, "storeName");
+	CHECK_EQUAL(goods.Write(buffer, sizeof(buffer)), 43);
 
-// 	STRCMP_EQUAL(buffer, "{\"Id\":2,\"Created\":1657052789,\"Group\":\"group\",\"Name\":\"name\",\"Price\":58.25,\"Quantity\":48.2,\"Deleted\":false,"
-// 						 "\"StoreName\":\"storeName\"}");
-// }
+	msgpack_unpacked unpacked;
+	msgpack_unpacked_init(&unpacked);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 43, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
+	CHECK_EQUAL(unpacked.data.via.array.size, 8);
+}
 
-// TEST(MsgpackObjectTestsGroup, MsgpackObject_WriteTo_With_Limited_Buffer_Test) {
-// 	char buffer[32];
-// 	GoodsDto goods(2, 1657052789, "group", "name", 58.25, 48.2, false, "storeName");
-// 	CHECK_EQUAL(goods.WriteToString(buffer, sizeof(buffer)), 31);
+TEST(MsgpackObjectTestsGroup, MsgpackObject_WriteTo_With_Limited_Buffer_Test) {
+	char buffer[32];
+	GoodsDto goods(2, 1657052789, "group", "name", 58.25, 48.2, false, "storeName");
+	CHECK_EQUAL(goods.Write(buffer, sizeof(buffer)), 0);
+}
 
-// 	STRCMP_EQUAL(buffer, "{\"Id\":2,\"Created\":1657052789,\"G");
-// }
+static void *TestParent = NULL;
+static char *DirectWriteTestBuffer = NULL;
+static size_t DirectWriteTestBufferLenght = 0;
+static void OnReady(void *parent, const char *json, size_t size) {
+	TestParent = parent;
+	DirectWriteTestBuffer = new char[size];
+    DirectWriteTestBufferLenght = size;
+	memcpy(DirectWriteTestBuffer, json, size);
+}
 
-// static void *TestParent = NULL;
-// static char *DirectWriteTestBuffer = NULL;
-// static void OnReady(void *parent, const char *json, size_t size) {
-// 	TestParent = parent;
-// 	DirectWriteTestBuffer = new char[size + 1];
-// 	memcpy(DirectWriteTestBuffer, json, size);
-// 	DirectWriteTestBuffer[size] = 0;
-// }
+TEST(MsgpackObjectTestsGroup, MsgpackObject_WriteTo_Async_Test) {
+	GoodsDto goods(2, 1657052789, "group", "name", 58.25, 48.2);
+	CHECK_EQUAL(goods.DirectWriteTo((void *)987654321, OnReady), 34);
 
-// TEST(MsgpackObjectTestsGroup, MsgpackObject_WriteTo_Async_Test) {
-// 	GoodsDto goods(2, 1657052789, "group", "name", 58.25, 48.2);
-// 	goods.DirectWriteTo((void *)987654321, OnReady);
+	CHECK_EQUAL(TestParent, (void *)987654321);
+	CHECK_EQUAL(DirectWriteTestBufferLenght, 34);
 
-// 	CHECK_EQUAL(TestParent, (void *)987654321);
-// 	STRCMP_EQUAL(DirectWriteTestBuffer, "{\"Id\":2,\"Created\":1657052789,\"Group\":\"group\",\"Name\":\"name\",\"Price\":58.25,\"Quantity\":48.2,\"Deleted\":false,"
-// 										"\"StoreName\":null}");
-// 	delete[] DirectWriteTestBuffer;
-// }
+	msgpack_unpacked unpacked;
+	msgpack_unpacked_init(&unpacked);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, DirectWriteTestBuffer, DirectWriteTestBufferLenght, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
+	CHECK_EQUAL(unpacked.data.via.array.size, 8);
+	delete[] DirectWriteTestBuffer;
+}
 
 // TEST(MsgpackObjectTestsGroup, MsgpackObject_Complex_WriteTo_Test) {
 // 	OrderDto orderDto("Dell", 1657058000, "Joe Doe", TUserRole::uViewer);
