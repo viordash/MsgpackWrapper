@@ -57,3 +57,37 @@ class MsgpackObject : public MsgpackFieldsContainer {
   protected:
   private:
 };
+
+template <class TItem> class MsgpackArray : public MsgpackArrayBase {
+  public:
+	typedef typename std::conditional<std::is_same<TItem, char *>::value, const char *, typename std::add_const<TItem>::type>::type ConstTItem;
+	virtual ~MsgpackArray() { Clear(); }
+
+	TItem Item(size_t index) { return (TItem)Items[index]; }
+	size_t Size() { return Items.size(); }
+	typename std::vector<TItem>::iterator const Begin() { return Items.begin(); }
+	typename std::vector<TItem>::iterator const End() { return Items.end(); }
+	void Reserve(size_t capacity) { Items.reserve(capacity); }
+	bool Empty() { return Items.empty(); }
+
+	bool TryParseObject(msgpack_object *deserialized) override final;
+	bool Write(msgpack_packer *packer) override final;
+
+	virtual bool Add(ConstTItem item, size_t newValueLen = size_t());
+	virtual bool Update(size_t index, ConstTItem item);
+	virtual void Remove(ConstTItem item);
+	typename std::vector<TItem>::iterator Find(ConstTItem item);
+
+	bool Equals(MsgpackArrayBase *other) override;
+	void CloneTo(MsgpackArrayBase *other) override;
+	void Clear() override;
+
+	friend bool operator!=(const MsgpackArray<TItem> &v1, const MsgpackArray<TItem> &v2) { return !((MsgpackArray<TItem> *)&v1)->Equals((MsgpackArray<TItem> *)&v2); }
+	friend bool operator==(const MsgpackArray<TItem> &v1, const MsgpackArray<TItem> &v2) { return !(v1 != v2); }
+
+  protected:
+	std::vector<TItem> Items;
+	virtual bool Validate(ConstTItem item) = 0;
+	void AddInternal(ConstTItem item, size_t newValueLen = size_t());
+	void DeleteItem(ConstTItem item);
+};

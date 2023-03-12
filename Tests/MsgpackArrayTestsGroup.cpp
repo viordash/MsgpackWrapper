@@ -8,13 +8,13 @@
 
 int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
-// size_t maxCount = 10;
+size_t maxCount = 10;
 
-// TEST_GROUP(MsgpackArrayTestsGroup){void setup(){maxCount = 10;
-// }
-// void teardown() {}
-// }
-// ;
+TEST_GROUP(MsgpackArrayTestsGroup){void setup(){maxCount = 10;
+}
+void teardown() {}
+}
+;
 
 // class UserDto : public MsgpackObject {
 //   public:
@@ -34,60 +34,60 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	MsgpackObject *CreateItem() { return new UserDto(); }
 // };
 
-// class StringsList : public MsgpackArray<char *> {
-//   public:
-// 	bool Validate(const char *item) override { return Size() < maxCount && (item == NULL || strcmp(item, "notValid") != 0); }
-// };
+class StringsList : public MsgpackArray<char *> {
+  public:
+	bool Validate(const char *item) override { return Size() < maxCount && (item == NULL || strcmp(item, "notValid") != 0); }
+};
 
-// class BoolList : public MsgpackArray<TBoolArray> {
-//   public:
-// 	bool Validate(const TBoolArray item) override { return Size() < maxCount; }
-// };
+class BoolList : public MsgpackArray<TBoolArray> {
+  public:
+	bool Validate(const TBoolArray item) override { return Size() < maxCount; }
+};
 
-// class Int64List : public MsgpackArray<int64_t> {
-//   public:
-// 	bool Validate(const int64_t item) override { return Size() < maxCount && item < 5188146770730811392LL + 1LL; }
-// };
-// class Uint64List : public MsgpackArray<uint64_t> {
-//   public:
-// 	bool Validate(const uint64_t item) override { return Size() < maxCount && item < 10188146770730811392ULL + 1ULL; }
-// };
+class Int64List : public MsgpackArray<int64_t> {
+  public:
+	bool Validate(const int64_t item) override { return Size() < maxCount && item < 5188146770730811392LL + 1LL; }
+};
+class Uint64List : public MsgpackArray<uint64_t> {
+  public:
+	bool Validate(const uint64_t item) override { return Size() < maxCount && item < 10188146770730811392ULL + 1ULL; }
+};
 
-// class Int32List : public MsgpackArray<int32_t> {
-//   public:
-// 	bool Validate(const int32_t item) override { return Size() < maxCount; }
-// };
-// class Uint32List : public MsgpackArray<uint32_t> {
-//   public:
-// 	bool Validate(const uint32_t item) override { return Size() < maxCount; }
-// };
+class Int32List : public MsgpackArray<int32_t> {
+  public:
+	bool Validate(const int32_t item) override { return Size() < maxCount; }
+};
+class Uint32List : public MsgpackArray<uint32_t> {
+  public:
+	bool Validate(const uint32_t item) override { return Size() < maxCount; }
+};
 
-// class Int16List : public MsgpackArray<int16_t> {
-//   public:
-// 	bool Validate(const int16_t item) override { return Size() < maxCount; }
-// };
-// class Uint16List : public MsgpackArray<uint16_t> {
-//   public:
-// 	bool Validate(const uint16_t item) override { return Size() < maxCount; }
-// };
+class Int16List : public MsgpackArray<int16_t> {
+  public:
+	bool Validate(const int16_t item) override { return Size() < maxCount; }
+};
+class Uint16List : public MsgpackArray<uint16_t> {
+  public:
+	bool Validate(const uint16_t item) override { return Size() < maxCount; }
+};
 
-// class Int8List : public MsgpackArray<int8_t> {
-//   public:
-// 	bool Validate(const int8_t item) override { return Size() < maxCount; }
-// };
-// class Uint8List : public MsgpackArray<uint8_t> {
-//   public:
-// 	bool Validate(const uint8_t item) override { return Size() < maxCount; }
-// };
+class Int8List : public MsgpackArray<int8_t> {
+  public:
+	bool Validate(const int8_t item) override { return Size() < maxCount; }
+};
+class Uint8List : public MsgpackArray<uint8_t> {
+  public:
+	bool Validate(const uint8_t item) override { return Size() < maxCount; }
+};
 
-// class DoubleList : public MsgpackArray<double> {
-//   public:
-// 	bool Validate(const double item) override { return Size() < maxCount; }
-// };
-// class FloatList : public MsgpackArray<float> {
-//   public:
-// 	bool Validate(const float item) override { return Size() < maxCount; }
-// };
+class DoubleList : public MsgpackArray<double> {
+  public:
+	bool Validate(const double item) override { return Size() < maxCount; }
+};
+class FloatList : public MsgpackArray<float> {
+  public:
+	bool Validate(const float item) override { return Size() < maxCount; }
+};
 
 // TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Parse_Test) {
 // 	UsersList list;
@@ -484,15 +484,31 @@ int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 // 	CHECK_EQUAL(list2.Size(), 3);
 // }
 
-// TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Parse_Test) {
-// 	StringsList list;
+TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Parse_Test) {
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
 
-// 	CHECK_TRUE(list.TryStringParse("[\"User1\",\"User2\",\"User3\"]"));
-// 	CHECK_EQUAL(list.Size(), 3);
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
 
-// 	STRCMP_EQUAL(list.Item(0), "User1");
-// 	STRCMP_EQUAL(list.Item(2), "User3");
-// }
+	msgpack_pack_array(&pk, 3);
+	msgpack_pack_str(&pk, 5);
+	msgpack_pack_str_body(&pk, "User1", 5);
+	msgpack_pack_str(&pk, 5);
+	msgpack_pack_str_body(&pk, "User2", 5);
+	msgpack_pack_str(&pk, 5);
+	msgpack_pack_str_body(&pk, "User3", 5);
+
+	StringsList list;
+
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 3);
+
+	STRCMP_EQUAL(list.Item(0), "User1");
+	STRCMP_EQUAL(list.Item(2), "User3");
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
 
 // TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Parse_With_Null_Values_Test) {
 // 	StringsList list;
