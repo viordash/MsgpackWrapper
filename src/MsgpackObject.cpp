@@ -86,6 +86,7 @@ size_t MsgpackObject::DirectWriteTo(void *parent, TOnReady onReady) {
 	};
 
 	onReady(parent, sbuf.data, sbuf.size);
+	msgpack_sbuffer_destroy(&sbuf);
 	return sbuf.size;
 }
 

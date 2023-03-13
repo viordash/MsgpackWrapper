@@ -71,7 +71,7 @@ template <class TItem> class MsgpackArray : public MsgpackArrayBase {
 	bool Empty() { return Items.empty(); }
 
 	bool TryParseObject(msgpack_object *deserialized) override final;
-	bool Write(msgpack_packer *packer) override final;
+	bool WriteObject(msgpack_packer *packer) override final;
 
 	virtual bool Add(ConstTItem item, size_t newValueLen = size_t());
 	virtual bool Update(size_t index, ConstTItem item);

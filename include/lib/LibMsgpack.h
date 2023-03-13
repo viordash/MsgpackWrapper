@@ -17,7 +17,7 @@ class MsgpackArrayBase {
 	msgpack_unpacked *BeginTryParse(const char *buffer, size_t length);
 	void EndTryParse(msgpack_unpacked *unpacked);
 
-	virtual bool Write(msgpack_packer *packer) = 0;
+	virtual bool WriteObject(msgpack_packer *packer) = 0;
 	size_t Write(char *outBuffer, size_t outBufferSize);
 	typedef void (*TOnReady)(void *parent, const char *json, size_t size);
 	size_t DirectWriteTo(void *parent, TOnReady onReady);

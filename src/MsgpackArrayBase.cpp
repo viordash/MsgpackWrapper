@@ -40,7 +40,7 @@ size_t MsgpackArrayBase::Write(char *outBuffer, size_t outBufferSize) {
 	msgpack_sbuffer_init(&sbuf);
 	msgpack_packer_init(&packer, &sbuf, msgpack_sbuffer_write);
 
-	if (!Write(&packer)) {
+	if (!WriteObject(&packer)) {
 		msgpack_sbuffer_destroy(&sbuf);
 		return 0;
 	};
@@ -61,11 +61,12 @@ size_t MsgpackArrayBase::DirectWriteTo(void *parent, TOnReady onReady) {
 	msgpack_sbuffer_init(&sbuf);
 	msgpack_packer_init(&packer, &sbuf, msgpack_sbuffer_write);
 
-	if (!Write(&packer)) {
+	if (!WriteObject(&packer)) {
 		msgpack_sbuffer_destroy(&sbuf);
 		return 0;
 	};
 
 	onReady(parent, sbuf.data, sbuf.size);
+	msgpack_sbuffer_destroy(&sbuf);
 	return sbuf.size;
 }

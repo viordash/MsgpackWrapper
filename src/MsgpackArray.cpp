@@ -82,7 +82,7 @@ template <> std::vector<float>::iterator MsgpackArray<float>::Find(const float i
 
 
 */
-template <> bool MsgpackArray<char *>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<char *>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (item == NULL) {
@@ -97,77 +97,77 @@ template <> bool MsgpackArray<char *>::Write(msgpack_packer *packer) {
 	}
 	return true;
 }
-template <> bool MsgpackArray<TBoolArray>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<TBoolArray>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (((bool)item ? msgpack_pack_true(packer) : msgpack_pack_false(packer)) != 0) { return false; }
 	}
 	return true;
 }
-template <> bool MsgpackArray<int64_t>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<int64_t>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (msgpack_pack_int64(packer, item) != 0) { return false; }
 	}
 	return true;
 }
-template <> bool MsgpackArray<uint64_t>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<uint64_t>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (msgpack_pack_uint64(packer, item) != 0) { return false; }
 	}
 	return true;
 }
-template <> bool MsgpackArray<int32_t>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<int32_t>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (msgpack_pack_int32(packer, item) != 0) { return false; }
 	}
 	return true;
 }
-template <> bool MsgpackArray<uint32_t>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<uint32_t>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (msgpack_pack_uint32(packer, item) != 0) { return false; }
 	}
 	return true;
 }
-template <> bool MsgpackArray<int16_t>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<int16_t>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (msgpack_pack_int16(packer, item) != 0) { return false; }
 	}
 	return true;
 }
-template <> bool MsgpackArray<uint16_t>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<uint16_t>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (msgpack_pack_uint16(packer, item) != 0) { return false; }
 	}
 	return true;
 }
-template <> bool MsgpackArray<int8_t>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<int8_t>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (msgpack_pack_int8(packer, item) != 0) { return false; }
 	}
 	return true;
 }
-template <> bool MsgpackArray<uint8_t>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<uint8_t>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (msgpack_pack_uint8(packer, item) != 0) { return false; }
 	}
 	return true;
 }
-template <> bool MsgpackArray<double>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<double>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (msgpack_pack_double(packer, item) != 0) { return false; }
 	}
 	return true;
 }
-template <> bool MsgpackArray<float>::Write(msgpack_packer *packer) {
+template <> bool MsgpackArray<float>::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
 		if (msgpack_pack_float(packer, item) != 0) { return false; }
@@ -607,187 +607,196 @@ template <> bool MsgpackArray<float>::Update(size_t index, const float item) {
 template <> bool MsgpackArray<char *>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_NIL) {
-			if (!Add(NULL)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add(NULL)) { break; }
 		} else if (object.type == MSGPACK_OBJECT_STR) {
-			if (!Add(object.via.str.ptr, object.via.str.size)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add(object.via.str.ptr, object.via.str.size)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 template <> bool MsgpackArray<TBoolArray>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_BOOLEAN) {
-			if (!Add((TBoolArray)object.via.boolean)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add((TBoolArray)object.via.boolean)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 template <> bool MsgpackArray<int64_t>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_NEGATIVE_INTEGER || object.type == MSGPACK_OBJECT_POSITIVE_INTEGER) {
-			if (!Add(object.via.i64)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add(object.via.i64)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 template <> bool MsgpackArray<uint64_t>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_NEGATIVE_INTEGER || object.type == MSGPACK_OBJECT_POSITIVE_INTEGER) {
-			if (!Add(object.via.u64)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add(object.via.u64)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 template <> bool MsgpackArray<int32_t>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_NEGATIVE_INTEGER || object.type == MSGPACK_OBJECT_POSITIVE_INTEGER) {
-			if (!Add((int32_t)object.via.i64)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add((int32_t)object.via.i64)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 template <> bool MsgpackArray<uint32_t>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_NEGATIVE_INTEGER || object.type == MSGPACK_OBJECT_POSITIVE_INTEGER) {
-			if (!Add((uint32_t)object.via.u64)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add((uint32_t)object.via.u64)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 template <> bool MsgpackArray<int16_t>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_NEGATIVE_INTEGER || object.type == MSGPACK_OBJECT_POSITIVE_INTEGER) {
-			if (!Add((int16_t)object.via.i64)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add((int16_t)object.via.i64)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 template <> bool MsgpackArray<uint16_t>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_NEGATIVE_INTEGER || object.type == MSGPACK_OBJECT_POSITIVE_INTEGER) {
-			if (!Add((uint16_t)object.via.u64)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add((uint16_t)object.via.u64)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 template <> bool MsgpackArray<int8_t>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_NEGATIVE_INTEGER || object.type == MSGPACK_OBJECT_POSITIVE_INTEGER) {
-			if (!Add((int8_t)object.via.i64)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add((int8_t)object.via.i64)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 template <> bool MsgpackArray<uint8_t>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_NEGATIVE_INTEGER || object.type == MSGPACK_OBJECT_POSITIVE_INTEGER) {
-			if (!Add((uint8_t)object.via.u64)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add((uint8_t)object.via.u64)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 template <> bool MsgpackArray<double>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_FLOAT64) {
-			if (!Add((double)object.via.f64)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add((double)object.via.f64)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 template <> bool MsgpackArray<float>::TryParseObject(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	Items.reserve(deserialized->via.array.size);
-	for (size_t i = 0; i < deserialized->via.array.size; i++) {
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
 		msgpack_object object = deserialized->via.array.ptr[i];
 		if (object.type == MSGPACK_OBJECT_FLOAT32) {
-			if (!Add((float)object.via.f64)) {
-				Items.shrink_to_fit();
-				return false;
-			}
+			if (!Add((float)object.via.f64)) { break; }
+		} else {
+			break;
 		}
+		i++;
 	}
 	Items.shrink_to_fit();
-	return true;
+	return i == deserialized->via.array.size;
 }
 /*
 
