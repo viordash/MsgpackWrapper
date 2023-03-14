@@ -520,6 +520,8 @@ TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Parse_Not_String_Test) {
 	msgpack_pack_array(&pk, 1);
 	msgpack_pack_true(&pk);
 	CHECK_FALSE(list.TryParse(sbuf.data, sbuf.size));
+    
+	msgpack_sbuffer_destroy(&sbuf);
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Parse_With_Null_Values_Test) {
@@ -1162,6 +1164,8 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 3);
+    
+	msgpack_sbuffer_destroy(&sbuf);
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Parse_Test) {
@@ -1214,7 +1218,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_WriteTo_Test) {
 
 	msgpack_unpacked unpacked;
 	msgpack_unpacked_init(&unpacked);
-	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 20, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 12, NULL), MSGPACK_UNPACK_SUCCESS);
 	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
 	CHECK_EQUAL(unpacked.data.via.array.size, 3);
 
@@ -1347,10 +1351,12 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 3);
+    
+	msgpack_sbuffer_destroy(&sbuf);
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Parse_Test) {
-	Int64List list;
+	Int32List list;
 	msgpack_sbuffer sbuf;
 	msgpack_packer pk;
 
@@ -1372,7 +1378,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Parse_Test) {
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Parse_Not_Int32_Test) {
-	Int64List list;
+	Int32List list;
 	msgpack_sbuffer sbuf;
 	msgpack_packer pk;
 
@@ -1398,7 +1404,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_WriteTo_Test) {
 
 	msgpack_unpacked unpacked;
 	msgpack_unpacked_init(&unpacked);
-	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 20, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 12, NULL), MSGPACK_UNPACK_SUCCESS);
 	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
 	CHECK_EQUAL(unpacked.data.via.array.size, 3);
 
@@ -1521,10 +1527,12 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 3);
+    
+	msgpack_sbuffer_destroy(&sbuf);
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Parse_Test) {
-	Uint64List list;
+	Uint32List list;
 	msgpack_sbuffer sbuf;
 	msgpack_packer pk;
 
@@ -1544,7 +1552,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Parse_Test) {
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Parse_Not_Uint32_Test) {
-	Uint64List list;
+	Uint32List list;
 	msgpack_sbuffer sbuf;
 	msgpack_packer pk;
 
@@ -1561,7 +1569,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Parse_Not_Uint32_Test) {
 
 TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_WriteTo_Test) {
 	char buffer[2048];
-	Uint64List list;
+	Uint32List list;
 	list.Add(0);
 	list.Add(4294967295);
 	list.Add(1);
@@ -1570,7 +1578,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_WriteTo_Test) {
 
 	msgpack_unpacked unpacked;
 	msgpack_unpacked_init(&unpacked);
-	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 20, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 8, NULL), MSGPACK_UNPACK_SUCCESS);
 	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
 	CHECK_EQUAL(unpacked.data.via.array.size, 3);
 
@@ -1694,738 +1702,1147 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 4);
+    
+	msgpack_sbuffer_destroy(&sbuf);
 }
 
-// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Parse_Test) {
-// 	Int16List list;
-// 	CHECK_TRUE(list.TryStringParse("[0,-32768,32767,-2147483647,2147483647]"));
-// 	CHECK_EQUAL(list.Size(), 5);
-// 	CHECK_EQUAL(list.Item(0), 0);
-// 	CHECK_EQUAL(list.Item(1), -32768);
-// 	CHECK_EQUAL(list.Item(2), 32767);
-// 	CHECK_EQUAL(list.Item(3), 1);
-// 	CHECK_EQUAL(list.Item(4), -1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_WriteTo_Test) {
-// 	char buffer[2048];
-// 	Int16List list;
-// 	list.Add(-32768);
-// 	list.Add(32767);
-// 	list.Add(0);
-// 	list.Add(-2147483647);
-// 	list.Add(2147483647);
-
-// 	CHECK_EQUAL(list.WriteToString(buffer, sizeof(buffer)), 21);
-// 	STRCMP_EQUAL(buffer, "[-32768,32767,0,1,-1]");
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Equals_Test) {
-// 	Int16List list1;
-// 	list1.Add(-32768);
-// 	list1.Add(32767);
-// 	list1.Add(0);
-
-// 	Int16List list2;
-// 	list2.Add(-32768);
-// 	list2.Add(32767);
-// 	list2.Add(0);
-
-// 	CHECK_TRUE(list1 == list2);
-// 	CHECK_FALSE(list1 != list2);
-// 	list1.Update(2, 42);
-// 	CHECK_TRUE(list1 != list2);
-// 	CHECK_FALSE(list1 == list2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Clone_Test) {
-// 	auto list1 = new Int16List();
-// 	list1->Add(-32768);
-// 	list1->Add(32767);
-// 	list1->Add(0);
-
-// 	Int16List list2;
-// 	list2.Add(1234);
-
-// 	list1->CloneTo(&list2);
-// 	delete list1;
-// 	CHECK_EQUAL(list2.Size(), 3);
-// 	CHECK_EQUAL(list2.Item(0), -32768);
-// 	CHECK_EQUAL(list2.Item(1), 32767);
-// 	CHECK_EQUAL(list2.Item(2), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Find_Test) {
-// 	Int16List list1;
-// 	list1.Add(-32768);
-// 	list1.Add(32767);
-// 	list1.Add(0);
-
-// 	CHECK(list1.Find(32767) != list1.End());
-// 	CHECK_EQUAL(*(list1.Find(32767)), 32767);
-// 	CHECK_TRUE(list1.Find(1) == list1.End());
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Remove_Test) {
-// 	Int16List list1;
-// 	list1.Add(-32768);
-// 	list1.Add(32767);
-// 	list1.Add(0);
-
-// 	list1.Remove(0);
-// 	CHECK_EQUAL(list1.Size(), 2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Add_Test) {
-// 	Int16List list1;
-// 	CHECK_TRUE(list1.Add(-32768));
-// 	CHECK_TRUE(list1.Add(32767));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), -32768);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Update_Test) {
-// 	Int16List list1;
-// 	list1.Add(-32768);
-// 	list1.Add(32767);
-
-// 	CHECK_TRUE(list1.Update(0, 1));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Incorrect_Update_Test) {
-// 	Int16List list1;
-// 	list1.Add(-32768);
-// 	list1.Add(32767);
-
-// 	CHECK_FALSE(list1.Update(100, 10));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), -32768);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Clear_Test) {
-// 	Int16List list;
-// 	CHECK_TRUE(list.Add(-32768));
-// 	CHECK_TRUE(list.Add(32767));
-// 	CHECK_EQUAL(list.Size(), 2);
-// 	CHECK_TRUE(list.TryStringParse("[0,-32768,32767,-2147483647]"));
-// 	CHECK_EQUAL(list.Size(), 6);
-// 	list.Clear();
-// 	CHECK_TRUE(list.TryStringParse("[0,-32768,32767,-2147483647,2147483647]"));
-// 	CHECK_EQUAL(list.Size(), 5);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Parse_Test) {
-// 	Uint16List list;
-// 	CHECK_TRUE(list.TryStringParse("[0,65535,2147483647]"));
-// 	CHECK_EQUAL(list.Size(), 3);
-// 	CHECK_EQUAL(list.Item(0), 0);
-// 	CHECK_EQUAL(list.Item(1), 65535);
-// 	CHECK_EQUAL(list.Item(2), 65535);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_WriteTo_Test) {
-// 	char buffer[2048];
-// 	Uint16List list;
-// 	list.Add(0);
-// 	list.Add(65535);
-// 	list.Add(1);
-// 	list.Add(2147483647);
-
-// 	CHECK_EQUAL(list.WriteToString(buffer, sizeof(buffer)), 17);
-// 	STRCMP_EQUAL(buffer, "[0,65535,1,65535]");
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Equals_Test) {
-// 	Uint16List list1;
-// 	list1.Add(0);
-// 	list1.Add(65535);
-// 	list1.Add(1);
-
-// 	Uint16List list2;
-// 	list2.Add(0);
-// 	list2.Add(65535);
-// 	list2.Add(1);
-
-// 	CHECK_TRUE(list1 == list2);
-// 	CHECK_FALSE(list1 != list2);
-// 	list1.Update(2, 42);
-// 	CHECK_TRUE(list1 != list2);
-// 	CHECK_FALSE(list1 == list2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Clone_Test) {
-// 	auto list1 = new Uint16List();
-// 	list1->Add(65535);
-// 	list1->Add(32767);
-// 	list1->Add(0);
-
-// 	Uint16List list2;
-// 	list2.Add(1234);
-
-// 	list1->CloneTo(&list2);
-// 	delete list1;
-// 	CHECK_EQUAL(list2.Size(), 3);
-// 	CHECK_EQUAL(list2.Item(0), 65535);
-// 	CHECK_EQUAL(list2.Item(1), 32767);
-// 	CHECK_EQUAL(list2.Item(2), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Find_Test) {
-// 	Uint16List list1;
-// 	list1.Add(0);
-// 	list1.Add(65535);
-// 	list1.Add(1);
-
-// 	CHECK(list1.Find(65535) != list1.End());
-// 	CHECK_EQUAL(*(list1.Find(65535)), 65535);
-// 	CHECK_TRUE(list1.Find(10) == list1.End());
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Remove_Test) {
-// 	Uint16List list1;
-// 	list1.Add(0);
-// 	list1.Add(65535);
-// 	list1.Add(1);
-
-// 	list1.Remove(0);
-// 	CHECK_EQUAL(list1.Size(), 2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Add_Test) {
-// 	Uint16List list1;
-// 	CHECK_TRUE(list1.Add(0));
-// 	CHECK_TRUE(list1.Add(65535));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Update_Test) {
-// 	Uint16List list1;
-// 	list1.Add(0);
-// 	list1.Add(65535);
-
-// 	CHECK_TRUE(list1.Update(0, 1));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Incorrect_Update_Test) {
-// 	Uint16List list1;
-// 	list1.Add(0);
-// 	list1.Add(65535);
-
-// 	CHECK_FALSE(list1.Update(100, 10));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Clear_Test) {
-// 	Uint16List list;
-// 	CHECK_TRUE(list.Add(0));
-// 	CHECK_TRUE(list.Add(65535));
-// 	CHECK_EQUAL(list.Size(), 2);
-// 	CHECK_TRUE(list.TryStringParse("[0,65535]"));
-// 	CHECK_EQUAL(list.Size(), 4);
-// 	list.Clear();
-// 	CHECK_TRUE(list.TryStringParse("[0,65535,2147483647]"));
-// 	CHECK_EQUAL(list.Size(), 3);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Parse_Test) {
-// 	Int8List list;
-// 	CHECK_TRUE(list.TryStringParse("[0,-128,127,-2147483647,2147483647]"));
-// 	CHECK_EQUAL(list.Size(), 5);
-// 	CHECK_EQUAL(list.Item(0), 0);
-// 	CHECK_EQUAL(list.Item(1), -128);
-// 	CHECK_EQUAL(list.Item(2), 127);
-// 	CHECK_EQUAL(list.Item(3), 1);
-// 	CHECK_EQUAL(list.Item(4), -1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_WriteTo_Test) {
-// 	char buffer[2048];
-// 	Int8List list;
-// 	list.Add(-128);
-// 	list.Add(127);
-// 	list.Add(-32768);
-// 	list.Add(32767);
-// 	list.Add(0);
-// 	list.Add(-2147483647);
-// 	list.Add(2147483647);
-
-// 	CHECK_EQUAL(list.WriteToString(buffer, sizeof(buffer)), 22);
-// 	STRCMP_EQUAL(buffer, "[-128,127,0,-1,0,1,-1]");
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Equals_Test) {
-// 	Int8List list1;
-// 	list1.Add(0);
-// 	list1.Add(-128);
-// 	list1.Add(1);
-
-// 	Int8List list2;
-// 	list2.Add(0);
-// 	list2.Add(-128);
-// 	list2.Add(1);
-
-// 	CHECK_TRUE(list1 == list2);
-// 	CHECK_FALSE(list1 != list2);
-// 	list1.Update(2, 42);
-// 	CHECK_TRUE(list1 != list2);
-// 	CHECK_FALSE(list1 == list2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Clone_Test) {
-// 	auto list1 = new Int8List();
-// 	list1->Add(0);
-// 	list1->Add(-128);
-// 	list1->Add(1);
-
-// 	Int8List list2;
-// 	list2.Add(123);
-
-// 	list1->CloneTo(&list2);
-// 	delete list1;
-// 	CHECK_EQUAL(list2.Size(), 3);
-// 	CHECK_EQUAL(list2.Item(0), 0);
-// 	CHECK_EQUAL(list2.Item(1), -128);
-// 	CHECK_EQUAL(list2.Item(2), 1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Find_Test) {
-// 	Int8List list1;
-// 	list1.Add(0);
-// 	list1.Add(-128);
-// 	list1.Add(1);
-
-// 	CHECK(list1.Find(1) != list1.End());
-// 	CHECK_EQUAL(*(list1.Find(1)), 1);
-// 	CHECK_TRUE(list1.Find(2) == list1.End());
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Remove_Test) {
-// 	Int8List list1;
-// 	list1.Add(0);
-// 	list1.Add(-128);
-// 	list1.Add(1);
-
-// 	list1.Remove(0);
-// 	CHECK_EQUAL(list1.Size(), 2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Add_Test) {
-// 	Int8List list1;
-// 	CHECK_TRUE(list1.Add(-128));
-// 	CHECK_TRUE(list1.Add(0));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), -128);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Update_Test) {
-// 	Int8List list1;
-// 	list1.Add(-128);
-// 	list1.Add(0);
-
-// 	CHECK_TRUE(list1.Update(0, 1));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Incorrect_Update_Test) {
-// 	Int8List list1;
-// 	list1.Add(-128);
-// 	list1.Add(0);
-
-// 	CHECK_FALSE(list1.Update(100, 10));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), -128);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Clear_Test) {
-// 	Int8List list;
-// 	CHECK_TRUE(list.Add(-128));
-// 	CHECK_TRUE(list.Add(0));
-// 	CHECK_EQUAL(list.Size(), 2);
-// 	CHECK_TRUE(list.TryStringParse("[0,-128,127,-2147483647]"));
-// 	CHECK_EQUAL(list.Size(), 6);
-// 	list.Clear();
-// 	CHECK_TRUE(list.TryStringParse("[0,-128,127,-2147483647,2147483647]"));
-// 	CHECK_EQUAL(list.Size(), 5);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Parse_Test) {
-// 	Uint8List list;
-// 	CHECK_TRUE(list.TryStringParse("[0,254,65535,2147483647]"));
-// 	CHECK_EQUAL(list.Size(), 4);
-// 	CHECK_EQUAL(list.Item(0), 0);
-// 	CHECK_EQUAL(list.Item(1), 254);
-// 	CHECK_EQUAL(list.Item(2), 255);
-// 	CHECK_EQUAL(list.Item(3), 255);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_WriteTo_Test) {
-// 	char buffer[2048];
-// 	Uint8List list;
-// 	list.Add(0);
-// 	list.Add(254);
-// 	list.Add(65535);
-// 	list.Add(1);
-// 	list.Add(2147483647);
-
-// 	CHECK_EQUAL(list.WriteToString(buffer, sizeof(buffer)), 17);
-// 	STRCMP_EQUAL(buffer, "[0,254,255,1,255]");
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Equals_Test) {
-// 	Uint8List list1;
-// 	list1.Add(0);
-// 	list1.Add(254);
-// 	list1.Add(1);
-
-// 	Uint8List list2;
-// 	list2.Add(0);
-// 	list2.Add(254);
-// 	list2.Add(1);
-
-// 	CHECK_TRUE(list1 == list2);
-// 	CHECK_FALSE(list1 != list2);
-// 	list1.Update(2, 42);
-// 	CHECK_TRUE(list1 != list2);
-// 	CHECK_FALSE(list1 == list2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Clone_Test) {
-// 	auto list1 = new Uint8List();
-// 	list1->Add(0);
-// 	list1->Add(254);
-// 	list1->Add(1);
-
-// 	Uint8List list2;
-// 	list2.Add(123);
-
-// 	list1->CloneTo(&list2);
-// 	delete list1;
-// 	CHECK_EQUAL(list2.Size(), 3);
-// 	CHECK_EQUAL(list2.Item(0), 0);
-// 	CHECK_EQUAL(list2.Item(1), 254);
-// 	CHECK_EQUAL(list2.Item(2), 1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Find_Test) {
-// 	Uint8List list1;
-// 	list1.Add(0);
-// 	list1.Add(254);
-// 	list1.Add(1);
-
-// 	CHECK(list1.Find(1) != list1.End());
-// 	CHECK_EQUAL(*(list1.Find(1)), 1);
-// 	CHECK_TRUE(list1.Find(2) == list1.End());
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Remove_Test) {
-// 	Uint8List list1;
-// 	list1.Add(0);
-// 	list1.Add(254);
-// 	list1.Add(1);
-
-// 	list1.Remove(0);
-// 	CHECK_EQUAL(list1.Size(), 2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Add_Test) {
-// 	Uint8List list1;
-// 	CHECK_TRUE(list1.Add(0));
-// 	CHECK_TRUE(list1.Add(254));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Update_Test) {
-// 	Uint8List list1;
-// 	list1.Add(0);
-// 	list1.Add(254);
-
-// 	CHECK_TRUE(list1.Update(0, 1));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Incorrect_Update_Test) {
-// 	Uint8List list1;
-// 	list1.Add(0);
-// 	list1.Add(254);
-
-// 	CHECK_FALSE(list1.Update(100, 10));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Clear_Test) {
-// 	Uint8List list;
-// 	CHECK_TRUE(list.Add(0));
-// 	CHECK_TRUE(list.Add(254));
-// 	CHECK_EQUAL(list.Size(), 2);
-// 	CHECK_TRUE(list.TryStringParse("[0,254,65535]"));
-// 	CHECK_EQUAL(list.Size(), 5);
-// 	list.Clear();
-// 	CHECK_TRUE(list.TryStringParse("[0,254,65535,2147483647]"));
-// 	CHECK_EQUAL(list.Size(), 4);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Parse_Test) {
-// 	DoubleList list;
-// 	CHECK_TRUE(list.TryStringParse("[0.00001,254.123,-65535.523,2147483647.1]"));
-// 	CHECK_EQUAL(list.Size(), 4);
-// 	CHECK_EQUAL(list.Item(0), 0.00001);
-// 	CHECK_EQUAL(list.Item(1), 254.123);
-// 	CHECK_EQUAL(list.Item(2), -65535.523);
-// 	CHECK_EQUAL(list.Item(3), 2147483647.1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_WriteTo_Test) {
-// 	char buffer[2048];
-// 	DoubleList list;
-// 	list.Add(-0.05);
-// 	list.Add(1.254);
-// 	list.Add(65535.15);
-// 	list.Add(0.1);
-// 	list.Add(2147.483647);
-
-// 	CHECK_EQUAL(list.WriteToString(buffer, sizeof(buffer)), 38);
-// 	STRCMP_EQUAL(buffer, "[-0.05,1.254,65535.15,0.1,2147.483647]");
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Equals_Test) {
-// 	DoubleList list1;
-// 	list1.Add(-0.05);
-// 	list1.Add(1.254);
-// 	list1.Add(65535.15);
-
-// 	DoubleList list2;
-// 	list2.Add(-0.05);
-// 	list2.Add(1.254);
-// 	list2.Add(65535.15);
-
-// 	CHECK_TRUE(list1 == list2);
-// 	CHECK_FALSE(list1 != list2);
-// 	list1.Update(2, 42);
-// 	CHECK_TRUE(list1 != list2);
-// 	CHECK_FALSE(list1 == list2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Clone_Test) {
-// 	auto list1 = new DoubleList();
-// 	list1->Add(-0.05);
-// 	list1->Add(1.254);
-// 	list1->Add(65535.15);
-
-// 	DoubleList list2;
-// 	list2.Add(1234);
-
-// 	list1->CloneTo(&list2);
-// 	delete list1;
-// 	CHECK_EQUAL(list2.Size(), 3);
-// 	CHECK_EQUAL(list2.Item(0), -0.05);
-// 	CHECK_EQUAL(list2.Item(1), 1.254);
-// 	CHECK_EQUAL(list2.Item(2), 65535.15);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Find_Test) {
-// 	DoubleList list1;
-// 	list1.Add(-0.05);
-// 	list1.Add(1.254);
-// 	list1.Add(65535.15);
-
-// 	CHECK(list1.Find(-0.05) != list1.End());
-// 	CHECK_EQUAL(*(list1.Find(-0.05)), -0.05);
-// 	CHECK_TRUE(list1.Find(2) == list1.End());
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Remove_Test) {
-// 	DoubleList list1;
-// 	list1.Add(-0.05);
-// 	list1.Add(1.254);
-// 	list1.Add(65535.15);
-
-// 	list1.Remove(1.254);
-// 	CHECK_EQUAL(list1.Size(), 2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Add_Test) {
-// 	DoubleList list1;
-// 	CHECK_TRUE(list1.Add(0));
-// 	CHECK_TRUE(list1.Add(1.254));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Update_Test) {
-// 	DoubleList list1;
-// 	list1.Add(0);
-// 	list1.Add(1.254);
-
-// 	CHECK_TRUE(list1.Update(0, 1));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Incorrect_Update_Test) {
-// 	DoubleList list1;
-// 	list1.Add(0);
-// 	list1.Add(1.254);
-
-// 	CHECK_FALSE(list1.Update(100, 10));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Clear_Test) {
-// 	DoubleList list;
-// 	CHECK_TRUE(list.Add(0));
-// 	CHECK_TRUE(list.Add(1.254));
-// 	CHECK_EQUAL(list.Size(), 2);
-// 	CHECK_TRUE(list.TryStringParse("[0.00001,254.123,-65535.523]"));
-// 	CHECK_EQUAL(list.Size(), 5);
-// 	list.Clear();
-// 	CHECK_TRUE(list.TryStringParse("[0.00001,254.123,-65535.523,2147483647.1]"));
-// 	CHECK_EQUAL(list.Size(), 4);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Parse_Test) {
-// 	FloatList list;
-// 	CHECK_TRUE(list.TryStringParse("[0.1,254.1,-65535.5,214748.1]"));
-// 	CHECK_EQUAL(list.Size(), 4);
-// 	CHECK_EQUAL(list.Item(0), 0.1f);
-// 	CHECK_EQUAL(list.Item(1), 254.1f);
-// 	CHECK_EQUAL(list.Item(2), -65535.5f);
-// 	CHECK_EQUAL(list.Item(3), 214748.1f);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_WriteTo_Test) {
-// 	char buffer[2048];
-// 	FloatList list;
-// 	list.Add(-1.5f);
-// 	list.Add(1.25f);
-// 	list.Add(1000.25f);
-// 	list.Add(-100.75f);
-// 	list.Add(214789.5625f);
-
-// 	CHECK_EQUAL(list.WriteToString(buffer, sizeof(buffer)), 39);
-// 	STRCMP_EQUAL(buffer, "[-1.5,1.25,1000.25,-100.75,214789.5625]");
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Equals_Test) {
-// 	FloatList list1;
-// 	list1.Add(-0.05f);
-// 	list1.Add(1.254f);
-// 	list1.Add(65535.15f);
-
-// 	FloatList list2;
-// 	list2.Add(-0.05f);
-// 	list2.Add(1.254f);
-// 	list2.Add(65535.15f);
-
-// 	CHECK_TRUE(list1 == list2);
-// 	CHECK_FALSE(list1 != list2);
-// 	list1.Update(2, 42);
-// 	CHECK_TRUE(list1 != list2);
-// 	CHECK_FALSE(list1 == list2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Clone_Test) {
-// 	auto list1 = new FloatList();
-// 	list1->Add(-0.05f);
-// 	list1->Add(1.254f);
-// 	list1->Add(65535.15f);
-
-// 	FloatList list2;
-// 	list2.Add(1234);
-
-// 	list1->CloneTo(&list2);
-// 	delete list1;
-// 	CHECK_EQUAL(list2.Size(), 3);
-// 	CHECK_EQUAL(list2.Item(0), -0.05f);
-// 	CHECK_EQUAL(list2.Item(1), 1.254f);
-// 	CHECK_EQUAL(list2.Item(2), 65535.15f);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Find_Test) {
-// 	FloatList list1;
-// 	list1.Add(-0.05f);
-// 	list1.Add(1.254f);
-// 	list1.Add(65535.15f);
-
-// 	CHECK(list1.Find(-0.05f) != list1.End());
-// 	CHECK_EQUAL(*(list1.Find(-0.05f)), -0.05f);
-// 	CHECK_TRUE(list1.Find(2) == list1.End());
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Remove_Test) {
-// 	FloatList list1;
-// 	list1.Add(-0.05f);
-// 	list1.Add(1.254f);
-// 	list1.Add(65535.15f);
-
-// 	list1.Remove(1.254f);
-// 	CHECK_EQUAL(list1.Size(), 2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Add_Test) {
-// 	FloatList list1;
-// 	CHECK_TRUE(list1.Add(0));
-// 	CHECK_TRUE(list1.Add(1.254f));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Update_Test) {
-// 	FloatList list1;
-// 	list1.Add(0);
-// 	list1.Add(1.254f);
-
-// 	CHECK_TRUE(list1.Update(0, 1));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Incorrect_Update_Test) {
-// 	FloatList list1;
-// 	list1.Add(0);
-// 	list1.Add(1.254f);
-
-// 	CHECK_FALSE(list1.Update(100, 10));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	CHECK_EQUAL(list1.Item(0), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Clear_Test) {
-// 	DoubleList list;
-// 	CHECK_TRUE(list.Add(0));
-// 	CHECK_TRUE(list.Add(1.254f));
-// 	CHECK_EQUAL(list.Size(), 2);
-// 	CHECK_TRUE(list.TryStringParse("[0.1,254.1,-65535.5]"));
-// 	CHECK_EQUAL(list.Size(), 5);
-// 	list.Clear();
-// 	CHECK_TRUE(list.TryStringParse("[0.1,254.1,-65535.5,214748.1]"));
-// 	CHECK_EQUAL(list.Size(), 4);
-// }
+TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Parse_Test) {
+	Int16List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 5);
+	msgpack_pack_int16(&pk, 0);
+	msgpack_pack_int16(&pk, -32768);
+	msgpack_pack_int16(&pk, 32767);
+	msgpack_pack_int16(&pk, 1);
+	msgpack_pack_int16(&pk, -1);
+
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 5);
+	CHECK_EQUAL(list.Item(0), 0);
+	CHECK_EQUAL(list.Item(1), -32768);
+	CHECK_EQUAL(list.Item(2), 32767);
+	CHECK_EQUAL(list.Item(3), 1);
+	CHECK_EQUAL(list.Item(4), -1);
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Parse_Not_Int16_Test) {
+	Int16List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_float(&pk, 0);
+
+	CHECK_FALSE(list.TryParse(sbuf.data, sbuf.size));
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_WriteTo_Test) {
+	char buffer[2048];
+	Int16List list;
+	list.Add(-32768);
+	list.Add(32767);
+	list.Add(0);
+	list.Add(-2147483647);
+	list.Add(2147483647);
+
+	CHECK_EQUAL(list.Write(buffer, sizeof(buffer)), 10);
+
+	msgpack_unpacked unpacked;
+	msgpack_unpacked_init(&unpacked);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 10, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
+	CHECK_EQUAL(unpacked.data.via.array.size, 5);
+
+	msgpack_object object = unpacked.data.via.array.ptr[0];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_NEGATIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, -32768);
+
+	object = unpacked.data.via.array.ptr[1];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 32767);
+
+	object = unpacked.data.via.array.ptr[2];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 0);
+
+	object = unpacked.data.via.array.ptr[3];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 1);
+
+	object = unpacked.data.via.array.ptr[4];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_NEGATIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, -1);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Equals_Test) {
+	Int16List list1;
+	list1.Add(-32768);
+	list1.Add(32767);
+	list1.Add(0);
+
+	Int16List list2;
+	list2.Add(-32768);
+	list2.Add(32767);
+	list2.Add(0);
+
+	CHECK_TRUE(list1 == list2);
+	CHECK_FALSE(list1 != list2);
+	list1.Update(2, 42);
+	CHECK_TRUE(list1 != list2);
+	CHECK_FALSE(list1 == list2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Clone_Test) {
+	auto list1 = new Int16List();
+	list1->Add(-32768);
+	list1->Add(32767);
+	list1->Add(0);
+
+	Int16List list2;
+	list2.Add(1234);
+
+	list1->CloneTo(&list2);
+	delete list1;
+	CHECK_EQUAL(list2.Size(), 3);
+	CHECK_EQUAL(list2.Item(0), -32768);
+	CHECK_EQUAL(list2.Item(1), 32767);
+	CHECK_EQUAL(list2.Item(2), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Find_Test) {
+	Int16List list1;
+	list1.Add(-32768);
+	list1.Add(32767);
+	list1.Add(0);
+
+	CHECK(list1.Find(32767) != list1.End());
+	CHECK_EQUAL(*(list1.Find(32767)), 32767);
+	CHECK_TRUE(list1.Find(1) == list1.End());
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Remove_Test) {
+	Int16List list1;
+	list1.Add(-32768);
+	list1.Add(32767);
+	list1.Add(0);
+
+	list1.Remove(0);
+	CHECK_EQUAL(list1.Size(), 2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Add_Test) {
+	Int16List list1;
+	CHECK_TRUE(list1.Add(-32768));
+	CHECK_TRUE(list1.Add(32767));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), -32768);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Update_Test) {
+	Int16List list1;
+	list1.Add(-32768);
+	list1.Add(32767);
+
+	CHECK_TRUE(list1.Update(0, 1));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 1);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Incorrect_Update_Test) {
+	Int16List list1;
+	list1.Add(-32768);
+	list1.Add(32767);
+
+	CHECK_FALSE(list1.Update(100, 10));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), -32768);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Clear_Test) {
+	Int16List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 4);
+	msgpack_pack_int16(&pk, 0);
+	msgpack_pack_int16(&pk, -32768);
+	msgpack_pack_int16(&pk, 32767);
+	msgpack_pack_int16(&pk, -2147483647);
+
+	CHECK_TRUE(list.Add(-32768));
+	CHECK_TRUE(list.Add(32767));
+	CHECK_EQUAL(list.Size(), 2);
+	list.Clear();
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 4);
+    
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Parse_Test) {
+	Uint16List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 3);
+	msgpack_pack_uint16(&pk, 0);
+	msgpack_pack_uint16(&pk, 65535);
+	msgpack_pack_uint16(&pk, 2147483647);
+
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 3);
+	CHECK_EQUAL(list.Item(0), 0);
+	CHECK_EQUAL(list.Item(1), 65535);
+	CHECK_EQUAL(list.Item(2), 65535);
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Parse_Not_Uint16_Test) {
+	Uint16List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_double(&pk, 1);
+
+	CHECK_FALSE(list.TryParse(sbuf.data, sbuf.size));
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_WriteTo_Test) {
+	char buffer[2048];
+	Uint16List list;
+	list.Add(0);
+	list.Add(65535);
+	list.Add(1);
+	list.Add(2147483647);
+
+	CHECK_EQUAL(list.Write(buffer, sizeof(buffer)), 9);
+
+	msgpack_unpacked unpacked;
+	msgpack_unpacked_init(&unpacked);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 9, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
+	CHECK_EQUAL(unpacked.data.via.array.size, 4);
+
+	msgpack_object object = unpacked.data.via.array.ptr[0];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 0);
+
+	object = unpacked.data.via.array.ptr[1];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 65535);
+
+	object = unpacked.data.via.array.ptr[2];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 1);
+
+	object = unpacked.data.via.array.ptr[3];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 65535);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Equals_Test) {
+	Uint16List list1;
+	list1.Add(0);
+	list1.Add(65535);
+	list1.Add(1);
+
+	Uint16List list2;
+	list2.Add(0);
+	list2.Add(65535);
+	list2.Add(1);
+
+	CHECK_TRUE(list1 == list2);
+	CHECK_FALSE(list1 != list2);
+	list1.Update(2, 42);
+	CHECK_TRUE(list1 != list2);
+	CHECK_FALSE(list1 == list2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Clone_Test) {
+	auto list1 = new Uint16List();
+	list1->Add(65535);
+	list1->Add(32767);
+	list1->Add(0);
+
+	Uint16List list2;
+	list2.Add(1234);
+
+	list1->CloneTo(&list2);
+	delete list1;
+	CHECK_EQUAL(list2.Size(), 3);
+	CHECK_EQUAL(list2.Item(0), 65535);
+	CHECK_EQUAL(list2.Item(1), 32767);
+	CHECK_EQUAL(list2.Item(2), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Find_Test) {
+	Uint16List list1;
+	list1.Add(0);
+	list1.Add(65535);
+	list1.Add(1);
+
+	CHECK(list1.Find(65535) != list1.End());
+	CHECK_EQUAL(*(list1.Find(65535)), 65535);
+	CHECK_TRUE(list1.Find(10) == list1.End());
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Remove_Test) {
+	Uint16List list1;
+	list1.Add(0);
+	list1.Add(65535);
+	list1.Add(1);
+
+	list1.Remove(0);
+	CHECK_EQUAL(list1.Size(), 2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Add_Test) {
+	Uint16List list1;
+	CHECK_TRUE(list1.Add(0));
+	CHECK_TRUE(list1.Add(65535));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Update_Test) {
+	Uint16List list1;
+	list1.Add(0);
+	list1.Add(65535);
+
+	CHECK_TRUE(list1.Update(0, 1));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 1);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Incorrect_Update_Test) {
+	Uint16List list1;
+	list1.Add(0);
+	list1.Add(65535);
+
+	CHECK_FALSE(list1.Update(100, 10));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Clear_Test) {
+	Uint16List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 3);
+	msgpack_pack_uint16(&pk, 0);
+	msgpack_pack_uint16(&pk, 65535);
+	msgpack_pack_uint16(&pk, 2147483647);
+
+	CHECK_TRUE(list.Add(0));
+	CHECK_TRUE(list.Add(65535));
+	CHECK_EQUAL(list.Size(), 2);
+	list.Clear();
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 3);
+    
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Parse_Test) {
+	Int8List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 5);
+	msgpack_pack_int8(&pk, 0);
+	msgpack_pack_int8(&pk, -128);
+	msgpack_pack_int8(&pk, 127);
+	msgpack_pack_int8(&pk, -2147483647);
+	msgpack_pack_int8(&pk, 2147483647);
+
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 5);
+	CHECK_EQUAL(list.Item(0), 0);
+	CHECK_EQUAL(list.Item(1), -128);
+	CHECK_EQUAL(list.Item(2), 127);
+	CHECK_EQUAL(list.Item(3), 1);
+	CHECK_EQUAL(list.Item(4), -1);
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Parse_Not_Int8_Test) {
+	Int8List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_float(&pk, 0);
+
+	CHECK_FALSE(list.TryParse(sbuf.data, sbuf.size));
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_WriteTo_Test) {
+	char buffer[2048];
+	Int8List list;
+	list.Add(-128);
+	list.Add(127);
+	list.Add(-32768);
+	list.Add(32767);
+	list.Add(0);
+	list.Add(-2147483647);
+	list.Add(2147483647);
+
+	CHECK_EQUAL(list.Write(buffer, sizeof(buffer)), 9);
+
+	msgpack_unpacked unpacked;
+	msgpack_unpacked_init(&unpacked);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 9, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
+	CHECK_EQUAL(unpacked.data.via.array.size, 7);
+
+	msgpack_object object = unpacked.data.via.array.ptr[0];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_NEGATIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, -128);
+
+	object = unpacked.data.via.array.ptr[1];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 127);
+
+	object = unpacked.data.via.array.ptr[2];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 0);
+
+	object = unpacked.data.via.array.ptr[3];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_NEGATIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, -1);
+
+	object = unpacked.data.via.array.ptr[4];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 0);
+
+	object = unpacked.data.via.array.ptr[5];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 1);
+
+	object = unpacked.data.via.array.ptr[6];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_NEGATIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, -1);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Equals_Test) {
+	Int8List list1;
+	list1.Add(0);
+	list1.Add(-128);
+	list1.Add(1);
+
+	Int8List list2;
+	list2.Add(0);
+	list2.Add(-128);
+	list2.Add(1);
+
+	CHECK_TRUE(list1 == list2);
+	CHECK_FALSE(list1 != list2);
+	list1.Update(2, 42);
+	CHECK_TRUE(list1 != list2);
+	CHECK_FALSE(list1 == list2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Clone_Test) {
+	auto list1 = new Int8List();
+	list1->Add(0);
+	list1->Add(-128);
+	list1->Add(1);
+
+	Int8List list2;
+	list2.Add(123);
+
+	list1->CloneTo(&list2);
+	delete list1;
+	CHECK_EQUAL(list2.Size(), 3);
+	CHECK_EQUAL(list2.Item(0), 0);
+	CHECK_EQUAL(list2.Item(1), -128);
+	CHECK_EQUAL(list2.Item(2), 1);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Find_Test) {
+	Int8List list1;
+	list1.Add(0);
+	list1.Add(-128);
+	list1.Add(1);
+
+	CHECK(list1.Find(1) != list1.End());
+	CHECK_EQUAL(*(list1.Find(1)), 1);
+	CHECK_TRUE(list1.Find(2) == list1.End());
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Remove_Test) {
+	Int8List list1;
+	list1.Add(0);
+	list1.Add(-128);
+	list1.Add(1);
+
+	list1.Remove(0);
+	CHECK_EQUAL(list1.Size(), 2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Add_Test) {
+	Int8List list1;
+	CHECK_TRUE(list1.Add(-128));
+	CHECK_TRUE(list1.Add(0));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), -128);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Update_Test) {
+	Int8List list1;
+	list1.Add(-128);
+	list1.Add(0);
+
+	CHECK_TRUE(list1.Update(0, 1));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 1);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Incorrect_Update_Test) {
+	Int8List list1;
+	list1.Add(-128);
+	list1.Add(0);
+
+	CHECK_FALSE(list1.Update(100, 10));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), -128);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Clear_Test) {
+	Int8List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 5);
+	msgpack_pack_int8(&pk, 0);
+	msgpack_pack_int8(&pk, -128);
+	msgpack_pack_int8(&pk, 127);
+	msgpack_pack_int8(&pk, -2147483647);
+	msgpack_pack_int8(&pk, 2147483647);
+
+	CHECK_TRUE(list.Add(-128));
+	CHECK_TRUE(list.Add(0));
+	CHECK_EQUAL(list.Size(), 2);
+	list.Clear();
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 5);
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Parse_Test) {
+	Uint8List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 4);
+	msgpack_pack_uint8(&pk, 0);
+	msgpack_pack_uint8(&pk, 254);
+	msgpack_pack_uint8(&pk, 65535);
+	msgpack_pack_uint8(&pk, 2147483647);
+
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 4);
+	CHECK_EQUAL(list.Item(0), 0);
+	CHECK_EQUAL(list.Item(1), 254);
+	CHECK_EQUAL(list.Item(2), 255);
+	CHECK_EQUAL(list.Item(3), 255);
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Parse_Not_Uint8_Test) {
+	Uint8List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_double(&pk, 1);
+
+	CHECK_FALSE(list.TryParse(sbuf.data, sbuf.size));
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_WriteTo_Test) {
+	char buffer[2048];
+	Uint8List list;
+	list.Add(0);
+	list.Add(254);
+	list.Add(65535);
+	list.Add(1);
+	list.Add(2147483647);
+
+	CHECK_EQUAL(list.Write(buffer, sizeof(buffer)), 9);
+
+	msgpack_unpacked unpacked;
+	msgpack_unpacked_init(&unpacked);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 9, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
+	CHECK_EQUAL(unpacked.data.via.array.size, 5);
+
+	msgpack_object object = unpacked.data.via.array.ptr[0];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 0);
+
+	object = unpacked.data.via.array.ptr[1];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 254);
+
+	object = unpacked.data.via.array.ptr[2];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 255);
+
+	object = unpacked.data.via.array.ptr[3];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 1);
+
+	object = unpacked.data.via.array.ptr[4];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_POSITIVE_INTEGER);
+	CHECK_EQUAL(object.via.i64, 255);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Equals_Test) {
+	Uint8List list1;
+	list1.Add(0);
+	list1.Add(254);
+	list1.Add(1);
+
+	Uint8List list2;
+	list2.Add(0);
+	list2.Add(254);
+	list2.Add(1);
+
+	CHECK_TRUE(list1 == list2);
+	CHECK_FALSE(list1 != list2);
+	list1.Update(2, 42);
+	CHECK_TRUE(list1 != list2);
+	CHECK_FALSE(list1 == list2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Clone_Test) {
+	auto list1 = new Uint8List();
+	list1->Add(0);
+	list1->Add(254);
+	list1->Add(1);
+
+	Uint8List list2;
+	list2.Add(123);
+
+	list1->CloneTo(&list2);
+	delete list1;
+	CHECK_EQUAL(list2.Size(), 3);
+	CHECK_EQUAL(list2.Item(0), 0);
+	CHECK_EQUAL(list2.Item(1), 254);
+	CHECK_EQUAL(list2.Item(2), 1);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Find_Test) {
+	Uint8List list1;
+	list1.Add(0);
+	list1.Add(254);
+	list1.Add(1);
+
+	CHECK(list1.Find(1) != list1.End());
+	CHECK_EQUAL(*(list1.Find(1)), 1);
+	CHECK_TRUE(list1.Find(2) == list1.End());
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Remove_Test) {
+	Uint8List list1;
+	list1.Add(0);
+	list1.Add(254);
+	list1.Add(1);
+
+	list1.Remove(0);
+	CHECK_EQUAL(list1.Size(), 2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Add_Test) {
+	Uint8List list1;
+	CHECK_TRUE(list1.Add(0));
+	CHECK_TRUE(list1.Add(254));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Update_Test) {
+	Uint8List list1;
+	list1.Add(0);
+	list1.Add(254);
+
+	CHECK_TRUE(list1.Update(0, 1));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 1);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Incorrect_Update_Test) {
+	Uint8List list1;
+	list1.Add(0);
+	list1.Add(254);
+
+	CHECK_FALSE(list1.Update(100, 10));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Clear_Test) {
+	Uint8List list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 4);
+	msgpack_pack_uint8(&pk, 0);
+	msgpack_pack_uint8(&pk, 254);
+	msgpack_pack_uint8(&pk, 65535);
+	msgpack_pack_uint8(&pk, 2147483647);
+
+	CHECK_TRUE(list.Add(0));
+	CHECK_TRUE(list.Add(254));
+	CHECK_EQUAL(list.Size(), 2);
+	list.Clear();
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 4);
+    
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Parse_Test) {
+	DoubleList list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 4);
+	msgpack_pack_double(&pk, 0.00001);
+	msgpack_pack_double(&pk, 254.123);
+	msgpack_pack_double(&pk, -65535.523);
+	msgpack_pack_double(&pk, 2147483647.1);
+
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 4);
+	CHECK_EQUAL(list.Item(0), 0.00001);
+	CHECK_EQUAL(list.Item(1), 254.123);
+	CHECK_EQUAL(list.Item(2), -65535.523);
+	CHECK_EQUAL(list.Item(3), 2147483647.1);
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Parse_Not_Double_Test) {
+	DoubleList list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_int(&pk, 1);
+
+	CHECK_FALSE(list.TryParse(sbuf.data, sbuf.size));
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_WriteTo_Test) {
+	char buffer[2048];
+	DoubleList list;
+	list.Add(-0.05);
+	list.Add(1.254);
+	list.Add(65535.15);
+	list.Add(0.1);
+	list.Add(2147.483647);
+
+	CHECK_EQUAL(list.Write(buffer, sizeof(buffer)), 46);
+
+	msgpack_unpacked unpacked;
+	msgpack_unpacked_init(&unpacked);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 46, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
+	CHECK_EQUAL(unpacked.data.via.array.size, 5);
+
+	msgpack_object object = unpacked.data.via.array.ptr[0];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_FLOAT64);
+	CHECK_EQUAL(object.via.f64, -0.05);
+
+	object = unpacked.data.via.array.ptr[1];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_FLOAT64);
+	CHECK_EQUAL(object.via.f64, 1.254);
+
+	object = unpacked.data.via.array.ptr[2];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_FLOAT64);
+	CHECK_EQUAL(object.via.f64, 65535.15);
+
+	object = unpacked.data.via.array.ptr[3];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_FLOAT64);
+	CHECK_EQUAL(object.via.f64, 0.1);
+
+	object = unpacked.data.via.array.ptr[4];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_FLOAT64);
+	CHECK_EQUAL(object.via.f64, 2147.483647);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Equals_Test) {
+	DoubleList list1;
+	list1.Add(-0.05);
+	list1.Add(1.254);
+	list1.Add(65535.15);
+
+	DoubleList list2;
+	list2.Add(-0.05);
+	list2.Add(1.254);
+	list2.Add(65535.15);
+
+	CHECK_TRUE(list1 == list2);
+	CHECK_FALSE(list1 != list2);
+	list1.Update(2, 42);
+	CHECK_TRUE(list1 != list2);
+	CHECK_FALSE(list1 == list2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Clone_Test) {
+	auto list1 = new DoubleList();
+	list1->Add(-0.05);
+	list1->Add(1.254);
+	list1->Add(65535.15);
+
+	DoubleList list2;
+	list2.Add(1234);
+
+	list1->CloneTo(&list2);
+	delete list1;
+	CHECK_EQUAL(list2.Size(), 3);
+	CHECK_EQUAL(list2.Item(0), -0.05);
+	CHECK_EQUAL(list2.Item(1), 1.254);
+	CHECK_EQUAL(list2.Item(2), 65535.15);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Find_Test) {
+	DoubleList list1;
+	list1.Add(-0.05);
+	list1.Add(1.254);
+	list1.Add(65535.15);
+
+	CHECK(list1.Find(-0.05) != list1.End());
+	CHECK_EQUAL(*(list1.Find(-0.05)), -0.05);
+	CHECK_TRUE(list1.Find(2) == list1.End());
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Remove_Test) {
+	DoubleList list1;
+	list1.Add(-0.05);
+	list1.Add(1.254);
+	list1.Add(65535.15);
+
+	list1.Remove(1.254);
+	CHECK_EQUAL(list1.Size(), 2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Add_Test) {
+	DoubleList list1;
+	CHECK_TRUE(list1.Add(0));
+	CHECK_TRUE(list1.Add(1.254));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Update_Test) {
+	DoubleList list1;
+	list1.Add(0);
+	list1.Add(1.254);
+
+	CHECK_TRUE(list1.Update(0, 1));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 1);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Incorrect_Update_Test) {
+	DoubleList list1;
+	list1.Add(0);
+	list1.Add(1.254);
+
+	CHECK_FALSE(list1.Update(100, 10));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Clear_Test) {
+	DoubleList list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 4);
+	msgpack_pack_double(&pk, 0.00001);
+	msgpack_pack_double(&pk, 254.123);
+	msgpack_pack_double(&pk, -65535.523);
+	msgpack_pack_double(&pk, 2147483647.1);
+
+	CHECK_TRUE(list.Add(0));
+	CHECK_TRUE(list.Add(1.254));
+	CHECK_EQUAL(list.Size(), 2);
+	list.Clear();
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 4);
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Parse_Test) {
+	FloatList list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 4);
+	msgpack_pack_float(&pk, 0.1);
+	msgpack_pack_float(&pk, 254.1);
+	msgpack_pack_float(&pk, -65535.5);
+	msgpack_pack_float(&pk, 214748.1);
+
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 4);
+	CHECK_EQUAL(list.Item(0), 0.1f);
+	CHECK_EQUAL(list.Item(1), 254.1f);
+	CHECK_EQUAL(list.Item(2), -65535.5f);
+	CHECK_EQUAL(list.Item(3), 214748.1f);
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Parse_Not_Float_Test) {
+	FloatList list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 1);
+	msgpack_pack_int(&pk, 1);
+
+	CHECK_FALSE(list.TryParse(sbuf.data, sbuf.size));
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_WriteTo_Test) {
+	char buffer[2048];
+	FloatList list;
+	list.Add(-1.5f);
+	list.Add(1.25f);
+	list.Add(1000.25f);
+	list.Add(-100.75f);
+	list.Add(214789.5625f);
+
+	CHECK_EQUAL(list.Write(buffer, sizeof(buffer)), 26);
+
+	msgpack_unpacked unpacked;
+	msgpack_unpacked_init(&unpacked);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 46, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
+	CHECK_EQUAL(unpacked.data.via.array.size, 5);
+
+	msgpack_object object = unpacked.data.via.array.ptr[0];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_FLOAT32);
+	CHECK_EQUAL(object.via.f64, -1.5f);
+
+	object = unpacked.data.via.array.ptr[1];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_FLOAT32);
+	CHECK_EQUAL(object.via.f64, 1.25f);
+
+	object = unpacked.data.via.array.ptr[2];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_FLOAT32);
+	CHECK_EQUAL(object.via.f64, 1000.25f);
+
+	object = unpacked.data.via.array.ptr[3];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_FLOAT32);
+	CHECK_EQUAL(object.via.f64, -100.75f);
+
+	object = unpacked.data.via.array.ptr[4];
+	CHECK_EQUAL(object.type, MSGPACK_OBJECT_FLOAT32);
+	CHECK_EQUAL(object.via.f64, 214789.5625f);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Equals_Test) {
+	FloatList list1;
+	list1.Add(-0.05f);
+	list1.Add(1.254f);
+	list1.Add(65535.15f);
+
+	FloatList list2;
+	list2.Add(-0.05f);
+	list2.Add(1.254f);
+	list2.Add(65535.15f);
+
+	CHECK_TRUE(list1 == list2);
+	CHECK_FALSE(list1 != list2);
+	list1.Update(2, 42);
+	CHECK_TRUE(list1 != list2);
+	CHECK_FALSE(list1 == list2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Clone_Test) {
+	auto list1 = new FloatList();
+	list1->Add(-0.05f);
+	list1->Add(1.254f);
+	list1->Add(65535.15f);
+
+	FloatList list2;
+	list2.Add(1234);
+
+	list1->CloneTo(&list2);
+	delete list1;
+	CHECK_EQUAL(list2.Size(), 3);
+	CHECK_EQUAL(list2.Item(0), -0.05f);
+	CHECK_EQUAL(list2.Item(1), 1.254f);
+	CHECK_EQUAL(list2.Item(2), 65535.15f);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Find_Test) {
+	FloatList list1;
+	list1.Add(-0.05f);
+	list1.Add(1.254f);
+	list1.Add(65535.15f);
+
+	CHECK(list1.Find(-0.05f) != list1.End());
+	CHECK_EQUAL(*(list1.Find(-0.05f)), -0.05f);
+	CHECK_TRUE(list1.Find(2) == list1.End());
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Remove_Test) {
+	FloatList list1;
+	list1.Add(-0.05f);
+	list1.Add(1.254f);
+	list1.Add(65535.15f);
+
+	list1.Remove(1.254f);
+	CHECK_EQUAL(list1.Size(), 2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Add_Test) {
+	FloatList list1;
+	CHECK_TRUE(list1.Add(0));
+	CHECK_TRUE(list1.Add(1.254f));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Update_Test) {
+	FloatList list1;
+	list1.Add(0);
+	list1.Add(1.254f);
+
+	CHECK_TRUE(list1.Update(0, 1));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 1);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Incorrect_Update_Test) {
+	FloatList list1;
+	list1.Add(0);
+	list1.Add(1.254f);
+
+	CHECK_FALSE(list1.Update(100, 10));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	CHECK_EQUAL(list1.Item(0), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Clear_Test) {
+	FloatList list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 4);
+	msgpack_pack_float(&pk, 0.1);
+	msgpack_pack_float(&pk, 254.1);
+	msgpack_pack_float(&pk, -65535.5);
+	msgpack_pack_float(&pk, 214748.1);
+
+	CHECK_TRUE(list.Add(0));
+	CHECK_TRUE(list.Add(1.254f));
+	CHECK_EQUAL(list.Size(), 2);
+	list.Clear();
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 4);
+    
+	msgpack_sbuffer_destroy(&sbuf);
+}
