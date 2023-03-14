@@ -6,6 +6,7 @@
 
 bool MsgpackObject::TryParse(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
+	if (deserialized->via.array.size != Fields.size()) { return false; }
 
 	for (auto item = Fields.begin(); item != Fields.end(); item++) {
 		auto field = *item;
@@ -97,7 +98,7 @@ bool MsgpackObject::Equals(MsgpackObject *other) {
 	if (Fields.size() != other->Fields.size()) { return false; }
 
 	auto item = Fields.begin();
-	auto otherItem = Fields.begin();
+	auto otherItem = other->Fields.begin();
 	while (item != Fields.end() && otherItem != other->Fields.end()) {
 		auto field = *item;
 		auto otherField = *otherItem;
@@ -110,7 +111,7 @@ bool MsgpackObject::Equals(MsgpackObject *other) {
 
 void MsgpackObject::CloneTo(MsgpackObject *other) {
 	auto item = Fields.begin();
-	auto otherItem = Fields.begin();
+	auto otherItem = other->Fields.begin();
 	while (item != Fields.end() && otherItem != other->Fields.end()) {
 		auto field = *item;
 		auto otherField = *otherItem;

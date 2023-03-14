@@ -91,3 +91,41 @@ template <class TItem> class MsgpackArray : public MsgpackArrayBase {
 	void AddInternal(ConstTItem item, size_t newValueLen = size_t());
 	void DeleteItem(ConstTItem item);
 };
+
+class MsgpackObjectsArray : public MsgpackArrayBase {
+  public:
+	virtual ~MsgpackObjectsArray();
+
+	template <class TItem> TItem Item(size_t index) { return (TItem)Items[index]; }
+	size_t Size() { return Items.size(); }
+	typename std::vector<MsgpackObject *>::iterator const Begin() { return Items.begin(); }
+	typename std::vector<MsgpackObject *>::iterator const End() { return Items.end(); }
+	void Reserve(size_t capacity) { Items.reserve(capacity); }
+	bool Empty() { return Items.empty(); }
+
+	bool TryParseObject(msgpack_object *deserialized) override final;
+	bool WriteObject(msgpack_packer *packer) override final;
+
+	virtual bool Add(MsgpackObject *item);
+	virtual bool Update(size_t index, MsgpackObject *item);
+	virtual void Remove(MsgpackObject *item);
+
+	typename std::vector<MsgpackObject *>::iterator Find(MsgpackObject *item);
+
+	bool Equals(MsgpackArrayBase *other) override;
+	void CloneTo(MsgpackArrayBase *other) override;
+	typename std::vector<MsgpackObject *>::iterator MoveTo(MsgpackArrayBase *other, MsgpackObject *item);
+	void MoveAllTo(MsgpackArrayBase *other);
+
+	void Clear() override;
+	virtual bool Validate(MsgpackObject *item) = 0;
+	virtual MsgpackObject *CreateItem() = 0;
+
+	friend bool operator!=(const MsgpackObjectsArray &v1, const MsgpackObjectsArray &v2);
+	friend bool operator==(const MsgpackObjectsArray &v1, const MsgpackObjectsArray &v2);
+
+  protected:
+	std::vector<MsgpackObject *> Items;
+	void AddInternal(MsgpackObject *item);
+	void DeleteItem(MsgpackObject *item);
+};

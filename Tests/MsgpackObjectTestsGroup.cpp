@@ -48,64 +48,64 @@ class GoodsDto : public MsgpackObject {
 		  StoreName(this, 7, storeName){};
 };
 
-// class GoodsList : public MsgpackObjectsArray {
-//   public:
-// 	bool Validate(MsgpackObject *item) override { return item->Validate(); }
-// 	MsgpackObject *CreateItem() override { return new GoodsDto(); }
-// };
+class GoodsList : public MsgpackObjectsArray {
+  public:
+	bool Validate(MsgpackObject *item) override { return item->Validate(); }
+	MsgpackObject *CreateItem() override { return new GoodsDto(); }
+};
 
-// class OrderDto : public MsgpackObject {
-//   public:
-// 	MsgpackValue<char *> Supplier;
-// 	MsgpackValue<uint32_t> DateTime;
-// 	MsgpackValue<MsgpackArrayBase *> Goods;
-// 	MsgpackValue<MsgpackObject *> User;
-// 	GoodsList goodsList;
-// 	UserDto userDto;
+class OrderDto : public MsgpackObject {
+  public:
+	MsgpackValue<char *> Supplier;
+	MsgpackValue<uint32_t> DateTime;
+	MsgpackValue<MsgpackArrayBase *> Goods;
+	MsgpackValue<MsgpackObject *> User;
+	GoodsList goodsList;
+	UserDto userDto;
 
-// 	OrderDto(const char *supplier = {}, const uint32_t dateTime = {}, const char *userName = {}, const TUserRole userRole = {})
-// 		: Supplier(this, "supplier", supplier), //
-// 		  DateTime(this, "dateTime", dateTime), //
-// 		  Goods(this, "goods", &goodsList),		//
-// 		  userDto(userName, userRole),			//
-// 		  User(this, "user", &userDto){};
+	OrderDto(const char *supplier = {}, const uint32_t dateTime = {}, const char *userName = {}, const TUserRole userRole = {})
+		: Supplier(this, 0, supplier), //
+		  DateTime(this, 1, dateTime), //
+		  Goods(this, 2, &goodsList),  //
+		  userDto(userName, userRole), //
+		  User(this, 3, &userDto){};
 
-// 	~OrderDto() {}
-// };
+	~OrderDto() {}
+};
 
-// class OrdersList : public MsgpackObjectsArray {
-//   public:
-// 	bool Validate(MsgpackObject *item) override { return item->Validate(); }
-// 	MsgpackObject *CreateItem() override { return new OrderDto(); }
-// };
+class OrdersList : public MsgpackObjectsArray {
+  public:
+	bool Validate(MsgpackObject *item) override { return item->Validate(); }
+	MsgpackObject *CreateItem() override { return new OrderDto(); }
+};
 
-// class CustomerDto : public MsgpackObject {
-//   public:
-// 	MsgpackValue<uint64_t> Id;
-// 	MsgpackValue<char *> Name;
-// 	MsgpackValue<TMsgpackRawData> Blob;
-// 	MsgpackValue<MsgpackArrayBase *> Orders;
-// 	OrdersList ordersList;
+class CustomerDto : public MsgpackObject {
+  public:
+	MsgpackValue<uint64_t> Id;
+	MsgpackValue<char *> Name;
+	MsgpackValue<TMsgpackRawData> Blob;
+	MsgpackValue<MsgpackArrayBase *> Orders;
+	OrdersList ordersList;
 
-// 	CustomerDto(const uint64_t id = {}, const char *name = {}, const TMsgpackRawData blob = {})
-// 		: Id(this, "id", id),		//
-// 		  Name(this, "name", name), //
-// 		  Blob(this, "blob", blob), //
-// 		  Orders(this, "orders", &ordersList){};
-// };
+	CustomerDto(const uint64_t id = {}, const char *name = {}, const TMsgpackRawData blob = {})
+		: Id(this, 0, id),	   //
+		  Name(this, 1, name), //
+		  Blob(this, 2, blob), //
+		  Orders(this, 3, &ordersList){};
+};
 
-// class ValuesWoInstance : public MsgpackObject {
-//   public:
-// 	ValuesWoInstance(const uint64_t id = {}, const char *name = {}, const TMsgpackRawData blob = {}) {
-// 		new MsgpackValue<uint64_t>(this, "id", id);
-// 		new MsgpackValue<char *>(this, "name", name);
-// 		new MsgpackValue<TMsgpackRawData>(this, "blob", blob);
-// 	};
+class ValuesWoInstance : public MsgpackObject {
+  public:
+	ValuesWoInstance(const uint64_t id = {}, const char *name = {}, const TMsgpackRawData blob = {}) {
+		new MsgpackValue<uint64_t>(this, 0, id);
+		new MsgpackValue<char *>(this, 1, name);
+		new MsgpackValue<TMsgpackRawData>(this, 2, blob);
+	};
 
-// 	~ValuesWoInstance() {
-// 		for (const auto &field : Fields) { delete field; }
-// 	}
-// };
+	~ValuesWoInstance() {
+		for (const auto &field : Fields) { delete field; }
+	}
+};
 
 TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Test) {
 	msgpack_sbuffer sbuf;
@@ -154,7 +154,7 @@ TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Test) {
 // 	STRCMP_EQUAL(order.userDto.Name.Get(), "Joe Doe");
 // }
 
-TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Error_Test) {
+TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Error_Less_Data_Test) {
 	msgpack_sbuffer sbuf = {};
 	msgpack_packer pk;
 	GoodsDto goods;
@@ -163,12 +163,54 @@ TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Error_Test) {
 
 	msgpack_sbuffer_init(&sbuf);
 	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
-
 	msgpack_pack_array(&pk, 1);
 	msgpack_pack_int(&pk, 1);
-
 	CHECK_FALSE(goods.TryParse(sbuf.data, sbuf.size));
+	msgpack_sbuffer_destroy(&sbuf);
+}
 
+TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Error_Exceeded_Data_Test) {
+	msgpack_sbuffer sbuf = {};
+	msgpack_packer pk;
+	GoodsDto goods;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	msgpack_pack_array(&pk, 8 + 1);
+	msgpack_pack_int(&pk, 1);
+	msgpack_pack_str(&pk, 10);
+	msgpack_pack_str_body(&pk, "Vegetables", 10);
+	msgpack_pack_uint32(&pk, 1657052045);
+	msgpack_pack_str(&pk, 6);
+	msgpack_pack_str_body(&pk, "Tomato", 6);
+	msgpack_pack_float(&pk, 123.25);
+	msgpack_pack_double(&pk, 165.052045);
+	msgpack_pack_false(&pk);
+	msgpack_pack_nil(&pk);
+	msgpack_pack_nil(&pk);
+	CHECK_FALSE(goods.TryParse(sbuf.data, sbuf.size));
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_Error_Incorrect_Field_Test) {
+	msgpack_sbuffer sbuf = {};
+	msgpack_packer pk;
+	GoodsDto goods;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+	msgpack_pack_array(&pk, 8);
+	msgpack_pack_float(&pk, 1);
+	msgpack_pack_str(&pk, 10);
+	msgpack_pack_str_body(&pk, "Vegetables", 10);
+	msgpack_pack_uint32(&pk, 1657052045);
+	msgpack_pack_str(&pk, 6);
+	msgpack_pack_str_body(&pk, "Tomato", 6);
+	msgpack_pack_float(&pk, 123.25);
+	msgpack_pack_double(&pk, 165.052045);
+	msgpack_pack_false(&pk);
+	msgpack_pack_nil(&pk);
+	CHECK_FALSE(goods.TryParse(sbuf.data, sbuf.size));
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -275,7 +317,6 @@ TEST(MsgpackObjectTestsGroup, MsgpackObject_Parse_With_Begin_End_Stages_Test) {
 	msgpack_pack_nil(&pk);
 
 	GoodsDto goods;
-	CHECK_TRUE(goods.TryParse(sbuf.data, sbuf.size));
 	auto unpacked = goods.BeginTryParse(sbuf.data, sbuf.size);
 
 	CHECK(unpacked != NULL);
@@ -310,7 +351,7 @@ static size_t DirectWriteTestBufferLenght = 0;
 static void OnReady(void *parent, const char *json, size_t size) {
 	TestParent = parent;
 	DirectWriteTestBuffer = new char[size];
-    DirectWriteTestBufferLenght = size;
+	DirectWriteTestBufferLenght = size;
 	memcpy(DirectWriteTestBuffer, json, size);
 }
 

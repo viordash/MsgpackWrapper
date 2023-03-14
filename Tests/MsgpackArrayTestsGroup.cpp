@@ -16,23 +16,23 @@ void teardown() {}
 }
 ;
 
-// class UserDto : public MsgpackObject {
-//   public:
-// 	MsgpackValue<char *> Name;
-// 	MsgpackValue<uint32_t> Role;
+class UserDto : public MsgpackObject {
+  public:
+	MsgpackValue<char *> Name;
+	MsgpackValue<uint32_t> Role;
 
-// 	UserDto(const char *name = {}, const uint32_t role = {}, const bool optional = {})
-// 		: Name(this, "name", name), //
-// 		  Role(this, "role", role){};
+	UserDto(const char *name = {}, const uint32_t role = {})
+		: Name(this, 0, name), //
+		  Role(this, 1, role){};
 
-// 	bool Validate() override { return Role.Get() < 1000; }
-// };
+	bool Validate() override { return Role.Get() < 1000; }
+};
 
-// class UsersList : public MsgpackObjectsArray {
-//   public:
-// 	bool Validate(MsgpackObject *item) override { return Size() < maxCount && item != NULL && item->Validate(); }
-// 	MsgpackObject *CreateItem() { return new UserDto(); }
-// };
+class UsersList : public MsgpackObjectsArray {
+  public:
+	bool Validate(MsgpackObject *item) override { return Size() < maxCount && item != NULL && item->Validate(); }
+	MsgpackObject *CreateItem() { return new UserDto(); }
+};
 
 class StringsList : public MsgpackArray<char *> {
   public:
@@ -89,400 +89,453 @@ class FloatList : public MsgpackArray<float> {
 	bool Validate(const float item) override { return Size() < maxCount; }
 };
 
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Parse_Test) {
-// 	UsersList list;
-
-// 	CHECK_TRUE(list.TryStringParse("[{\"name\":\"User1\",\"role\":100},{\"name\":\"User2\",\"role\":0},{\"name\":\"User3\","
-// 								   "\"role\":255}]"));
-// 	CHECK_EQUAL(list.Size(), 3);
-
-// 	STRCMP_EQUAL(list.Item<UserDto *>(0)->Name.Get(), "User1");
-// 	CHECK_EQUAL(list.Item<UserDto *>(0)->Role.Get(), 100);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Parse_Error_Test) {
-// 	UsersList list;
-// 	CHECK_FALSE(list.TryStringParse("[{\"name\":\"User1\",\"role\":100},{\"name\":\"User2\",\"role\":0},{\"name\":\"User3\","
-// 									"\"role\":255}"));
-// 	CHECK_FALSE(list.TryStringParse("{\"name\":\"User1\",\"role\":100},{\"name\":\"User2\",\"role\":0},{\"name\":\"User3\","
-// 									"\"role\":255}]"));
-// 	CHECK_FALSE(list.TryStringParse("[\"name\":\"User1\",\"role\":100},{\"name\":\"User2\",\"role\":0},{\"name\":\"User3\","
-// 									"\"role\":255}]"));
-// 	CHECK_FALSE(list.TryStringParse("[{\"name\":\"User1\",\"role\":100},{\"name\":\"User2\",\"role\":0},{\"name\":\"User3\","
-// 									"\"role\":255]"));
-// 	CHECK_FALSE(list.TryStringParse("[{\"name\":\"User1\",\"role\":100},{\"name\":\"User2\",\"role\":0},{\"name\"\"User3\","
-// 									"\"role\":255}]"));
-// 	CHECK_FALSE(list.TryStringParse("[{\"name\":\"User1\",\"role\":100}{\"name\":\"User2\",\"role\":0},{\"name\":\"User3\","
-// 									"\"role\":255}]"));
-// 	CHECK_FALSE(list.TryStringParse("[{},{\"name\":\"User2\",\"role\":0},{\"name\":\"User3\",\"role\":255}]"));
-// 	CHECK_FALSE(list.TryStringParse(NULL, 1));
-// 	CHECK_EQUAL(list.Size(), 0);
-
-// 	CHECK_FALSE(list.TryStringParse("[{\"name\":\"User2\",\"role\":0},null]"));
-// 	CHECK_EQUAL(list.Size(), 1);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Parse_With_Begin_End_Stages_Test) {
-// 	UsersList list;
-// 	auto doc = list.BeginTryStringParse("[{\"name\":\"User1\",\"role\":100},{\"name\":\"User2\",\"role\":0},{\"name\":\"User3\","
-// 										"\"role\":255}]");
-
-// 	CHECK(doc != NULL);
-// 	CHECK_EQUAL(list.Size(), 3);
-
-// 	STRCMP_EQUAL(list.Item<UserDto *>(0)->Name.Get(), "User1");
-// 	CHECK_EQUAL(list.Item<UserDto *>(0)->Role.Get(), 100);
-// 	list.EndTryStringParse(doc);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Parse_With_Begin_End_Stages_And_Specified_Length_Test) {
-// 	UsersList list;
-// 	auto doc = list.BeginTryStringParse("[{\"name\":\"User1\",\"role\":100},{\"name\":\"User2\",\"role\":0},{\"name\":\"User3\","
-// 										"\"role\":255}]  some data 0123456                     ",
-// 										83);
-
-// 	CHECK(doc != NULL);
-// 	CHECK_EQUAL(list.Size(), 3);
-
-// 	STRCMP_EQUAL(list.Item<UserDto *>(2)->Name.Get(), "User3");
-// 	CHECK_EQUAL(list.Item<UserDto *>(2)->Role.Get(), 255);
-// 	list.EndTryStringParse(doc);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_WriteTo_Test) {
-// 	char buffer[2048];
-// 	UsersList list;
-// 	list.Add(new UserDto("user 1", 0));
-// 	list.Add(new UserDto("user 2", 10));
-// 	list.Add(new UserDto("user 3", 100));
-// 	UserDto user("user 4", 1000);
-// 	list.Add(&user);
-
-// 	CHECK_EQUAL(list.WriteToString(buffer, sizeof(buffer)), 85);
-// 	STRCMP_EQUAL(buffer, "[{\"name\":\"user 1\",\"role\":0},{\"name\":\"user 2\",\"role\":10},{\"name\":\"user 3\",\"role\":100}]");
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_WriteTo_With_Limited_Buffer_Test) {
-// 	char buffer[100];
-// 	UsersList list;
-// 	list.Add(new UserDto("user 1", 0));
-// 	list.Add(new UserDto("user 2", 10));
-// 	list.Add(new UserDto("user 3", 100));
-// 	list.Add(new UserDto("user 4", 999));
-
-// 	CHECK_EQUAL(list.WriteToString(buffer, sizeof(buffer)), 99);
-
-// 	STRCMP_EQUAL(buffer, "[{\"name\":\"user 1\",\"role\":0},{\"name\":\"user 2\",\"role\":10},{\"name\":\"user 3\",\"role\":100},{\"name\":\"user ");
-// }
-
-// static void *TestParent = NULL;
-// static char *DirectWriteTestBuffer = NULL;
-// static void OnReady(void *parent, const char *json, size_t size) {
-// 	TestParent = parent;
-// 	DirectWriteTestBuffer = new char[size + 1];
-// 	memcpy(DirectWriteTestBuffer, json, size);
-// 	DirectWriteTestBuffer[size] = 0;
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Direct_Write_From_Msgpack_Memory_Test) {
-// 	UsersList list;
-// 	list.Add(new UserDto("user 1", 0));
-// 	list.Add(new UserDto("user 2", 10));
-// 	list.Add(new UserDto("user 3", 100));
-// 	list.Add(new UserDto("user 4", 999));
-
-// 	list.DirectWriteTo((void *)987654321, OnReady);
-// 	CHECK_EQUAL(TestParent, (void *)987654321);
-// 	STRCMP_EQUAL(DirectWriteTestBuffer, "[{\"name\":\"user 1\",\"role\":0},{\"name\":\"user 2\",\"role\":10},{\"name\":\"user 3\",\"role\":100},{\"name\":\"user 4\",\"role\":999}]");
-// 	delete[] DirectWriteTestBuffer;
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Equals_Test) {
-// 	UsersList list1;
-// 	list1.Add(new UserDto("user 1", 0));
-// 	list1.Add(new UserDto("user 2", 10));
-// 	list1.Add(new UserDto("user 3", 100));
-// 	list1.Add(new UserDto("user 4", 999));
-
-// 	UsersList list2;
-// 	list2.Add(new UserDto("user 1", 0));
-// 	list2.Add(new UserDto("user 2", 10));
-// 	list2.Add(new UserDto("user 3", 100));
-// 	list2.Add(new UserDto("user 4", 999));
-
-// 	CHECK_TRUE(list1 == list2);
-// 	CHECK_FALSE(list1 != list2);
-// 	list1.Item<UserDto *>(2)->Name.Set("User3");
-// 	CHECK_TRUE(list1 != list2);
-// 	CHECK_FALSE(list1 == list2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Clone_Test) {
-// 	auto list1 = new UsersList();
-// 	list1->Add(new UserDto("user 1", 0));
-// 	list1->Add(new UserDto("user 2", 10));
-// 	list1->Add(new UserDto("user 3", 100));
-// 	list1->Add(new UserDto("user 4", 999));
-
-// 	UsersList list2;
-// 	list2.Add(new UserDto(" 1", 0));
-// 	list2.Add(new UserDto(" 2", 10));
-
-// 	list1->CloneTo(&list2);
-// 	delete list1;
-// 	CHECK_EQUAL(list2.Size(), 4);
-
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(2)->Name.Get(), "user 3");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(2)->Role.Get(), 100);
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(3)->Name.Get(), "user 4");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(3)->Role.Get(), 999);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Find_Test) {
-// 	UsersList list1;
-// 	list1.Add(new UserDto("user 1", 0));
-// 	list1.Add(new UserDto("user 2", 10));
-// 	list1.Add(new UserDto("user 3", 100));
-// 	list1.Add(new UserDto("user 4", 999));
-// 	UserDto user1("user 3", 100);
-// 	auto iter = list1.Find(&user1);
-// 	CHECK(iter != list1.End());
-// 	STRCMP_EQUAL(((UserDto *)*iter)->Name.Get(), "user 3");
-// 	UserDto user2("user 3", 0);
-// 	CHECK_TRUE(list1.Find(&user2) == list1.End());
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Remove_Test) {
-// 	UsersList list1;
-// 	list1.Add(new UserDto("user 1", 0));
-// 	list1.Add(new UserDto("user 2", 10));
-// 	list1.Add(new UserDto("user 3", 100));
-// 	list1.Add(new UserDto("user 4", 999));
-
-// 	auto item1 = new UserDto("user 3", 100);
-// 	list1.Remove(item1);
-// 	delete item1;
-
-// 	auto item2 = new UserDto("user 2", 10);
-// 	list1.Remove(item2);
-// 	delete item2;
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Add_Test) {
-// 	UsersList list1;
-// 	auto item1 = new UserDto("user 1", 0);
-// 	CHECK_TRUE(list1.Add(item1));
-// 	auto item2 = new UserDto("user 2", 10);
-// 	CHECK_TRUE(list1.Add(item2));
-
-// 	CHECK_EQUAL(list1.Size(), 2);
-// 	STRCMP_EQUAL(list1.Item<UserDto *>(0)->Name.Get(), "user 1");
-// 	CHECK_EQUAL(list1.Item<UserDto *>(0)->Role.Get(), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Incorrect_Add_Test) {
-// 	UsersList list1;
-// 	auto item1 = new UserDto("user 1", 0);
-// 	CHECK_TRUE(list1.Add(item1));
-// 	auto item2 = new UserDto("user 2", 1010);
-// 	CHECK_FALSE(list1.Add(item2));
-// 	delete item2;
-
-// 	CHECK_EQUAL(list1.Size(), 1);
-// 	STRCMP_EQUAL(list1.Item<UserDto *>(0)->Name.Get(), "user 1");
-// 	CHECK_EQUAL(list1.Item<UserDto *>(0)->Role.Get(), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Update_Test) {
-// 	UsersList list1;
-// 	auto item1 = new UserDto("user 1", 0);
-// 	list1.Add(item1);
-// 	auto item2 = new UserDto("user 2", 10);
-// 	list1.Add(item2);
-
-// 	auto item3 = new UserDto("user 3", 100);
-// 	CHECK_TRUE(list1.Update(0, item3));
-// 	CHECK_EQUAL(list1.Size(), 2);
-
-// 	STRCMP_EQUAL(list1.Item<UserDto *>(0)->Name.Get(), "user 3");
-// 	CHECK_EQUAL(list1.Item<UserDto *>(0)->Role.Get(), 100);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Incorrect_Update_Test) {
-// 	UsersList list1;
-// 	list1.Add(new UserDto("user 1", 0));
-// 	list1.Add(new UserDto("user 2", 10));
-
-// 	auto item3 = new UserDto("user 2", 10);
-// 	CHECK_FALSE(list1.Update(100, item3));
-// 	delete item3;
-
-// 	auto item4 = new UserDto("user 3", 1000);
-// 	CHECK_FALSE(list1.Update(0, item4));
-// 	delete item4;
-
-// 	CHECK_FALSE(list1.Update(0, NULL));
-// 	CHECK_EQUAL(list1.Size(), 2);
-
-// 	STRCMP_EQUAL(list1.Item<UserDto *>(0)->Name.Get(), "user 1");
-// 	CHECK_EQUAL(list1.Item<UserDto *>(0)->Role.Get(), 0);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Field_Optional_Test) {
-// 	MsgpackFieldsContainer container;
-// 	rapidjson::Document doc;
-// 	StringsList stringArray;
-// 	auto testableFieldMustExists = new MsgpackValue<MsgpackArrayBase *>(&container, "testStringArray", &stringArray);
-// 	doc.Parse("{\"otherField\":[\"Item4\"]}");
-// 	CHECK_FALSE(testableFieldMustExists->TryParse(&doc));
-// 	delete testableFieldMustExists;
-
-// 	auto testableWithOptional = new MsgpackValue<MsgpackArrayBase *>(&container, "testStringArray", &stringArray);
-// 	doc.Parse("{\"otherField\":[\"Item4\"]}");
-// 	CHECK_TRUE(testableWithOptional->TryParse(&doc));
-// 	CHECK_FALSE(testableWithOptional->Presented());
-
-// 	doc.Parse("{\"testStringArray\":[\"Item4\"]}");
-// 	CHECK_TRUE(testableWithOptional->TryParse(&doc));
-// 	CHECK_TRUE(testableWithOptional->Presented());
-// 	delete testableWithOptional;
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Clear_Test) {
-// 	UsersList list;
-// 	CHECK_TRUE(list.Add(new UserDto("user 1", 0)));
-// 	CHECK_TRUE(list.Add(new UserDto("user 2", 10)));
-// 	CHECK_EQUAL(list.Size(), 2);
-// 	CHECK_TRUE(list.TryStringParse("[{\"name\":\"User1\",\"role\":100},{\"name\":\"User2\",\"role\":0}]"));
-// 	CHECK_EQUAL(list.Size(), 4);
-// 	list.Clear();
-// 	CHECK_TRUE(list.TryStringParse("[{\"name\":\"User1\",\"role\":100},{\"name\":\"User2\",\"role\":0},{\"name\":\"User3\","
-// 								   "\"role\":255}]"));
-// 	CHECK_EQUAL(list.Size(), 3);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_MoveTo_Test) {
-// 	auto list1 = new UsersList();
-// 	list1->Add(new UserDto("user 1", 0));
-// 	list1->Add(new UserDto("user 2", 10));
-// 	list1->Add(new UserDto("user 3", 100));
-// 	list1->Add(new UserDto("user 4", 999));
-
-// 	UsersList list2;
-// 	list2.Add(new UserDto(" 1", 0));
-// 	list2.Add(new UserDto(" 2", 10));
-
-// 	auto item0 = list1->Item<UserDto *>(0);
-// 	auto item1 = list1->Item<UserDto *>(1);
-// 	auto iter = list1->MoveTo(&list2, item0);
-// 	STRCMP_EQUAL(((UserDto *)*iter)->Name.Get(), "user 2");
-
-// 	iter = list1->MoveTo(&list2, item1);
-// 	STRCMP_EQUAL(((UserDto *)*iter)->Name.Get(), "user 3");
-// 	CHECK_EQUAL(list1->Size(), 2);
-// 	delete list1;
-// 	CHECK_EQUAL(list2.Size(), 4);
-
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(0)->Name.Get(), " 1");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(0)->Role.Get(), 0);
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(1)->Name.Get(), " 2");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(1)->Role.Get(), 10);
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(2)->Name.Get(), "user 1");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(2)->Role.Get(), 0);
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(3)->Name.Get(), "user 2");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(3)->Role.Get(), 10);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_MoveTo_For_Non_Native_Test) {
-// 	auto list1 = new UsersList();
-// 	list1->Add(new UserDto("user 1", 0));
-// 	list1->Add(new UserDto("user 2", 10));
-
-// 	UsersList list2;
-// 	list2.Add(new UserDto(" 1", 0));
-
-// 	auto iter = list1->MoveTo(&list2, NULL);
-// 	CHECK(iter == list1->End());
-
-// 	UserDto other("user 1", 0);
-// 	iter = list1->MoveTo(&list2, &other);
-// 	CHECK(iter == list1->End());
-
-// 	iter = list1->MoveTo(&list2, *list2.Begin());
-// 	CHECK(iter == list1->End());
-// 	delete list1;
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_MoveTo_With_Validation_Test) {
-// 	maxCount = 3;
-// 	auto list1 = new UsersList();
-// 	list1->Add(new UserDto("user 1", 0));
-// 	list1->Add(new UserDto("user 2", 10));
-// 	list1->Add(new UserDto("user 3", 100));
-
-// 	UsersList list2;
-// 	list2.Add(new UserDto(" 1", 0));
-// 	list2.Add(new UserDto(" 2", 10));
-
-// 	auto item0 = list1->Item<UserDto *>(0);
-// 	auto item1 = list1->Item<UserDto *>(1);
-// 	auto iter = list1->MoveTo(&list2, item0);
-// 	STRCMP_EQUAL(((UserDto *)*iter)->Name.Get(), "user 2");
-
-// 	iter = list1->MoveTo(&list2, item1);
-// 	STRCMP_EQUAL(((UserDto *)*iter)->Name.Get(), "user 3");
-// 	CHECK_EQUAL(list1->Size(), 2);
-// 	delete list1;
-// 	CHECK_EQUAL(list2.Size(), 3);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_MoveAllTo_Test) {
-// 	auto list1 = new UsersList();
-// 	list1->Add(new UserDto("user 1", 0));
-// 	list1->Add(new UserDto("user 2", 10));
-// 	list1->Add(new UserDto("user 3", 100));
-// 	list1->Add(new UserDto("user 4", 999));
-
-// 	UsersList list2;
-// 	list2.Add(new UserDto(" 1", 0));
-// 	list2.Add(new UserDto(" 2", 10));
-
-// 	list1->MoveAllTo(&list2);
-// 	CHECK_EQUAL(list1->Size(), 0);
-// 	delete list1;
-// 	CHECK_EQUAL(list2.Size(), 6);
-
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(0)->Name.Get(), " 1");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(0)->Role.Get(), 0);
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(1)->Name.Get(), " 2");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(1)->Role.Get(), 10);
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(2)->Name.Get(), "user 1");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(2)->Role.Get(), 0);
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(3)->Name.Get(), "user 2");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(3)->Role.Get(), 10);
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(4)->Name.Get(), "user 3");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(4)->Role.Get(), 100);
-// 	STRCMP_EQUAL(list2.Item<UserDto *>(5)->Name.Get(), "user 4");
-// 	CHECK_EQUAL(list2.Item<UserDto *>(5)->Role.Get(), 999);
-// }
-
-// TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_MoveAllTo_With_Validation_Test) {
-// 	maxCount = 3;
-// 	auto list1 = new UsersList();
-// 	list1->Add(new UserDto("user 1", 0));
-// 	list1->Add(new UserDto("user 2", 10));
-
-// 	UsersList list2;
-// 	list2.Add(new UserDto(" 1", 0));
-// 	list2.Add(new UserDto(" 2", 10));
-
-// 	list1->MoveAllTo(&list2);
-// 	CHECK_EQUAL(list1->Size(), 1);
-// 	delete list1;
-// 	CHECK_EQUAL(list2.Size(), 3);
-// }
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Parse_Test) {
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 3);
+
+	msgpack_pack_array(&pk, 2);
+	msgpack_pack_str(&pk, 5);
+	msgpack_pack_str_body(&pk, "User1", 5);
+	msgpack_pack_int(&pk, 100);
+
+	msgpack_pack_array(&pk, 2);
+	msgpack_pack_str(&pk, 5);
+	msgpack_pack_str_body(&pk, "User2", 5);
+	msgpack_pack_int(&pk, 0);
+
+	msgpack_pack_array(&pk, 2);
+	msgpack_pack_str(&pk, 5);
+	msgpack_pack_str_body(&pk, "User3", 5);
+	msgpack_pack_int(&pk, 255);
+
+	UsersList list;
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+
+	msgpack_sbuffer_destroy(&sbuf);
+
+	CHECK_EQUAL(list.Size(), 3);
+
+	STRCMP_EQUAL(list.Item<UserDto *>(0)->Name.Get(), "User1");
+	CHECK_EQUAL(list.Item<UserDto *>(0)->Role.Get(), 100);
+
+	STRCMP_EQUAL(list.Item<UserDto *>(1)->Name.Get(), "User2");
+	CHECK_EQUAL(list.Item<UserDto *>(1)->Role.Get(), 0);
+
+	STRCMP_EQUAL(list.Item<UserDto *>(2)->Name.Get(), "User3");
+	CHECK_EQUAL(list.Item<UserDto *>(2)->Role.Get(), 255);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Parse_Error_Test) {
+	msgpack_sbuffer sbuf = {};
+	msgpack_packer pk;
+	UsersList list;
+
+	CHECK_FALSE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_FALSE(list.TryParse(NULL, 1));
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 1);
+
+	CHECK_FALSE(list.TryParse(sbuf.data, sbuf.size));
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Parse_Error_Breaked_Data_Test) {
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 1);
+
+	msgpack_pack_array(&pk, 2);
+	msgpack_pack_str(&pk, 5);
+	msgpack_pack_str_body(&pk, "User1", 5);
+	msgpack_pack_int(&pk, 100);
+
+	UsersList list;
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_FALSE(list.TryParse(sbuf.data, sbuf.size - 1));
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Parse_With_Begin_End_Stages_Test) {
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 2);
+
+	msgpack_pack_array(&pk, 2);
+	msgpack_pack_str(&pk, 5);
+	msgpack_pack_str_body(&pk, "User1", 5);
+	msgpack_pack_int(&pk, 100);
+
+	msgpack_pack_array(&pk, 2);
+	msgpack_pack_str(&pk, 5);
+	msgpack_pack_str_body(&pk, "User2", 5);
+	msgpack_pack_int(&pk, 0);
+
+	UsersList list;
+	auto unpacked = list.BeginTryParse(sbuf.data, sbuf.size);
+
+	CHECK(unpacked != NULL);
+	msgpack_sbuffer_destroy(&sbuf);
+
+	CHECK_EQUAL(list.Size(), 2);
+
+	STRCMP_EQUAL(list.Item<UserDto *>(0)->Name.Get(), "User1");
+	CHECK_EQUAL(list.Item<UserDto *>(0)->Role.Get(), 100);
+	list.EndTryParse(unpacked);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_WriteTo_Test) {
+	char buffer[2048];
+	UsersList list;
+	list.Add(new UserDto("user 1", 0));
+	list.Add(new UserDto("user 2", 10));
+	list.Add(new UserDto("user 3", 100));
+	UserDto user("user 4", 1000);
+	list.Add(&user);
+
+	CHECK_EQUAL(list.Write(buffer, sizeof(buffer)), 28);
+
+	msgpack_unpacked unpacked;
+	msgpack_unpacked_init(&unpacked);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, buffer, 28, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
+	CHECK_EQUAL(unpacked.data.via.array.size, 3);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_WriteTo_With_Limited_Buffer_Test) {
+	char buffer[30];
+	UsersList list;
+	list.Add(new UserDto("user 1", 0));
+	list.Add(new UserDto("user 2", 10));
+	list.Add(new UserDto("user 3", 100));
+	list.Add(new UserDto("user 4", 999));
+
+	CHECK_EQUAL(list.Write(buffer, sizeof(buffer)), 0);
+}
+
+static void *TestParent = NULL;
+static char *DirectWriteTestBuffer = NULL;
+static size_t DirectWriteTestBufferLenght = 0;
+static void OnReady(void *parent, const char *json, size_t size) {
+	TestParent = parent;
+	DirectWriteTestBuffer = new char[size];
+	DirectWriteTestBufferLenght = size;
+	memcpy(DirectWriteTestBuffer, json, size);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Direct_Write_From_Msgpack_Memory_Test) {
+	UsersList list;
+	list.Add(new UserDto("user 1", 0));
+	list.Add(new UserDto("user 2", 10));
+	list.Add(new UserDto("user 3", 100));
+	list.Add(new UserDto("user 4", 999));
+
+	list.DirectWriteTo((void *)987654321, OnReady);
+	CHECK_EQUAL(TestParent, (void *)987654321);
+
+	msgpack_unpacked unpacked;
+	msgpack_unpacked_init(&unpacked);
+	CHECK_EQUAL(msgpack_unpack_next(&unpacked, DirectWriteTestBuffer, DirectWriteTestBufferLenght, NULL), MSGPACK_UNPACK_SUCCESS);
+	CHECK_EQUAL(unpacked.data.type, MSGPACK_OBJECT_ARRAY);
+	CHECK_EQUAL(unpacked.data.via.array.size, 4);
+	delete[] DirectWriteTestBuffer;
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Equals_Test) {
+	UsersList list1;
+	list1.Add(new UserDto("user 1", 0));
+	list1.Add(new UserDto("user 2", 10));
+	list1.Add(new UserDto("user 3", 100));
+	list1.Add(new UserDto("user 4", 999));
+
+	UsersList list2;
+	list2.Add(new UserDto("user 1", 0));
+	list2.Add(new UserDto("user 2", 10));
+	list2.Add(new UserDto("user 3", 100));
+	list2.Add(new UserDto("user 4", 999));
+
+	CHECK_TRUE(list1 == list2);
+	CHECK_FALSE(list1 != list2);
+	list1.Item<UserDto *>(2)->Name.Set("User3");
+	CHECK_TRUE(list1 != list2);
+	CHECK_FALSE(list1 == list2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Clone_Test) {
+	auto list1 = new UsersList();
+	list1->Add(new UserDto("user 1", 0));
+	list1->Add(new UserDto("user 2", 10));
+	list1->Add(new UserDto("user 3", 100));
+	list1->Add(new UserDto("user 4", 999));
+
+	UsersList list2;
+	list2.Add(new UserDto(" 1", 0));
+	list2.Add(new UserDto(" 2", 10));
+
+	list1->CloneTo(&list2);
+	delete list1;
+	CHECK_EQUAL(list2.Size(), 4);
+
+	STRCMP_EQUAL(list2.Item<UserDto *>(2)->Name.Get(), "user 3");
+	CHECK_EQUAL(list2.Item<UserDto *>(2)->Role.Get(), 100);
+	STRCMP_EQUAL(list2.Item<UserDto *>(3)->Name.Get(), "user 4");
+	CHECK_EQUAL(list2.Item<UserDto *>(3)->Role.Get(), 999);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Find_Test) {
+	UsersList list1;
+	list1.Add(new UserDto("user 1", 0));
+	list1.Add(new UserDto("user 2", 10));
+	list1.Add(new UserDto("user 3", 100));
+	list1.Add(new UserDto("user 4", 999));
+	UserDto user1("user 3", 100);
+	auto iter = list1.Find(&user1);
+	CHECK(iter != list1.End());
+	STRCMP_EQUAL(((UserDto *)*iter)->Name.Get(), "user 3");
+	UserDto user2("user 3", 0);
+	CHECK_TRUE(list1.Find(&user2) == list1.End());
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Remove_Test) {
+	UsersList list1;
+	list1.Add(new UserDto("user 1", 0));
+	list1.Add(new UserDto("user 2", 10));
+	list1.Add(new UserDto("user 3", 100));
+	list1.Add(new UserDto("user 4", 999));
+
+	auto item1 = new UserDto("user 3", 100);
+	list1.Remove(item1);
+	delete item1;
+
+	auto item2 = new UserDto("user 2", 10);
+	list1.Remove(item2);
+	delete item2;
+
+	CHECK_EQUAL(list1.Size(), 2);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Add_Test) {
+	UsersList list1;
+	auto item1 = new UserDto("user 1", 0);
+	CHECK_TRUE(list1.Add(item1));
+	auto item2 = new UserDto("user 2", 10);
+	CHECK_TRUE(list1.Add(item2));
+
+	CHECK_EQUAL(list1.Size(), 2);
+	STRCMP_EQUAL(list1.Item<UserDto *>(0)->Name.Get(), "user 1");
+	CHECK_EQUAL(list1.Item<UserDto *>(0)->Role.Get(), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Incorrect_Add_Test) {
+	UsersList list1;
+	auto item1 = new UserDto("user 1", 0);
+	CHECK_TRUE(list1.Add(item1));
+	auto item2 = new UserDto("user 2", 1010);
+	CHECK_FALSE(list1.Add(item2));
+	delete item2;
+
+	CHECK_EQUAL(list1.Size(), 1);
+	STRCMP_EQUAL(list1.Item<UserDto *>(0)->Name.Get(), "user 1");
+	CHECK_EQUAL(list1.Item<UserDto *>(0)->Role.Get(), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Update_Test) {
+	UsersList list1;
+	auto item1 = new UserDto("user 1", 0);
+	list1.Add(item1);
+	auto item2 = new UserDto("user 2", 10);
+	list1.Add(item2);
+
+	auto item3 = new UserDto("user 3", 100);
+	CHECK_TRUE(list1.Update(0, item3));
+	CHECK_EQUAL(list1.Size(), 2);
+
+	STRCMP_EQUAL(list1.Item<UserDto *>(0)->Name.Get(), "user 3");
+	CHECK_EQUAL(list1.Item<UserDto *>(0)->Role.Get(), 100);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Incorrect_Update_Test) {
+	UsersList list1;
+	list1.Add(new UserDto("user 1", 0));
+	list1.Add(new UserDto("user 2", 10));
+
+	auto item3 = new UserDto("user 2", 10);
+	CHECK_FALSE(list1.Update(100, item3));
+	delete item3;
+
+	auto item4 = new UserDto("user 3", 1000);
+	CHECK_FALSE(list1.Update(0, item4));
+	delete item4;
+
+	CHECK_FALSE(list1.Update(0, NULL));
+	CHECK_EQUAL(list1.Size(), 2);
+
+	STRCMP_EQUAL(list1.Item<UserDto *>(0)->Name.Get(), "user 1");
+	CHECK_EQUAL(list1.Item<UserDto *>(0)->Role.Get(), 0);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Clear_Test) {
+	UsersList list;
+	msgpack_sbuffer sbuf;
+	msgpack_packer pk;
+
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+
+	msgpack_pack_array(&pk, 1);
+
+	msgpack_pack_array(&pk, 2);
+	msgpack_pack_str(&pk, 5);
+	msgpack_pack_str_body(&pk, "User1", 5);
+	msgpack_pack_int(&pk, 100);
+
+	CHECK_TRUE(list.Add(new UserDto("user 1", 0)));
+	CHECK_TRUE(list.Add(new UserDto("user 2", 10)));
+	CHECK_EQUAL(list.Size(), 2);
+	list.Clear();
+	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
+	CHECK_EQUAL(list.Size(), 1);
+
+	msgpack_sbuffer_destroy(&sbuf);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_MoveTo_Test) {
+	auto list1 = new UsersList();
+	list1->Add(new UserDto("user 1", 0));
+	list1->Add(new UserDto("user 2", 10));
+	list1->Add(new UserDto("user 3", 100));
+	list1->Add(new UserDto("user 4", 999));
+
+	UsersList list2;
+	list2.Add(new UserDto(" 1", 0));
+	list2.Add(new UserDto(" 2", 10));
+
+	auto item0 = list1->Item<UserDto *>(0);
+	auto item1 = list1->Item<UserDto *>(1);
+	auto iter = list1->MoveTo(&list2, item0);
+	STRCMP_EQUAL(((UserDto *)*iter)->Name.Get(), "user 2");
+
+	iter = list1->MoveTo(&list2, item1);
+	STRCMP_EQUAL(((UserDto *)*iter)->Name.Get(), "user 3");
+	CHECK_EQUAL(list1->Size(), 2);
+	delete list1;
+	CHECK_EQUAL(list2.Size(), 4);
+
+	STRCMP_EQUAL(list2.Item<UserDto *>(0)->Name.Get(), " 1");
+	CHECK_EQUAL(list2.Item<UserDto *>(0)->Role.Get(), 0);
+	STRCMP_EQUAL(list2.Item<UserDto *>(1)->Name.Get(), " 2");
+	CHECK_EQUAL(list2.Item<UserDto *>(1)->Role.Get(), 10);
+	STRCMP_EQUAL(list2.Item<UserDto *>(2)->Name.Get(), "user 1");
+	CHECK_EQUAL(list2.Item<UserDto *>(2)->Role.Get(), 0);
+	STRCMP_EQUAL(list2.Item<UserDto *>(3)->Name.Get(), "user 2");
+	CHECK_EQUAL(list2.Item<UserDto *>(3)->Role.Get(), 10);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_MoveTo_For_Non_Native_Test) {
+	auto list1 = new UsersList();
+	list1->Add(new UserDto("user 1", 0));
+	list1->Add(new UserDto("user 2", 10));
+
+	UsersList list2;
+	list2.Add(new UserDto(" 1", 0));
+
+	auto iter = list1->MoveTo(&list2, NULL);
+	CHECK(iter == list1->End());
+
+	UserDto other("user 1", 0);
+	iter = list1->MoveTo(&list2, &other);
+	CHECK(iter == list1->End());
+
+	iter = list1->MoveTo(&list2, *list2.Begin());
+	CHECK(iter == list1->End());
+	delete list1;
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_MoveTo_With_Validation_Test) {
+	maxCount = 3;
+	auto list1 = new UsersList();
+	list1->Add(new UserDto("user 1", 0));
+	list1->Add(new UserDto("user 2", 10));
+	list1->Add(new UserDto("user 3", 100));
+
+	UsersList list2;
+	list2.Add(new UserDto(" 1", 0));
+	list2.Add(new UserDto(" 2", 10));
+
+	auto item0 = list1->Item<UserDto *>(0);
+	auto item1 = list1->Item<UserDto *>(1);
+	auto iter = list1->MoveTo(&list2, item0);
+	STRCMP_EQUAL(((UserDto *)*iter)->Name.Get(), "user 2");
+
+	iter = list1->MoveTo(&list2, item1);
+	STRCMP_EQUAL(((UserDto *)*iter)->Name.Get(), "user 3");
+	CHECK_EQUAL(list1->Size(), 2);
+	delete list1;
+	CHECK_EQUAL(list2.Size(), 3);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_MoveAllTo_Test) {
+	auto list1 = new UsersList();
+	list1->Add(new UserDto("user 1", 0));
+	list1->Add(new UserDto("user 2", 10));
+	list1->Add(new UserDto("user 3", 100));
+	list1->Add(new UserDto("user 4", 999));
+
+	UsersList list2;
+	list2.Add(new UserDto(" 1", 0));
+	list2.Add(new UserDto(" 2", 10));
+
+	list1->MoveAllTo(&list2);
+	CHECK_EQUAL(list1->Size(), 0);
+	delete list1;
+	CHECK_EQUAL(list2.Size(), 6);
+
+	STRCMP_EQUAL(list2.Item<UserDto *>(0)->Name.Get(), " 1");
+	CHECK_EQUAL(list2.Item<UserDto *>(0)->Role.Get(), 0);
+	STRCMP_EQUAL(list2.Item<UserDto *>(1)->Name.Get(), " 2");
+	CHECK_EQUAL(list2.Item<UserDto *>(1)->Role.Get(), 10);
+	STRCMP_EQUAL(list2.Item<UserDto *>(2)->Name.Get(), "user 1");
+	CHECK_EQUAL(list2.Item<UserDto *>(2)->Role.Get(), 0);
+	STRCMP_EQUAL(list2.Item<UserDto *>(3)->Name.Get(), "user 2");
+	CHECK_EQUAL(list2.Item<UserDto *>(3)->Role.Get(), 10);
+	STRCMP_EQUAL(list2.Item<UserDto *>(4)->Name.Get(), "user 3");
+	CHECK_EQUAL(list2.Item<UserDto *>(4)->Role.Get(), 100);
+	STRCMP_EQUAL(list2.Item<UserDto *>(5)->Name.Get(), "user 4");
+	CHECK_EQUAL(list2.Item<UserDto *>(5)->Role.Get(), 999);
+}
+
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_MoveAllTo_With_Validation_Test) {
+	maxCount = 3;
+	auto list1 = new UsersList();
+	list1->Add(new UserDto("user 1", 0));
+	list1->Add(new UserDto("user 2", 10));
+
+	UsersList list2;
+	list2.Add(new UserDto(" 1", 0));
+	list2.Add(new UserDto(" 2", 10));
+
+	list1->MoveAllTo(&list2);
+	CHECK_EQUAL(list1->Size(), 1);
+	delete list1;
+	CHECK_EQUAL(list2.Size(), 3);
+}
 
 TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Parse_Test) {
 	StringsList list;
@@ -520,7 +573,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Parse_Not_String_Test) {
 	msgpack_pack_array(&pk, 1);
 	msgpack_pack_true(&pk);
 	CHECK_FALSE(list.TryParse(sbuf.data, sbuf.size));
-    
+
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -1164,7 +1217,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 3);
-    
+
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -1351,7 +1404,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 3);
-    
+
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -1527,7 +1580,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 3);
-    
+
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -1702,7 +1755,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 4);
-    
+
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -1893,7 +1946,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 4);
-    
+
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -2074,7 +2127,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 3);
-    
+
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -2465,7 +2518,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 4);
-    
+
 	msgpack_sbuffer_destroy(&sbuf);
 }
 
@@ -2843,6 +2896,6 @@ TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Clear_Test) {
 	list.Clear();
 	CHECK_TRUE(list.TryParse(sbuf.data, sbuf.size));
 	CHECK_EQUAL(list.Size(), 4);
-    
+
 	msgpack_sbuffer_destroy(&sbuf);
 }
