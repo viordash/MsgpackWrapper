@@ -4,342 +4,362 @@
 #include <stdlib.h>
 #include <string.h>
 #include <chrono>
+#include <vector>
 #include "MsgpackWrapper.h"
 #include "CppUTest/CommandLineTestRunner.h"
 
 int main(int ac, char **av) { return RUN_ALL_TESTS(ac, av); }
 
-// TEST_GROUP(MsgpackHeavyDutyTestsGroup){void setup(){} void teardown(){}};
+TEST_GROUP(MsgpackHeavyDutyTestsGroup){void setup(){} void teardown(){}};
 
-// static char *strDuplicate(const char *src) {
-// 	if (src == NULL) { return NULL; }
-// 	int len = strlen(src) + 1;
-// 	char *dest = new char[len];
-// 	memcpy(dest, src, len);
-// 	return dest;
-// }
+static char *strDuplicate(const char *src, size_t len = 0) {
+	if (src == NULL) { return NULL; }
+	if (len == 0) { len = strlen(src); }
+	char *dest = new char[len + 1];
+	memcpy(dest, src, len);
+	dest[len] = 0;
+	return dest;
+}
 
-// typedef enum { uAdmin, uViewer } TUserRole;
+typedef enum { uAdmin, uViewer } TUserRole;
 
-// class UserDto : public MsgpackObject {
-//   public:
-// 	MsgpackValue<char *> Name;
-// 	MsgpackValue<uint32_t> Role;
+class UserDto : public MsgpackObject {
+  public:
+	MsgpackValue<char *> Name;
+	MsgpackValue<uint32_t> Role;
 
-// 	UserDto(const char *name = {}, const TUserRole role = {})
-// 		: Name(this, "name", name), //
-// 		  Role(this, "role", role){};
-// };
+	UserDto(const char *name = {}, const TUserRole role = {})
+		: Name(this, 0, name), //
+		  Role(this, 1, role){};
+};
 
-// typedef struct {
-// 	char *name;
-// 	TUserRole role;
-// } TUserDto;
+typedef struct {
+	char *name;
+	TUserRole role;
+} TUserDto;
 
-// static void SerializeUserDto(rapidjson::Writer<rapidjson::StringBuffer> *writer, const TUserDto *pUserDto) {
-// 	writer->StartObject();
-// 	writer->String("name");
-// 	writer->String(pUserDto->name);
-// 	writer->String("role");
-// 	writer->Uint(pUserDto->role);
-// 	writer->EndObject();
-// }
+static void SerializeUserDto(msgpack_packer *packer, const TUserDto *pUserDto) {
+	msgpack_pack_array(packer, 2);
+	auto sLen = strlen(pUserDto->name);
+	msgpack_pack_str(packer, sLen);
+	msgpack_pack_str_body(packer, pUserDto->name, sLen);
+	msgpack_pack_uint32(packer, pUserDto->role);
+}
 
-// static TUserDto *DeserializeUserDto(rapidjson::Value *doc) {
-// 	if (!doc->IsObject()) { return NULL; }
+static TUserDto *DeserializeUserDto(msgpack_object *deserialized) {
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
+	if (deserialized->via.array.size != 2) { return false; }
 
-// 	auto name = doc->FindMember("name");
-// 	auto role = doc->FindMember("role");
+	msgpack_object name = deserialized->via.array.ptr[0];
+	if (name.type != MSGPACK_OBJECT_STR) { return false; }
 
-// 	if (name == doc->MemberEnd() || !name->value.IsString()) { return NULL; }
-// 	if (role == doc->MemberEnd() || !role->value.IsUint()) { return NULL; }
+	msgpack_object role = deserialized->via.array.ptr[1];
+	if (role.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
 
-// 	auto userDto = new TUserDto();
-// 	userDto->name = strDuplicate(name->value.GetString());
-// 	userDto->role = (TUserRole)role->value.GetUint();
-// 	return userDto;
-// }
+	auto userDto = new TUserDto();
+	userDto->name = strDuplicate(name.via.str.ptr, name.via.str.size);
+	userDto->role = (TUserRole)role.via.u64;
+	return userDto;
+}
 
-// class GoodsDto : public MsgpackObject {
-//   public:
-// 	MsgpackValue<int> Id;
-// 	MsgpackValue<uint32_t> Created;
-// 	MsgpackValue<char *> Group;
-// 	MsgpackValue<char *> Name;
-// 	MsgpackValue<float> Price;
-// 	MsgpackValue<double> Quantity;
-// 	MsgpackValue<bool> Deleted;
-// 	MsgpackValue<char *> StoreName;
+class GoodsDto : public MsgpackObject {
+  public:
+	MsgpackValue<int> Id;
+	MsgpackValue<uint32_t> Created;
+	MsgpackValue<char *> Group;
+	MsgpackValue<char *> Name;
+	MsgpackValue<float> Price;
+	MsgpackValue<double> Quantity;
+	MsgpackValue<bool> Deleted;
+	MsgpackValue<char *> StoreName;
 
-// 	GoodsDto(const int id = {}, const uint32_t created = {}, const char *group = {}, const char *name = {}, const float price = {}, const double quantity = {}, const bool deleted = {},
-// 			 const char *storeName = {})
-// 		: Id(this, "Id", id),					//
-// 		  Created(this, "Created", created),	//
-// 		  Group(this, "Group", group),			//
-// 		  Name(this, "Name", name),				//
-// 		  Price(this, "Price", price),			//
-// 		  Quantity(this, "Quantity", quantity), //
-// 		  Deleted(this, "Deleted", deleted),	//
-// 		  StoreName(this, "StoreName", storeName){};
-// };
+	GoodsDto(const int id = {}, const uint32_t created = {}, const char *group = {}, const char *name = {}, const float price = {}, const double quantity = {}, const bool deleted = {},
+			 const char *storeName = {})
+		: Id(this, 0, id),			   //
+		  Created(this, 1, created),   //
+		  Group(this, 2, group),	   //
+		  Name(this, 3, name),		   //
+		  Price(this, 4, price),	   //
+		  Quantity(this, 5, quantity), //
+		  Deleted(this, 6, deleted),   //
+		  StoreName(this, 7, storeName){};
+};
 
-// typedef struct {
-// 	int id;
-// 	uint32_t created;
-// 	char *group;
-// 	char *name;
-// 	float price;
-// 	double quantity;
-// 	bool deleted;
-// 	char *storeName;
-// } TGoodsDto;
+typedef struct {
+	int id;
+	uint32_t created;
+	char *group;
+	char *name;
+	float price;
+	double quantity;
+	bool deleted;
+	char *storeName;
+} TGoodsDto;
 
-// static void SerializeGoodsDto(rapidjson::Writer<rapidjson::StringBuffer> *writer, const TGoodsDto *pGoodsDto) {
-// 	writer->StartObject();
-// 	writer->String("Id");
-// 	writer->Int(pGoodsDto->id);
-// 	writer->String("Created");
-// 	writer->Uint(pGoodsDto->created);
-// 	writer->String("Group");
-// 	writer->String(pGoodsDto->group);
-// 	writer->String("Name");
-// 	writer->String(pGoodsDto->name);
-// 	writer->String("Price");
-// 	writer->Double(pGoodsDto->price);
-// 	writer->String("Quantity");
-// 	writer->Double(pGoodsDto->quantity);
-// 	writer->String("Deleted");
-// 	writer->Bool(pGoodsDto->deleted);
-// 	writer->String("StoreName");
-// 	writer->String(pGoodsDto->storeName);
+static void SerializeGoodsDto(msgpack_packer *packer, const TGoodsDto *pGoodsDto) {
+	msgpack_pack_array(packer, 8);
 
-// 	writer->EndObject();
-// }
+	msgpack_pack_int(packer, pGoodsDto->id);
+	msgpack_pack_uint32(packer, pGoodsDto->created);
 
-// static TGoodsDto *DeserializeGoodsDto(rapidjson::Value *doc) {
-// 	if (!doc->IsObject()) { return NULL; }
+	auto sLen = strlen(pGoodsDto->group);
+	msgpack_pack_str(packer, sLen);
+	msgpack_pack_str_body(packer, pGoodsDto->group, sLen);
 
-// 	auto id = doc->FindMember("Id");
-// 	auto created = doc->FindMember("Created");
-// 	auto group = doc->FindMember("Group");
-// 	auto name = doc->FindMember("Name");
-// 	auto price = doc->FindMember("Price");
-// 	auto quantity = doc->FindMember("Quantity");
-// 	auto deleted = doc->FindMember("Deleted");
-// 	auto storeName = doc->FindMember("StoreName");
+	sLen = strlen(pGoodsDto->name);
+	msgpack_pack_str(packer, sLen);
+	msgpack_pack_str_body(packer, pGoodsDto->name, sLen);
 
-// 	if (id == doc->MemberEnd() || !id->value.IsInt()) { return NULL; }
-// 	if (created == doc->MemberEnd() || !created->value.IsUint()) { return NULL; }
-// 	if (group == doc->MemberEnd() || !group->value.IsString()) { return NULL; }
-// 	if (name == doc->MemberEnd() || !name->value.IsString()) { return NULL; }
-// 	if (price == doc->MemberEnd() || !price->value.IsDouble()) { return NULL; }
-// 	if (quantity == doc->MemberEnd() || !quantity->value.IsDouble()) { return NULL; }
-// 	if (deleted == doc->MemberEnd() || !deleted->value.IsBool()) { return NULL; }
+	msgpack_pack_float(packer, pGoodsDto->price);
+	msgpack_pack_double(packer, pGoodsDto->quantity);
+	if (pGoodsDto->deleted) {
+		msgpack_pack_true(packer);
+	} else {
+		msgpack_pack_false(packer);
+	}
 
-// 	auto goodsDto = new TGoodsDto();
-// 	goodsDto->id = id->value.GetInt();
-// 	goodsDto->created = id->value.GetUint();
-// 	goodsDto->group = strDuplicate(group->value.GetString());
-// 	goodsDto->name = strDuplicate(name->value.GetString());
-// 	goodsDto->price = price->value.GetDouble();
-// 	goodsDto->quantity = quantity->value.GetDouble();
-// 	goodsDto->deleted = deleted->value.GetBool();
-// 	goodsDto->storeName = strDuplicate(storeName->value.GetString());
-// 	return goodsDto;
-// }
+	sLen = strlen(pGoodsDto->storeName);
+	msgpack_pack_str(packer, sLen);
+	msgpack_pack_str_body(packer, pGoodsDto->storeName, sLen);
+}
 
-// class GoodsList : public MsgpackObjectsArray {
-//   public:
-// 	bool Validate(MsgpackObject *item) override { return item->Validate(); }
-// 	MsgpackObject *CreateItem() override { return new GoodsDto(); }
-// };
+static TGoodsDto *DeserializeGoodsDto(msgpack_object *deserialized) {
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
+	if (deserialized->via.array.size != 8) { return false; }
 
-// static void SerializeGoodsList(rapidjson::Writer<rapidjson::StringBuffer> *writer, std::vector<TGoodsDto *> *goods) {
-// 	writer->StartArray();
-// 	for (const auto &item : *goods) { //
-// 		SerializeGoodsDto(writer, item);
-// 	}
-// 	writer->EndArray();
-// }
+	msgpack_object id = deserialized->via.array.ptr[0];
+	if (id.type != MSGPACK_OBJECT_POSITIVE_INTEGER || id.type != MSGPACK_OBJECT_NEGATIVE_INTEGER) { return false; }
+	msgpack_object created = deserialized->via.array.ptr[1];
+	if (created.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
+	msgpack_object group = deserialized->via.array.ptr[2];
+	if (group.type != MSGPACK_OBJECT_STR) { return false; }
+	msgpack_object name = deserialized->via.array.ptr[3];
+	if (name.type != MSGPACK_OBJECT_STR) { return false; }
+	msgpack_object price = deserialized->via.array.ptr[4];
+	if (price.type != MSGPACK_OBJECT_FLOAT32) { return false; }
+	msgpack_object quantity = deserialized->via.array.ptr[5];
+	if (quantity.type != MSGPACK_OBJECT_FLOAT64) { return false; }
+	msgpack_object deleted = deserialized->via.array.ptr[6];
+	if (quantity.type != MSGPACK_OBJECT_BOOLEAN) { return false; }
+	msgpack_object storeName = deserialized->via.array.ptr[7];
+	if (storeName.type != MSGPACK_OBJECT_STR) { return false; }
 
-// static std::vector<TGoodsDto *> *DeserializeGoodsList(rapidjson::Value *doc) {
-// 	if (!doc->IsArray()) { return NULL; }
-// 	auto jArray = doc->GetArray();
+	auto goodsDto = new TGoodsDto();
+	goodsDto->id = (int)id.via.i64;
+	goodsDto->created = (uint32_t)created.via.u64;
+	goodsDto->group = strDuplicate(group.via.str.ptr, group.via.str.size);
+	goodsDto->name = strDuplicate(name.via.str.ptr, name.via.str.size);
+	goodsDto->price = (float)price.via.f64;
+	goodsDto->quantity = quantity.via.f64;
+	goodsDto->deleted = deleted.via.boolean;
+	goodsDto->storeName = strDuplicate(storeName.via.str.ptr, storeName.via.str.size);
+	return goodsDto;
+}
 
-// 	auto goodsList = new std::vector<TGoodsDto *>();
-// 	for (const auto &jItem : jArray) {
-// 		auto goods = DeserializeGoodsDto((rapidjson::Value *)&jItem);
-// 		if (goods == NULL) {
-// 			for (const auto& item : *goodsList) { delete item; }
-// 			delete goodsList;
-// 			return NULL;
-// 		}
-// 		goodsList->push_back(goods);
-// 	}
-// 	return goodsList;
-// }
+class GoodsList : public MsgpackObjectsArray {
+  public:
+	bool Validate(MsgpackObject *item) override { return item->Validate(); }
+	MsgpackObject *CreateItem() override { return new GoodsDto(); }
+};
 
-// class OrderDto : public MsgpackObject {
-//   public:
-// 	MsgpackValue<char *> Supplier;
-// 	MsgpackValue<uint32_t> DateTime;
-// 	MsgpackValue<MsgpackArrayBase *> Goods;
-// 	MsgpackValue<MsgpackObject *> User;
-// 	GoodsList goodsList;
-// 	UserDto userDto;
+static void SerializeGoodsList(msgpack_packer *packer, std::vector<TGoodsDto *> *goods) {
+	msgpack_pack_array(packer, goods->size());
+	for (const auto &item : *goods) { //
+		SerializeGoodsDto(packer, item);
+	}
+}
 
-// 	OrderDto(const char *supplier = {}, const uint32_t dateTime = {}, const char *userName = {}, const TUserRole userRole = {})
-// 		: Supplier(this, "supplier", supplier), //
-// 		  DateTime(this, "dateTime", dateTime), //
-// 		  Goods(this, "goods", &goodsList),		//
-// 		  userDto(userName, userRole),			//
-// 		  User(this, "user", &userDto){};
-// };
+static std::vector<TGoodsDto *> *DeserializeGoodsList(msgpack_object *deserialized) {
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 
-// typedef struct {
-// 	char *supplier;
-// 	uint32_t dateTime;
-// 	std::vector<TGoodsDto *> *goods;
-// 	TUserDto *user;
-// } TOrderDto;
+	auto goodsList = new std::vector<TGoodsDto *>();
+	goodsList->reserve(deserialized->via.array.size);
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
+		msgpack_object object = deserialized->via.array.ptr[i];
+		TGoodsDto *goods = NULL;
+		if (object.type == MSGPACK_OBJECT_ARRAY) { goods = DeserializeGoodsDto(&object); }
 
-// static void SerializeOrderDto(rapidjson::Writer<rapidjson::StringBuffer> *writer, const TOrderDto *pOrderDto) {
-// 	writer->StartObject();
-// 	writer->String("supplier");
-// 	writer->String(pOrderDto->supplier);
-// 	writer->String("dateTime");
-// 	writer->Uint(pOrderDto->dateTime);
+		if (goods == NULL) {
+			for (const auto &item : *goodsList) { delete item; }
+			delete goodsList;
+			return NULL;
+		}
+		goodsList->push_back(goods);
+		i++;
+	}
+	goodsList->shrink_to_fit();
+	return goodsList;
+}
 
-// 	writer->String("user");
-// 	SerializeUserDto(writer, pOrderDto->user);
+class OrderDto : public MsgpackObject {
+  public:
+	MsgpackValue<char *> Supplier;
+	MsgpackValue<uint32_t> DateTime;
+	MsgpackValue<MsgpackArrayBase *> Goods;
+	MsgpackValue<MsgpackObject *> User;
+	GoodsList goodsList;
+	UserDto userDto;
 
-// 	writer->String("goods");
-// 	SerializeGoodsList(writer, pOrderDto->goods);
-// 	writer->EndObject();
-// }
+	OrderDto(const char *supplier = {}, const uint32_t dateTime = {}, const char *userName = {}, const TUserRole userRole = {})
+		: Supplier(this, 0, supplier), //
+		  DateTime(this, 1, dateTime), //
+		  Goods(this, 2, &goodsList),  //
+		  userDto(userName, userRole), //
+		  User(this, 3, &userDto){};
+};
 
-// static TOrderDto *DeserializeOrderDto(rapidjson::Value *doc) {
-// 	if (!doc->IsObject()) { return NULL; }
+typedef struct {
+	char *supplier;
+	uint32_t dateTime;
+	std::vector<TGoodsDto *> *goods;
+	TUserDto *user;
+} TOrderDto;
 
-// 	auto supplier = doc->FindMember("supplier");
-// 	auto dateTime = doc->FindMember("dateTime");
-// 	auto user = doc->FindMember("user");
-// 	auto goods = doc->FindMember("goods");
+static void SerializeOrderDto(msgpack_packer *packer, const TOrderDto *pOrderDto) {
+	msgpack_pack_array(packer, 4);
+	auto sLen = strlen(pOrderDto->supplier);
+	msgpack_pack_str(packer, sLen);
+	msgpack_pack_str_body(packer, pOrderDto->supplier, sLen);
+	msgpack_pack_uint32(packer, pOrderDto->dateTime);
 
-// 	if (supplier == doc->MemberEnd() || !supplier->value.IsString()) { return NULL; }
-// 	if (dateTime == doc->MemberEnd() || !dateTime->value.IsUint()) { return NULL; }
-// 	if (user == doc->MemberEnd() || !user->value.IsObject()) { return NULL; }
-// 	if (goods == doc->MemberEnd() || !goods->value.IsArray()) { return NULL; }
+	SerializeGoodsList(packer, pOrderDto->goods);
+	SerializeUserDto(packer, pOrderDto->user);
+}
 
-// 	auto orderDto = new TOrderDto();
-// 	orderDto->supplier = strDuplicate(supplier->value.GetString());
-// 	orderDto->dateTime = dateTime->value.GetUint();
-// 	orderDto->user = DeserializeUserDto((rapidjson::Value *)&user->value);
-// 	orderDto->goods = DeserializeGoodsList((rapidjson::Value *)&goods->value);
-// 	return orderDto;
-// }
+static TOrderDto *DeserializeOrderDto(msgpack_object *deserialized) {
 
-// class OrdersList : public MsgpackObjectsArray {
-//   public:
-// 	bool Validate(MsgpackObject *item) override { return item->Validate(); }
-// 	MsgpackObject *CreateItem() override { return new OrderDto(); }
-// };
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
+	if (deserialized->via.array.size != 4) { return false; }
 
-// static void SerializeOrdersList(rapidjson::Writer<rapidjson::StringBuffer> *writer, std::vector<TOrderDto *> *orders) {
-// 	writer->StartArray();
-// 	for (const auto &item : *orders) { //
-// 		SerializeOrderDto(writer, item);
-// 	}
-// 	writer->EndArray();
-// }
+	msgpack_object supplier = deserialized->via.array.ptr[0];
+	if (supplier.type != MSGPACK_OBJECT_STR) { return false; }
 
-// static std::vector<TOrderDto *> *DeserializeOrdersList(rapidjson::Value *doc) {
-// 	if (!doc->IsArray()) { return NULL; }
-// 	auto jArray = doc->GetArray();
+	msgpack_object dateTime = deserialized->via.array.ptr[1];
+	if (dateTime.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
 
-// 	auto ordersList = new std::vector<TOrderDto *>();
-// 	for (const auto &jItem : jArray) {
-// 		auto goods = DeserializeOrderDto((rapidjson::Value *)&jItem);
-// 		if (goods == NULL) {
-// 			for (const auto& item : *ordersList) { delete item; }
-// 			delete ordersList;
-// 			return NULL;
-// 		}
-// 		ordersList->push_back(goods);
-// 	}
-// 	return ordersList;
-// }
+	msgpack_object goods = deserialized->via.array.ptr[2];
+	if (goods.type != MSGPACK_OBJECT_ARRAY) { return false; }
 
-// class CustomerDto : public MsgpackObject {
-//   public:
-// 	MsgpackValue<uint64_t> Id;
-// 	MsgpackValue<char *> Name;
-// 	MsgpackValue<TMsgpackRawData> Blob;
-// 	MsgpackValue<MsgpackArrayBase *> Orders;
-// 	OrdersList ordersList;
+	msgpack_object user = deserialized->via.array.ptr[3];
+	if (user.type != MSGPACK_OBJECT_ARRAY) { return false; }
 
-// 	CustomerDto(const uint64_t id = {}, const char *name = {}, const TMsgpackRawData blob = {})
-// 		: Id(this, "id", id),		//
-// 		  Name(this, "name", name), //
-// 		  Blob(this, "blob", blob), //
-// 		  Orders(this, "orders", &ordersList){};
-// };
+	auto orderDto = new TOrderDto();
+	orderDto->supplier = strDuplicate(supplier.via.str.ptr, supplier.via.str.size);
+	orderDto->dateTime = (uint32_t)dateTime.via.u64;
+	orderDto->goods = DeserializeGoodsList(&goods);
+	orderDto->user = DeserializeUserDto(&user);
+	return orderDto;
+}
 
-// typedef struct {
-// 	uint64_t id;
-// 	char *name;
-// 	TMsgpackRawData blob;
-// 	std::vector<TOrderDto *> *orders;
-// } TCustomerDto;
+class OrdersList : public MsgpackObjectsArray {
+  public:
+	bool Validate(MsgpackObject *item) override { return item->Validate(); }
+	MsgpackObject *CreateItem() override { return new OrderDto(); }
+};
 
-// static void SerializeCustomerDto(rapidjson::Writer<rapidjson::StringBuffer> *writer, const TCustomerDto *customerDto) {
-// 	writer->StartObject();
-// 	writer->String("id");
-// 	writer->Uint64(customerDto->id);
-// 	writer->String("name");
-// 	writer->String(customerDto->name);
-// 	writer->String("blob");
-// 	writer->String((char *)customerDto->blob.Data, (rapidjson::SizeType)customerDto->blob.Size);
+static void SerializeOrdersList(msgpack_packer *packer, std::vector<TOrderDto *> *orders) {
+	msgpack_pack_array(packer, orders->size());
+	for (const auto &item : *orders) { //
+		SerializeOrderDto(packer, item);
+	}
+}
 
-// 	writer->String("orders");
-// 	SerializeOrdersList(writer, customerDto->orders);
-// 	writer->EndObject();
-// }
+static std::vector<TOrderDto *> *DeserializeOrdersList(msgpack_object *deserialized) {
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 
-// static TCustomerDto *DeserializeCustomerDto(rapidjson::Value *doc) {
-// 	if (!doc->IsObject()) { return NULL; }
+	auto ordersList = new std::vector<TOrderDto *>();
+	ordersList->reserve(deserialized->via.array.size);
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
+		msgpack_object object = deserialized->via.array.ptr[i];
+		TOrderDto *order = NULL;
+		if (object.type == MSGPACK_OBJECT_ARRAY) { order = DeserializeOrderDto(&object); }
 
-// 	auto id = doc->FindMember("id");
-// 	auto name = doc->FindMember("name");
-// 	auto blob = doc->FindMember("blob");
-// 	auto orders = doc->FindMember("orders");
+		if (order == NULL) {
+			for (const auto &item : *ordersList) { delete item; }
+			delete ordersList;
+			return NULL;
+		}
+		ordersList->push_back(order);
+		i++;
+	}
+	ordersList->shrink_to_fit();
+	return ordersList;
+}
 
-// 	if (id == doc->MemberEnd() || !id->value.IsUint64()) { return NULL; }
-// 	if (name == doc->MemberEnd() || !name->value.IsString()) { return NULL; }
-// 	if (blob == doc->MemberEnd() || !blob->value.IsString()) { return NULL; }
-// 	if (orders == doc->MemberEnd() || !orders->value.IsArray()) { return NULL; }
+class CustomerDto : public MsgpackObject {
+  public:
+	MsgpackValue<uint64_t> Id;
+	MsgpackValue<char *> Name;
+	MsgpackValue<TMsgpackRawData> Blob;
+	MsgpackValue<MsgpackArrayBase *> Orders;
+	OrdersList ordersList;
 
-// 	auto customerDto = new TCustomerDto();
-// 	customerDto->id = id->value.GetUint64();
-// 	customerDto->name = strDuplicate(name->value.GetString());
-// 	customerDto->blob = {(uint8_t *)blob->value.GetString(), blob->value.GetStringLength()};
-// 	customerDto->orders = DeserializeOrdersList((rapidjson::Value *)&orders->value);
-// 	return customerDto;
-// }
+	CustomerDto(const uint64_t id = {}, const char *name = {}, const TMsgpackRawData blob = {})
+		: Id(this, 0, id),	   //
+		  Name(this, 1, name), //
+		  Blob(this, 2, blob), //
+		  Orders(this, 3, &ordersList){};
+};
 
-// class CustomerList : public MsgpackObjectsArray {
-//   public:
-// 	bool Validate(MsgpackObject *item) override { return item->Validate(); }
-// 	MsgpackObject *CreateItem() override { return new CustomerDto(); }
-// };
+typedef struct {
+	uint64_t id;
+	char *name;
+	TMsgpackRawData blob;
+	std::vector<TOrderDto *> *orders;
+} TCustomerDto;
 
-// static void SerializeCustomerList(rapidjson::Writer<rapidjson::StringBuffer> *writer, std::vector<TCustomerDto *> *customers) {
-// 	writer->StartArray();
-// 	for (const auto &item : *customers) { //
-// 		SerializeCustomerDto(writer, item);
-// 	}
-// 	writer->EndArray();
-// }
+static void SerializeCustomerDto(msgpack_packer *packer, const TCustomerDto *customerDto) {
+	msgpack_pack_array(packer, 4);
+	msgpack_pack_int64(packer, customerDto->id);
+
+	auto sLen = strlen(customerDto->name);
+	msgpack_pack_str(packer, sLen);
+	msgpack_pack_str_body(packer, customerDto->name, sLen);
+
+	msgpack_pack_v4raw(packer, customerDto->blob.Size);
+	msgpack_pack_v4raw_body(packer, customerDto->blob.Data, customerDto->blob.Size);
+
+	SerializeOrdersList(packer, customerDto->orders);
+}
+
+static TCustomerDto *DeserializeCustomerDto(msgpack_object *deserialized) {
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
+	if (deserialized->via.array.size != 4) { return false; }
+
+	msgpack_object id = deserialized->via.array.ptr[0];
+	if (id.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
+
+	msgpack_object name = deserialized->via.array.ptr[1];
+	if (name.type != MSGPACK_OBJECT_STR) { return false; }
+
+	msgpack_object blob = deserialized->via.array.ptr[2];
+	if (blob.type != MSGPACK_OBJECT_STR) { return false; }
+
+	msgpack_object orders = deserialized->via.array.ptr[3];
+	if (orders.type != MSGPACK_OBJECT_ARRAY) { return false; }
+
+	auto customerDto = new TCustomerDto();
+	customerDto->id = (uint64_t)id.via.u64;
+	customerDto->name = strDuplicate(name.via.str.ptr, name.via.str.size);
+	customerDto->blob = {(uint8_t *)blob.via.str.ptr, blob.via.str.size};
+	customerDto->orders = DeserializeOrdersList(&orders);
+	return customerDto;
+}
+
+class CustomerList : public MsgpackObjectsArray {
+  public:
+	bool Validate(MsgpackObject *item) override { return item->Validate(); }
+	MsgpackObject *CreateItem() override { return new CustomerDto(); }
+};
+
+static void SerializeCustomerList(msgpack_packer *packer, std::vector<TCustomerDto *> *customers) {
+	msgpack_pack_array(packer, customers->size());
+	for (const auto &item : *customers) { //
+		SerializeCustomerDto(packer, item);
+	}
+}
 
 // static std::vector<TCustomerDto *> *DeserializeCustomerList(rapidjson::Value *doc) {
 // 	if (!doc->IsArray()) { return NULL; }
