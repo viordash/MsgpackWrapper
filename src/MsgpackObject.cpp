@@ -4,6 +4,14 @@
 #include <stdlib.h>
 #include "MsgpackWrapper.h"
 
+MsgpackValueBase *MsgpackFieldsContainer::GetField(const unsigned int id) {
+	for (auto item = Fields.begin(); item != Fields.end(); item++) {
+		auto field = *item;
+		if (field->Id == id) { return field; }
+	}
+	return NULL;
+}
+
 bool MsgpackObject::TryParse(msgpack_object *deserialized) {
 	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 	if (deserialized->via.array.size != Fields.size()) { return false; }

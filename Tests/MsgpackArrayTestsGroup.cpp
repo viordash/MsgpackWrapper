@@ -130,6 +130,30 @@ TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Parse_Test) {
 	CHECK_EQUAL(list.Item<UserDto *>(2)->Role.Get(), 255);
 }
 
+TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_WriteTo_Parse_Test) {
+	char buffer[2048];
+	UsersList list0;
+	list0.Add(new UserDto("user 1", 0));
+	list0.Add(new UserDto("user 2", 10));
+	list0.Add(new UserDto("user 3", 100));
+
+	CHECK_EQUAL(list0.Write(buffer, sizeof(buffer)), 28);
+
+	UsersList list1;
+	CHECK_TRUE(list1.TryParse(buffer, 28));
+
+	CHECK_EQUAL(list1.Size(), 3);
+
+	STRCMP_EQUAL(list1.Item<UserDto *>(0)->Name.Get(), "user 1");
+	CHECK_EQUAL(list1.Item<UserDto *>(0)->Role.Get(), 0);
+
+	STRCMP_EQUAL(list1.Item<UserDto *>(1)->Name.Get(), "user 2");
+	CHECK_EQUAL(list1.Item<UserDto *>(1)->Role.Get(), 10);
+
+	STRCMP_EQUAL(list1.Item<UserDto *>(2)->Name.Get(), "user 3");
+	CHECK_EQUAL(list1.Item<UserDto *>(2)->Role.Get(), 100);
+}
+
 TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Parse_Error_Test) {
 	msgpack_sbuffer sbuf = {};
 	msgpack_packer pk;

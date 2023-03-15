@@ -44,6 +44,7 @@ class MsgpackFieldsContainer {
   public:
 	std::set<MsgpackValueBase *, FieldsCmp> Fields;
 	void Add(MsgpackValueBase *field) { Fields.insert(field); }
+	MsgpackValueBase *GetField(const unsigned int id);
 };
 
 class MsgpackValueBase : public MsgpackIdField {

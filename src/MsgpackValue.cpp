@@ -24,14 +24,14 @@ template <> bool MsgpackValue<TMsgpackRawData>::Equals(MsgpackValueBase *other) 
 	return Id == other->Id && ((TMsgpackRawData)value).Data == ((TMsgpackRawData)(((MsgpackValue<TMsgpackRawData> *)other)->value)).Data //
 		&& ((TMsgpackRawData)value).Size == ((TMsgpackRawData)(((MsgpackValue<TMsgpackRawData> *)other)->value)).Size;
 }
-// template <> bool MsgpackValue<MsgpackObject *>::Equals(MsgpackValueBase *other) {
-// 	return Id == other->Id && (MsgpackObject *)value->Equals((MsgpackObject *)((MsgpackValue<MsgpackObject *> *)other)->value);
-// }
-// template <> bool MsgpackValue<MsgpackArrayBase *>::Equals(MsgpackValueBase *other) {
-// 	return Id == other->Id && (MsgpackObject *)value->Equals((MsgpackArrayBase *)(((MsgpackValue<MsgpackArrayBase *> *)other)->value));
-// }
+template <> bool MsgpackValue<MsgpackObject *>::Equals(MsgpackValueBase *other) {
+	return Id == other->Id && (MsgpackObject *)value->Equals((MsgpackObject *)((MsgpackValue<MsgpackObject *> *)other)->value);
+}
+template <> bool MsgpackValue<MsgpackArrayBase *>::Equals(MsgpackValueBase *other) {
+	return Id == other->Id && (MsgpackObject *)value->Equals((MsgpackArrayBase *)(((MsgpackValue<MsgpackArrayBase *> *)other)->value));
+}
 /*
-Write(msgpack_packer *packer)
+
 
 */
 template <> bool MsgpackValue<bool>::Write(msgpack_packer *packer) { return (value ? msgpack_pack_true(packer) : msgpack_pack_false(packer)) == 0; }
@@ -62,18 +62,8 @@ template <> bool MsgpackValue<TMsgpackRawData>::Write(msgpack_packer *packer) {
 			&& msgpack_pack_v4raw_body(packer, value.Data, value.Size) == 0;
 	}
 }
-// template <> bool MsgpackValue<MsgpackObject *>::Write(msgpack_packer *packer) {
-// 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
-// 	rapidjson::Document jObject(&allocator);
-// 	value->WriteToDoc(&jObject);
-// 	doc->AddMember(Name, jObject, allocator);
-// }
-// template <> void MsgpackValue<MsgpackArrayBase *>::Write(msgpack_packer *packer) {
-// 	rapidjson::Document::AllocatorType &allocator = doc->GetAllocator();
-// 	rapidjson::Document jArray(&allocator);
-// 	value->WriteToDoc(&jArray);
-// 	doc->AddMember(Name, jArray, allocator);
-// }
+template <> bool MsgpackValue<MsgpackObject *>::Write(msgpack_packer *packer) { return value->Write(packer); }
+template <> bool MsgpackValue<MsgpackArrayBase *>::Write(msgpack_packer *packer) { return value->WriteObject(packer); }
 /*
 
 
@@ -91,8 +81,8 @@ template <> void MsgpackValue<float>::DeleteValue() {}
 template <> void MsgpackValue<double>::DeleteValue() {}
 template <> void MsgpackValue<char *>::DeleteValue() { delete[] this->value; }
 template <> void MsgpackValue<TMsgpackRawData>::DeleteValue() {}
-// template <> void MsgpackValue<MsgpackObject *>::DeleteValue() {}
-// template <> void MsgpackValue<MsgpackArrayBase *>::DeleteValue() {}
+template <> void MsgpackValue<MsgpackObject *>::DeleteValue() {}
+template <> void MsgpackValue<MsgpackArrayBase *>::DeleteValue() {}
 /*
 
 
@@ -121,8 +111,8 @@ template <> void MsgpackValue<char *>::InitValue(const char *value, size_t value
 	}
 }
 template <> void MsgpackValue<TMsgpackRawData>::InitValue(const TMsgpackRawData value, size_t valueLen) { this->value = value; }
-// template <> void MsgpackValue<MsgpackObject *>::InitValue(MsgpackObject *value, size_t valueLen) { this->value = value; }
-// template <> void MsgpackValue<MsgpackArrayBase *>::InitValue(MsgpackArrayBase *value, size_t valueLen) { this->value = value; }
+template <> void MsgpackValue<MsgpackObject *>::InitValue(MsgpackObject *value, size_t valueLen) { this->value = value; }
+template <> void MsgpackValue<MsgpackArrayBase *>::InitValue(MsgpackArrayBase *value, size_t valueLen) { this->value = value; }
 /*
 
 */
@@ -178,20 +168,20 @@ template <> void MsgpackValue<TMsgpackRawData>::Set(const TMsgpackRawData newVal
 	DeleteValue();
 	InitValue(newValue, newValueLen);
 }
-// template <> void MsgpackValue<MsgpackObject *>::Set(MsgpackObject *newValue, size_t newValueLen) {
-// 	if (this->value == NULL) {
-// 		this->value = newValue;
-// 	} else if (newValue != NULL) {
-// 		newValue->CloneTo(this->value);
-// 	}
-// }
-// template <> void MsgpackValue<MsgpackArrayBase *>::Set(MsgpackArrayBase *newValue, size_t newValueLen) {
-// 	if (this->value == NULL) {
-// 		this->value = newValue;
-// 	} else if (newValue != NULL) {
-// 		newValue->CloneTo(this->value);
-// 	}
-// }
+template <> void MsgpackValue<MsgpackObject *>::Set(MsgpackObject *newValue, size_t newValueLen) {
+	if (this->value == NULL) {
+		this->value = newValue;
+	} else if (newValue != NULL) {
+		newValue->CloneTo(this->value);
+	}
+}
+template <> void MsgpackValue<MsgpackArrayBase *>::Set(MsgpackArrayBase *newValue, size_t newValueLen) {
+	if (this->value == NULL) {
+		this->value = newValue;
+	} else if (newValue != NULL) {
+		newValue->CloneTo(this->value);
+	}
+}
 /*
 
 */
@@ -317,14 +307,16 @@ template <> bool MsgpackValue<TMsgpackRawData>::TryParse(msgpack_object *deseria
 
 	return false;
 }
-// template <> bool MsgpackValue<MsgpackObject *>::TryParse(msgpack_object *deserialized) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	return jsonVal != NULL && jsonVal->IsObject() && (/*jsonVal->ObjectEmpty() ||*/ value->TryParse((TMsgpackDocument *)jsonVal));
-// }
-// template <> bool MsgpackValue<MsgpackArrayBase *>::TryParse(msgpack_object *deserialized) {
-// 	auto jsonVal = MsgpackValueBase::GetMember(doc, this->Name);
-// 	return jsonVal != NULL && jsonVal->IsArray() && value->TryDocParse((TMsgpackDocument *)jsonVal);
-// }
+template <> bool MsgpackValue<MsgpackObject *>::TryParse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	return value->TryParse(&object);
+}
+template <> bool MsgpackValue<MsgpackArrayBase *>::TryParse(msgpack_object *deserialized) {
+	if (this->Id >= deserialized->via.array.size) { return false; }
+	msgpack_object object = deserialized->via.array.ptr[this->Id];
+	return value->TryParseObject(&object);
+}
 /*
 
 */
@@ -341,13 +333,13 @@ template <> void MsgpackValue<float>::CloneTo(MsgpackValueBase *other) { ((Msgpa
 template <> void MsgpackValue<double>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<double> *)other)->Set(this->value); }
 template <> void MsgpackValue<char *>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<char *> *)other)->Set(this->value); }
 template <> void MsgpackValue<TMsgpackRawData>::CloneTo(MsgpackValueBase *other) { ((MsgpackValue<TMsgpackRawData> *)other)->Set((TMsgpackRawData)this->value); }
-// template <> void MsgpackValue<MsgpackObject *>::CloneTo(MsgpackValueBase *other) {
-// 	auto thisObject = ((MsgpackObject *)value);
-// 	auto otherObject = ((MsgpackObject *)((MsgpackValue<MsgpackObject *> *)other)->value);
-// 	thisObject->CloneTo(otherObject);
-// }
-// template <> void MsgpackValue<MsgpackArrayBase *>::CloneTo(MsgpackValueBase *other) {
-// 	auto thisArray = ((MsgpackArrayBase *)value);
-// 	auto otherArray = ((MsgpackArrayBase *)((MsgpackValue<MsgpackArrayBase *> *)other)->value);
-// 	thisArray->CloneTo(otherArray);
-// }
+template <> void MsgpackValue<MsgpackObject *>::CloneTo(MsgpackValueBase *other) {
+	auto thisObject = ((MsgpackObject *)value);
+	auto otherObject = ((MsgpackObject *)((MsgpackValue<MsgpackObject *> *)other)->value);
+	thisObject->CloneTo(otherObject);
+}
+template <> void MsgpackValue<MsgpackArrayBase *>::CloneTo(MsgpackValueBase *other) {
+	auto thisArray = ((MsgpackArrayBase *)value);
+	auto otherArray = ((MsgpackArrayBase *)((MsgpackValue<MsgpackArrayBase *> *)other)->value);
+	thisArray->CloneTo(otherArray);
+}
