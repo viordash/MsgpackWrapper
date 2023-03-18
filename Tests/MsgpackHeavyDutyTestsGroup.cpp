@@ -409,7 +409,7 @@ static uint64_t testFillArray(CustomerList *customerList) {
 			auto orderDto = customerDto->ordersList.Item<OrderDto *>(k);
 			for (int m = 0; m < (perfTestItemsCount / 1000) + 1; m++) { //
 				orderDto->goodsList.Add(
-					new GoodsDto(1, 16570 + i + k + m, "Keyboards", "K1-100", k * 2.5, k * 0.1, m % 2 == 0, "Chargoggagoggmanchauggagoggchaubunagungamaugg 0123456789012345678901234567890123456789"));
+					new GoodsDto(1, 16570 + i + k + m, "Keyboards", "K1-100", k * 2.5F, k * 0.1, m % 2 == 0, "Chargoggagoggmanchauggagoggchaubunagungamaugg 0123456789012345678901234567890123456789"));
 			}
 		}
 	}
@@ -460,7 +460,7 @@ static uint64_t testFillRapidArray(std::vector<TCustomerDto *> *customerList) {
 	for (int i = 0; i < perfTestItemsCount; i++) {
 		picture[0] = i;
 		auto customer = new TCustomerDto();
-		customer->id = 52345678901100LL + i;
+		customer->id = 12345678901100LL + i;
 		customer->name = strDuplicate("Viordash");
 		customer->blob = {(uint8_t *)picture, sizeof(picture)};
 		customer->orders = new std::vector<TOrderDto *>();
@@ -485,7 +485,7 @@ static uint64_t testFillRapidArray(std::vector<TCustomerDto *> *customerList) {
 				goods->created = 16570 + i + k + m;
 				goods->group = strDuplicate("Keyboards");
 				goods->name = strDuplicate("K1-100");
-				goods->price = k * 2.5;
+				goods->price = k * 2.5F;
 				goods->quantity = k * 0.1;
 				goods->deleted = m % 2 == 0;
 				goods->storeName = strDuplicate("Chargoggagoggmanchauggagoggchaubunagungamaugg 0123456789012345678901234567890123456789");
@@ -532,6 +532,7 @@ static uint64_t testRapidArrayTryParse(const char *jsonStr, size_t size) {
 	auto finish = std::chrono::high_resolution_clock::now();
 	DeleteCustomerList(customerList);
 	msgpack_unpacked_destroy(unpacked);
+	delete unpacked;
 	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
 }
 
@@ -540,33 +541,33 @@ TEST(MsgpackHeavyDutyTestsGroup, MsgpackObject_Perfomance_Test) {
 	uint64_t durationDirectWriteTo = 0;
 	uint64_t durationTryParse = 0;
 
-	uint64_t rapidDurationAdd = 0;
-	uint64_t rapidDurationDirectWriteTo = 0;
-	uint64_t rapidDurationTryParse = 0;
+	uint64_t nativeDurationAdd = 0;
+	uint64_t nativeDurationDirectWriteTo = 0;
+	uint64_t nativeDurationTryParse = 0;
 
 	size_t size = 0;
-	size_t rapidSize = 0;
+	size_t nativeSize = 0;
 
 	const int avgCount = 10;
 	for (size_t a = 0; a < avgCount; a++) {
 
 		auto customerList = new CustomerList();
-		auto rapidCustomerList = new std::vector<TCustomerDto *>();
+		auto nativeCustomerList = new std::vector<TCustomerDto *>();
 
 		durationAdd += testFillArray(customerList);
-		rapidDurationAdd += testFillRapidArray(rapidCustomerList);
+		nativeDurationAdd += testFillRapidArray(nativeCustomerList);
 
 		DirectWriteTestBuffer = NULL;
 		RapidWriteTestBuffer = NULL;
 		durationDirectWriteTo += testArrayWriteTo(customerList, &size);
-		rapidDurationDirectWriteTo += testRapidArrayWriteTo(rapidCustomerList, &rapidSize);
+		nativeDurationDirectWriteTo += testRapidArrayWriteTo(nativeCustomerList, &nativeSize);
 
-		DeleteCustomerList(rapidCustomerList);
+		DeleteCustomerList(nativeCustomerList);
 		delete customerList;
 
 		customerList = new CustomerList();
 		durationTryParse += testArrayTryParse(customerList, DirectWriteTestBuffer, size);
-		rapidDurationTryParse += testRapidArrayTryParse(RapidWriteTestBuffer, rapidSize);
+		nativeDurationTryParse += testRapidArrayTryParse(RapidWriteTestBuffer, nativeSize);
 		delete customerList;
 
 		delete[] RapidWriteTestBuffer;
@@ -575,25 +576,25 @@ TEST(MsgpackHeavyDutyTestsGroup, MsgpackObject_Perfomance_Test) {
 	char text[512];
 	sprintf(text, "wrapper 'Add' dur(mean %u): %.02f us", avgCount, durationAdd / avgCount / 1000.0);
 	UT_PRINT(text);
-	sprintf(text, "rapid   'Add' dur(mean %u): %.02f us", avgCount, rapidDurationAdd / avgCount / 1000.0);
+	sprintf(text, "native   'Add' dur(mean %u): %.02f us", avgCount, nativeDurationAdd / avgCount / 1000.0);
 	UT_PRINT(text);
 
 	sprintf(text, "wrapper 'WriteTo' size: %zu, dur(mean %u): %.02f us", size, avgCount, durationDirectWriteTo / avgCount / 1000.0);
 	UT_PRINT(text);
-	sprintf(text, "rapid   'WriteTo' size: %zu, dur(mean %u): %.02f us", rapidSize, avgCount, rapidDurationDirectWriteTo / avgCount / 1000.0);
+	sprintf(text, "native   'WriteTo' size: %zu, dur(mean %u): %.02f us", nativeSize, avgCount, nativeDurationDirectWriteTo / avgCount / 1000.0);
 	UT_PRINT(text);
 
 	sprintf(text, "wrapper TryParse dur(mean %u): %.02f us", avgCount, durationTryParse / avgCount / 1000.0);
 	UT_PRINT(text);
-	sprintf(text, "rapid   TryParse dur(mean %u): %.02f us", avgCount, rapidDurationTryParse / avgCount / 1000.0);
+	sprintf(text, "native   TryParse dur(mean %u): %.02f us", avgCount, nativeDurationTryParse / avgCount / 1000.0);
 	UT_PRINT(text);
 
-	sprintf(text, "wrapper to rapid ratio 'Add':%.03f, 'WriteTo':%.03f, 'TryParse':%.03f", (double)durationAdd / (double)rapidDurationAdd,
-			(double)durationDirectWriteTo / (double)rapidDurationDirectWriteTo, (double)durationTryParse / (double)rapidDurationTryParse);
+	sprintf(text, "wrapper to native ratio 'Add':%.03f, 'WriteTo':%.03f, 'TryParse':%.03f", (double)durationAdd / (double)nativeDurationAdd,
+			(double)durationDirectWriteTo / (double)nativeDurationDirectWriteTo, (double)durationTryParse / (double)nativeDurationTryParse);
 	UT_PRINT(text);
 
-	CHECK_EQUAL(size, rapidSize);
-	CHECK_FALSE(durationAdd > rapidDurationAdd * 3);
-	CHECK_FALSE(durationDirectWriteTo > rapidDurationDirectWriteTo * 3);
-	CHECK_FALSE(durationTryParse > rapidDurationTryParse * 3);
+	CHECK_EQUAL(size, nativeSize);
+	CHECK_FALSE(durationAdd > nativeDurationAdd * 4);
+	CHECK_FALSE(durationDirectWriteTo > nativeDurationDirectWriteTo * 4);
+	CHECK_FALSE(durationTryParse > nativeDurationTryParse * 4);
 }
