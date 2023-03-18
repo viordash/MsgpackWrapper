@@ -128,7 +128,7 @@ static TGoodsDto *DeserializeGoodsDto(msgpack_object *deserialized) {
 	if (deserialized->via.array.size != 8) { return false; }
 
 	msgpack_object id = deserialized->via.array.ptr[0];
-	if (id.type != MSGPACK_OBJECT_POSITIVE_INTEGER || id.type != MSGPACK_OBJECT_NEGATIVE_INTEGER) { return false; }
+	if (id.type != MSGPACK_OBJECT_POSITIVE_INTEGER && id.type != MSGPACK_OBJECT_NEGATIVE_INTEGER) { return false; }
 	msgpack_object created = deserialized->via.array.ptr[1];
 	if (created.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
 	msgpack_object group = deserialized->via.array.ptr[2];
@@ -140,7 +140,7 @@ static TGoodsDto *DeserializeGoodsDto(msgpack_object *deserialized) {
 	msgpack_object quantity = deserialized->via.array.ptr[5];
 	if (quantity.type != MSGPACK_OBJECT_FLOAT64) { return false; }
 	msgpack_object deleted = deserialized->via.array.ptr[6];
-	if (quantity.type != MSGPACK_OBJECT_BOOLEAN) { return false; }
+	if (deleted.type != MSGPACK_OBJECT_BOOLEAN) { return false; }
 	msgpack_object storeName = deserialized->via.array.ptr[7];
 	if (storeName.type != MSGPACK_OBJECT_STR) { return false; }
 
@@ -361,222 +361,239 @@ static void SerializeCustomerList(msgpack_packer *packer, std::vector<TCustomerD
 	}
 }
 
-// static std::vector<TCustomerDto *> *DeserializeCustomerList(rapidjson::Value *doc) {
-// 	if (!doc->IsArray()) { return NULL; }
-// 	auto jArray = doc->GetArray();
+static std::vector<TCustomerDto *> *DeserializeCustomerList(msgpack_object *deserialized) {
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
 
-// 	auto customerList = new std::vector<TCustomerDto *>();
-// 	for (const auto &jItem : jArray) {
-// 		auto customer = DeserializeCustomerDto((rapidjson::Value *)&jItem);
-// 		if (customer == NULL) {
-// 			for (const auto& item : *customerList) { delete item; }
-// 			delete customerList;
-// 			return NULL;
-// 		}
-// 		customerList->push_back(customer);
-// 	}
-// 	return customerList;
-// }
+	auto customerList = new std::vector<TCustomerDto *>();
+	customerList->reserve(deserialized->via.array.size);
+	size_t i = 0;
+	while (i < deserialized->via.array.size) {
+		msgpack_object object = deserialized->via.array.ptr[i];
+		TCustomerDto *customer = NULL;
+		if (object.type == MSGPACK_OBJECT_ARRAY) { customer = DeserializeCustomerDto(&object); }
 
-// static void *TestParent = NULL;
-// static char *DirectWriteTestBuffer = NULL;
-// static void OnReady(void *parent, const char *json, size_t size) {
-// 	TestParent = parent;
-// 	DirectWriteTestBuffer = new char[size + 1];
-// 	memcpy(DirectWriteTestBuffer, json, size);
-// 	DirectWriteTestBuffer[size] = 0;
-// }
+		if (customer == NULL) {
+			for (const auto &item : *customerList) { delete item; }
+			delete customerList;
+			return NULL;
+		}
+		customerList->push_back(customer);
+		i++;
+	}
+	customerList->shrink_to_fit();
+	return customerList;
+}
 
-// const int perfTestItemsCount = 1'000;
-// int picture[] = {0x66, 0x00, 0x67, 0x67, 0x67, 0x00, 0x68, 0x68, 0x68, 0x00, 0x69, 0x69, 0x69, 0x00, 0x6A, 0x6A};
+static void *TestParent = NULL;
+static char *DirectWriteTestBuffer = NULL;
+static void OnReady(void *parent, const char *json, size_t size) {
+	TestParent = parent;
+	DirectWriteTestBuffer = new char[size + 1];
+	memcpy(DirectWriteTestBuffer, json, size);
+	DirectWriteTestBuffer[size] = 0;
+}
 
-// static uint64_t testFillArray(CustomerList *customerList) {
-// 	auto start = std::chrono::high_resolution_clock::now();
-// 	customerList->Reserve(perfTestItemsCount);
-// 	for (size_t i = 0; i < perfTestItemsCount; i++) {
-// 		picture[0] = i;
-// 		customerList->Add(new CustomerDto(12345678901100LL + i, "Viordash", {(uint8_t *)picture, sizeof(picture)}));
-// 		auto customerDto = customerList->Item<CustomerDto *>(i);
-// 		for (size_t k = 0; k < (perfTestItemsCount / 100) + 1; k++) {
-// 			customerDto->ordersList.Add(new OrderDto("Dell1", 165700 + i + k, "Joe Doe", TUserRole::uViewer));
+const int perfTestItemsCount = 1'000;
+int picture[] = {0x66, 0x00, 0x67, 0x67, 0x67, 0x00, 0x68, 0x68, 0x68, 0x00, 0x69, 0x69, 0x69, 0x00, 0x6A, 0x6A};
 
-// 			auto orderDto = customerDto->ordersList.Item<OrderDto *>(k);
-// 			for (size_t m = 0; m < (perfTestItemsCount / 1000) + 1; m++) { //
-// 				orderDto->goodsList.Add(
-// 					new GoodsDto(1, 16570 + i + k + m, "Keyboards", "K1-100", k * 2.5, k * 0.1, m % 2 == 0, "Chargoggagoggmanchauggagoggchaubunagungamaugg 0123456789012345678901234567890123456789"));
-// 			}
-// 		}
-// 	}
-// 	auto finish = std::chrono::high_resolution_clock::now();
-// 	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
-// }
+static uint64_t testFillArray(CustomerList *customerList) {
+	auto start = std::chrono::high_resolution_clock::now();
+	customerList->Reserve(perfTestItemsCount);
+	for (int i = 0; i < perfTestItemsCount; i++) {
+		picture[0] = i;
+		customerList->Add(new CustomerDto(12345678901100LL + i, "Viordash", {(uint8_t *)picture, sizeof(picture)}));
+		auto customerDto = customerList->Item<CustomerDto *>(i);
+		for (int k = 0; k < (perfTestItemsCount / 100) + 1; k++) {
+			customerDto->ordersList.Add(new OrderDto("Dell1", 165700 + i + k, "Joe Doe", TUserRole::uViewer));
 
-// static uint64_t testArrayWriteTo(CustomerList *customerList, size_t *size) {
-// 	auto start = std::chrono::high_resolution_clock::now();
-// 	*size = customerList->DirectWriteTo(0, OnReady);
-// 	CHECK(*size > 0);
-// 	auto finish = std::chrono::high_resolution_clock::now();
-// 	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
-// }
+			auto orderDto = customerDto->ordersList.Item<OrderDto *>(k);
+			for (int m = 0; m < (perfTestItemsCount / 1000) + 1; m++) { //
+				orderDto->goodsList.Add(
+					new GoodsDto(1, 16570 + i + k + m, "Keyboards", "K1-100", k * 2.5, k * 0.1, m % 2 == 0, "Chargoggagoggmanchauggagoggchaubunagungamaugg 0123456789012345678901234567890123456789"));
+			}
+		}
+	}
+	auto finish = std::chrono::high_resolution_clock::now();
+	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+}
 
-// static uint64_t testArrayTryParse(CustomerList *customerList, const char *jsonStr, size_t size) {
-// 	auto start = std::chrono::high_resolution_clock::now();
-// 	CHECK(customerList->TryStringParse(jsonStr, size));
-// 	auto finish = std::chrono::high_resolution_clock::now();
-// 	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
-// }
+static uint64_t testArrayWriteTo(CustomerList *customerList, size_t *size) {
+	auto start = std::chrono::high_resolution_clock::now();
+	*size = customerList->DirectWriteTo(0, OnReady);
+	CHECK(*size > 0);
+	auto finish = std::chrono::high_resolution_clock::now();
+	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+}
 
-// static void DeleteCustomerList(std::vector<TCustomerDto *> *customerList) {
-// 	for (const auto customer : *customerList) {
-// 		delete[] customer->name;
-// 		for (const auto order : *customer->orders) {
-// 			delete[] order->supplier;
-// 			delete[] order->user->name;
-// 			delete order->user;
-// 			for (const auto goods : *order->goods) {
-// 				delete[] goods->group;
-// 				delete[] goods->name;
-// 				delete[] goods->storeName;
-// 				delete goods;
-// 			}
-// 			delete order->goods;
-// 			delete order;
-// 		}
-// 		delete customer->orders;
-// 		delete customer;
-// 	}
-// 	delete customerList;
-// }
+static uint64_t testArrayTryParse(CustomerList *customerList, const char *jsonStr, size_t size) {
+	auto start = std::chrono::high_resolution_clock::now();
+	CHECK(customerList->TryParse(jsonStr, size));
+	auto finish = std::chrono::high_resolution_clock::now();
+	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+}
 
-// static uint64_t testFillRapidArray(std::vector<TCustomerDto *> *customerList) {
-// 	auto start = std::chrono::high_resolution_clock::now();
-// 	customerList->reserve(perfTestItemsCount);
-// 	for (size_t i = 0; i < perfTestItemsCount; i++) {
-// 		picture[0] = i;
-// 		auto customer = new TCustomerDto();
-// 		customer->id = 52345678901100LL + i;
-// 		customer->name = strDuplicate("Viordash");
-// 		customer->blob = {(uint8_t *)picture, sizeof(picture)};
-// 		customer->orders = new std::vector<TOrderDto *>();
-// 		customerList->push_back(customer);
+static void DeleteCustomerList(std::vector<TCustomerDto *> *customerList) {
+	for (const auto customer : *customerList) {
+		delete[] customer->name;
+		for (const auto order : *customer->orders) {
+			delete[] order->supplier;
+			delete[] order->user->name;
+			delete order->user;
+			for (const auto goods : *order->goods) {
+				delete[] goods->group;
+				delete[] goods->name;
+				delete[] goods->storeName;
+				delete goods;
+			}
+			delete order->goods;
+			delete order;
+		}
+		delete customer->orders;
+		delete customer;
+	}
+	delete customerList;
+}
 
-// 		auto customerDto = (*customerList)[i];
-// 		for (size_t k = 0; k < (perfTestItemsCount / 100) + 1; k++) {
-// 			auto order = new TOrderDto();
-// 			order->supplier = strDuplicate("Dell1");
-// 			order->dateTime = 165700 + i + k;
-// 			order->user = new TUserDto();
-// 			order->user->name = strDuplicate("Joe Doe");
-// 			order->user->role = TUserRole::uViewer;
+static uint64_t testFillRapidArray(std::vector<TCustomerDto *> *customerList) {
+	auto start = std::chrono::high_resolution_clock::now();
+	customerList->reserve(perfTestItemsCount);
+	for (int i = 0; i < perfTestItemsCount; i++) {
+		picture[0] = i;
+		auto customer = new TCustomerDto();
+		customer->id = 52345678901100LL + i;
+		customer->name = strDuplicate("Viordash");
+		customer->blob = {(uint8_t *)picture, sizeof(picture)};
+		customer->orders = new std::vector<TOrderDto *>();
+		customerList->push_back(customer);
 
-// 			order->goods = new std::vector<TGoodsDto *>();
-// 			customerDto->orders->push_back(order);
+		auto customerDto = (*customerList)[i];
+		for (int k = 0; k < (perfTestItemsCount / 100) + 1; k++) {
+			auto order = new TOrderDto();
+			order->supplier = strDuplicate("Dell1");
+			order->dateTime = 165700 + i + k;
+			order->user = new TUserDto();
+			order->user->name = strDuplicate("Joe Doe");
+			order->user->role = TUserRole::uViewer;
 
-// 			auto orderDto = (*customerDto->orders)[k];
-// 			for (size_t m = 0; m < (perfTestItemsCount / 1000) + 1; m++) { //
-// 				auto goods = new TGoodsDto();
-// 				goods->id = 1;
-// 				goods->created = 16570 + i + k + m;
-// 				goods->group = strDuplicate("Keyboards");
-// 				goods->name = strDuplicate("K1-100");
-// 				goods->price = k * 2.5;
-// 				goods->quantity = k * 0.1;
-// 				goods->deleted = m % 2 == 0;
-// 				goods->storeName = strDuplicate("Chargoggagoggmanchauggagoggchaubunagungamaugg 0123456789012345678901234567890123456789");
-// 				orderDto->goods->push_back(goods);
-// 			}
-// 		}
-// 	}
-// 	auto finish = std::chrono::high_resolution_clock::now();
-// 	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
-// }
+			order->goods = new std::vector<TGoodsDto *>();
+			customerDto->orders->push_back(order);
 
-// static char *RapidWriteTestBuffer = NULL;
-// static uint64_t testRapidArrayWriteTo(std::vector<TCustomerDto *> *customerList, size_t *size) {
-// 	auto start = std::chrono::high_resolution_clock::now();
-// 	rapidjson::StringBuffer s;
-// 	rapidjson::Writer<rapidjson::StringBuffer> writer(s);
-// 	SerializeCustomerList(&writer, customerList);
+			auto orderDto = (*customerDto->orders)[k];
+			for (int m = 0; m < (perfTestItemsCount / 1000) + 1; m++) { //
+				auto goods = new TGoodsDto();
+				goods->id = 1;
+				goods->created = 16570 + i + k + m;
+				goods->group = strDuplicate("Keyboards");
+				goods->name = strDuplicate("K1-100");
+				goods->price = k * 2.5;
+				goods->quantity = k * 0.1;
+				goods->deleted = m % 2 == 0;
+				goods->storeName = strDuplicate("Chargoggagoggmanchauggagoggchaubunagungamaugg 0123456789012345678901234567890123456789");
+				orderDto->goods->push_back(goods);
+			}
+		}
+	}
+	auto finish = std::chrono::high_resolution_clock::now();
+	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+}
 
-// 	*size = s.GetSize();
-// 	CHECK(*size > 0);
-// 	RapidWriteTestBuffer = new char[s.GetSize() + 1];
-// 	memcpy(RapidWriteTestBuffer, s.GetString(), s.GetSize());
-// 	RapidWriteTestBuffer[s.GetSize()] = 0;
-// 	auto finish = std::chrono::high_resolution_clock::now();
-// 	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
-// }
+static char *RapidWriteTestBuffer = NULL;
+static uint64_t testRapidArrayWriteTo(std::vector<TCustomerDto *> *customerList, size_t *size) {
+	auto start = std::chrono::high_resolution_clock::now();
 
-// static uint64_t testRapidArrayTryParse(const char *jsonStr, size_t size) {
-// 	auto start = std::chrono::high_resolution_clock::now();
-// 	rapidjson::Document document;
-// 	CHECK_FALSE(document.Parse(jsonStr, size).HasParseError());
-// 	auto customerList = DeserializeCustomerList(&document);
-// 	CHECK(customerList != NULL);
-// 	auto finish = std::chrono::high_resolution_clock::now();
-// 	DeleteCustomerList(customerList);
-// 	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
-// }
+	msgpack_sbuffer sbuf;
+	msgpack_packer packer;
+	msgpack_sbuffer_init(&sbuf);
+	msgpack_packer_init(&packer, &sbuf, msgpack_sbuffer_write);
 
-// TEST(MsgpackHeavyDutyTestsGroup, MsgpackObject_Perfomance_Test) {
-// 	uint64_t durationAdd = 0;
-// 	uint64_t durationDirectWriteTo = 0;
-// 	uint64_t durationTryParse = 0;
+	SerializeCustomerList(&packer, customerList);
 
-// 	uint64_t rapidDurationAdd = 0;
-// 	uint64_t rapidDurationDirectWriteTo = 0;
-// 	uint64_t rapidDurationTryParse = 0;
+	*size = sbuf.size;
+	CHECK(*size > 0);
+	RapidWriteTestBuffer = new char[sbuf.size + 1];
+	memcpy(RapidWriteTestBuffer, sbuf.data, sbuf.size);
+	RapidWriteTestBuffer[sbuf.size] = 0;
+	msgpack_sbuffer_destroy(&sbuf);
 
-// 	size_t size = 0;
-// 	size_t rapidSize = 0;
+	auto finish = std::chrono::high_resolution_clock::now();
+	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+}
 
-// 	const int avgCount = 10;
-// 	for (size_t a = 0; a < avgCount; a++) {
+static uint64_t testRapidArrayTryParse(const char *jsonStr, size_t size) {
+	auto start = std::chrono::high_resolution_clock::now();
 
-// 		auto customerList = new CustomerList();
-// 		auto rapidCustomerList = new std::vector<TCustomerDto *>();
+	msgpack_unpacked *unpacked = new msgpack_unpacked();
+	msgpack_unpacked_init(unpacked);
+	msgpack_unpack_return ret = msgpack_unpack_next(unpacked, jsonStr, size, NULL);
+	CHECK(ret == MSGPACK_UNPACK_SUCCESS);
 
-// 		durationAdd += testFillArray(customerList);
-// 		rapidDurationAdd += testFillRapidArray(rapidCustomerList);
+	auto customerList = DeserializeCustomerList(&unpacked->data);
+	CHECK(customerList != NULL);
+	auto finish = std::chrono::high_resolution_clock::now();
+	DeleteCustomerList(customerList);
+	msgpack_unpacked_destroy(unpacked);
+	return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+}
 
-// 		DirectWriteTestBuffer = NULL;
-// 		RapidWriteTestBuffer = NULL;
-// 		durationDirectWriteTo += testArrayWriteTo(customerList, &size);
-// 		rapidDurationDirectWriteTo += testRapidArrayWriteTo(rapidCustomerList, &rapidSize);
+TEST(MsgpackHeavyDutyTestsGroup, MsgpackObject_Perfomance_Test) {
+	uint64_t durationAdd = 0;
+	uint64_t durationDirectWriteTo = 0;
+	uint64_t durationTryParse = 0;
 
-// 		DeleteCustomerList(rapidCustomerList);
-// 		delete customerList;
+	uint64_t rapidDurationAdd = 0;
+	uint64_t rapidDurationDirectWriteTo = 0;
+	uint64_t rapidDurationTryParse = 0;
 
-// 		customerList = new CustomerList();
-// 		durationTryParse += testArrayTryParse(customerList, DirectWriteTestBuffer, size);
-// 		rapidDurationTryParse += testRapidArrayTryParse(RapidWriteTestBuffer, rapidSize);
-// 		delete customerList;
+	size_t size = 0;
+	size_t rapidSize = 0;
 
-// 		delete[] RapidWriteTestBuffer;
-// 		delete[] DirectWriteTestBuffer;
-// 	}
-// 	char text[512];
-// 	sprintf(text, "wrapper 'Add' dur(mean %u): %.02f us", avgCount, durationAdd / avgCount / 1000.0);
-// 	UT_PRINT(text);
-// 	sprintf(text, "rapid   'Add' dur(mean %u): %.02f us", avgCount, rapidDurationAdd / avgCount / 1000.0);
-// 	UT_PRINT(text);
+	const int avgCount = 10;
+	for (size_t a = 0; a < avgCount; a++) {
 
-// 	sprintf(text, "wrapper 'WriteTo' size: %lu, dur(mean %u): %.02f us", size, avgCount, durationDirectWriteTo / avgCount / 1000.0);
-// 	UT_PRINT(text);
-// 	sprintf(text, "rapid   'WriteTo' size: %lu, dur(mean %u): %.02f us", rapidSize, avgCount, rapidDurationDirectWriteTo / avgCount / 1000.0);
-// 	UT_PRINT(text);
+		auto customerList = new CustomerList();
+		auto rapidCustomerList = new std::vector<TCustomerDto *>();
 
-// 	sprintf(text, "wrapper TryParse dur(mean %u): %.02f us", avgCount, durationTryParse / avgCount / 1000.0);
-// 	UT_PRINT(text);
-// 	sprintf(text, "rapid   TryParse dur(mean %u): %.02f us", avgCount, rapidDurationTryParse / avgCount / 1000.0);
-// 	UT_PRINT(text);
+		durationAdd += testFillArray(customerList);
+		rapidDurationAdd += testFillRapidArray(rapidCustomerList);
 
-// 	sprintf(text, "wrapper to rapid ratio 'Add':%.03f, 'WriteTo':%.03f, 'TryParse':%.03f", (double)durationAdd / (double)rapidDurationAdd,
-// 			(double)durationDirectWriteTo / (double)rapidDurationDirectWriteTo, (double)durationTryParse / (double)rapidDurationTryParse);
-// 	UT_PRINT(text);
+		DirectWriteTestBuffer = NULL;
+		RapidWriteTestBuffer = NULL;
+		durationDirectWriteTo += testArrayWriteTo(customerList, &size);
+		rapidDurationDirectWriteTo += testRapidArrayWriteTo(rapidCustomerList, &rapidSize);
 
-// 	CHECK_EQUAL(size, rapidSize);
-// 	CHECK_FALSE(durationAdd > rapidDurationAdd * 3);
-// 	CHECK_FALSE(durationDirectWriteTo > rapidDurationDirectWriteTo * 3);
-// 	CHECK_FALSE(durationTryParse > rapidDurationTryParse * 3);
-// }
+		DeleteCustomerList(rapidCustomerList);
+		delete customerList;
+
+		customerList = new CustomerList();
+		durationTryParse += testArrayTryParse(customerList, DirectWriteTestBuffer, size);
+		rapidDurationTryParse += testRapidArrayTryParse(RapidWriteTestBuffer, rapidSize);
+		delete customerList;
+
+		delete[] RapidWriteTestBuffer;
+		delete[] DirectWriteTestBuffer;
+	}
+	char text[512];
+	sprintf(text, "wrapper 'Add' dur(mean %u): %.02f us", avgCount, durationAdd / avgCount / 1000.0);
+	UT_PRINT(text);
+	sprintf(text, "rapid   'Add' dur(mean %u): %.02f us", avgCount, rapidDurationAdd / avgCount / 1000.0);
+	UT_PRINT(text);
+
+	sprintf(text, "wrapper 'WriteTo' size: %zu, dur(mean %u): %.02f us", size, avgCount, durationDirectWriteTo / avgCount / 1000.0);
+	UT_PRINT(text);
+	sprintf(text, "rapid   'WriteTo' size: %zu, dur(mean %u): %.02f us", rapidSize, avgCount, rapidDurationDirectWriteTo / avgCount / 1000.0);
+	UT_PRINT(text);
+
+	sprintf(text, "wrapper TryParse dur(mean %u): %.02f us", avgCount, durationTryParse / avgCount / 1000.0);
+	UT_PRINT(text);
+	sprintf(text, "rapid   TryParse dur(mean %u): %.02f us", avgCount, rapidDurationTryParse / avgCount / 1000.0);
+	UT_PRINT(text);
+
+	sprintf(text, "wrapper to rapid ratio 'Add':%.03f, 'WriteTo':%.03f, 'TryParse':%.03f", (double)durationAdd / (double)rapidDurationAdd,
+			(double)durationDirectWriteTo / (double)rapidDurationDirectWriteTo, (double)durationTryParse / (double)rapidDurationTryParse);
+	UT_PRINT(text);
+
+	CHECK_EQUAL(size, rapidSize);
+	CHECK_FALSE(durationAdd > rapidDurationAdd * 3);
+	CHECK_FALSE(durationDirectWriteTo > rapidDurationDirectWriteTo * 3);
+	CHECK_FALSE(durationTryParse > rapidDurationTryParse * 3);
+}
