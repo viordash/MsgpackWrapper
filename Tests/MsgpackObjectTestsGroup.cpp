@@ -413,6 +413,7 @@ TEST(MsgpackObjectTestsGroup, MsgpackObject_Equals_Test) {
 	CHECK_TRUE(orderDto1 != orderDto2);
 	CHECK_FALSE(orderDto1 == orderDto2);
 	CHECK_FALSE(orderDto1.Equals(&orderDto2));
+	CHECK_FALSE(orderDto1.Equals(NULL));
 }
 
 TEST(MsgpackObjectTestsGroup, MsgpackObject_Clone_Test) {

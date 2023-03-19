@@ -74,6 +74,7 @@ bool operator!=(const MsgpackObjectsArray &v1, const MsgpackObjectsArray &v2) { 
 bool operator==(const MsgpackObjectsArray &v1, const MsgpackObjectsArray &v2) { return !(v1 != v2); }
 
 bool MsgpackObjectsArray::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackObjectsArray *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (*(Items[i]) != *(((MsgpackObjectsArray *)other)->Items[i])) { return false; }

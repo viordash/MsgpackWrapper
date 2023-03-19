@@ -141,6 +141,7 @@ TEST(MsgpackStringValueGroup, Equals_Test) {
 	CHECK_FALSE(testable1 == testable001);
 	CHECK_FALSE(testable001.Equals(&testable1));
 	CHECK_FALSE(testable1.Equals(&testable001));
+	CHECK_FALSE(testable1.Equals(NULL));
 
 	MsgpackValue<char *> testable2(&container, 0);
 	MsgpackValue<char *> testable02(&container, 0, NULL);

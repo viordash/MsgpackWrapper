@@ -166,6 +166,7 @@ TEST(MsgpackDataValueGroup, Equals_Test) {
 	testable01.Set({(uint8_t *)"otherValue", sizeof("otherValue")});
 	CHECK_TRUE(testable1 != testable01);
 	CHECK_FALSE(testable1 == testable01);
+	CHECK_FALSE(testable1.Equals(NULL));
 }
 
 TEST(MsgpackDataValueGroup, CloneTo_Test) {

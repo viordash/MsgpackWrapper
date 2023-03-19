@@ -300,6 +300,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Equals_Test) {
 	list1.Item<UserDto *>(2)->Name.Set("User3");
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Clone_Test) {
@@ -712,6 +713,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Equals_Test) {
 	list2.Update(1, NULL);
 	CHECK_TRUE(list1 == list2);
 	CHECK_FALSE(list1 != list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Clone_Test) {
@@ -962,6 +964,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Equals_Test) {
 	list1.Update(2, true);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Clone_Test) {
@@ -1141,6 +1144,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Equals_Test) {
 	list1.Update(2, -1);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Clone_Test) {
@@ -1328,6 +1332,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Equals_Test) {
 	list1.Update(2, 5222);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Clone_Test) {
@@ -1514,6 +1519,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Equals_Test) {
 	list1.Update(2, 100);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Clone_Test) {
@@ -1688,6 +1694,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Equals_Test) {
 	list1.Update(2, 42);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Clone_Test) {
@@ -1879,6 +1886,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Equals_Test) {
 	list1.Update(2, 42);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Clone_Test) {
@@ -2061,6 +2069,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Equals_Test) {
 	list1.Update(2, 42);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Clone_Test) {
@@ -2261,6 +2270,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Equals_Test) {
 	list1.Update(2, 42);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Clone_Test) {
@@ -2451,6 +2461,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Equals_Test) {
 	list1.Update(2, 42);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Clone_Test) {
@@ -2640,6 +2651,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Equals_Test) {
 	list1.Update(2, 42);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Clone_Test) {
@@ -2829,6 +2841,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Equals_Test) {
 	list1.Update(2, 42);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
+	CHECK_FALSE(list1.Equals(NULL));
 }
 
 TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Clone_Test) {

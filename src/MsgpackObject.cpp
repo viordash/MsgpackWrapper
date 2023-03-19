@@ -103,6 +103,7 @@ bool operator!=(const MsgpackObject &v1, const MsgpackObject &v2) { return !((Ms
 bool operator==(const MsgpackObject &v1, const MsgpackObject &v2) { return !(v1 != v2); }
 
 bool MsgpackObject::Equals(MsgpackObject *other) {
+	if (other == NULL) { return false; }
 	if (Fields.size() != other->Fields.size()) { return false; }
 
 	auto item = Fields.begin();

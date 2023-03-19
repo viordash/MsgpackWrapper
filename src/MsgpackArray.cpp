@@ -363,6 +363,7 @@ template <> void MsgpackArray<float>::Remove(const float item) {
 
 */
 template <> bool MsgpackArray<char *>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<char *> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		char *s1 = Items[i];
@@ -375,6 +376,7 @@ template <> bool MsgpackArray<char *>::Equals(MsgpackArrayBase *other) {
 	return true;
 }
 template <> bool MsgpackArray<TBoolArray>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<TBoolArray> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (Items[i] != ((MsgpackArray<TBoolArray> *)other)->Items[i]) { return false; }
@@ -382,6 +384,7 @@ template <> bool MsgpackArray<TBoolArray>::Equals(MsgpackArrayBase *other) {
 	return true;
 }
 template <> bool MsgpackArray<int64_t>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<int64_t> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (Items[i] != ((MsgpackArray<int64_t> *)other)->Items[i]) { return false; }
@@ -389,6 +392,7 @@ template <> bool MsgpackArray<int64_t>::Equals(MsgpackArrayBase *other) {
 	return true;
 }
 template <> bool MsgpackArray<uint64_t>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<uint64_t> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (Items[i] != ((MsgpackArray<uint64_t> *)other)->Items[i]) { return false; }
@@ -396,6 +400,7 @@ template <> bool MsgpackArray<uint64_t>::Equals(MsgpackArrayBase *other) {
 	return true;
 }
 template <> bool MsgpackArray<int32_t>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<int32_t> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (Items[i] != ((MsgpackArray<int32_t> *)other)->Items[i]) { return false; }
@@ -403,6 +408,7 @@ template <> bool MsgpackArray<int32_t>::Equals(MsgpackArrayBase *other) {
 	return true;
 }
 template <> bool MsgpackArray<uint32_t>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<uint32_t> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (Items[i] != ((MsgpackArray<uint32_t> *)other)->Items[i]) { return false; }
@@ -410,6 +416,7 @@ template <> bool MsgpackArray<uint32_t>::Equals(MsgpackArrayBase *other) {
 	return true;
 }
 template <> bool MsgpackArray<int16_t>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<int16_t> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (Items[i] != ((MsgpackArray<int16_t> *)other)->Items[i]) { return false; }
@@ -417,6 +424,7 @@ template <> bool MsgpackArray<int16_t>::Equals(MsgpackArrayBase *other) {
 	return true;
 }
 template <> bool MsgpackArray<uint16_t>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<uint16_t> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (Items[i] != ((MsgpackArray<uint16_t> *)other)->Items[i]) { return false; }
@@ -424,6 +432,7 @@ template <> bool MsgpackArray<uint16_t>::Equals(MsgpackArrayBase *other) {
 	return true;
 }
 template <> bool MsgpackArray<int8_t>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<int8_t> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (Items[i] != ((MsgpackArray<int8_t> *)other)->Items[i]) { return false; }
@@ -431,6 +440,7 @@ template <> bool MsgpackArray<int8_t>::Equals(MsgpackArrayBase *other) {
 	return true;
 }
 template <> bool MsgpackArray<uint8_t>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<uint8_t> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (Items[i] != ((MsgpackArray<uint8_t> *)other)->Items[i]) { return false; }
@@ -438,6 +448,7 @@ template <> bool MsgpackArray<uint8_t>::Equals(MsgpackArrayBase *other) {
 	return true;
 }
 template <> bool MsgpackArray<double>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<double> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (Items[i] != ((MsgpackArray<double> *)other)->Items[i]) { return false; }
@@ -445,6 +456,7 @@ template <> bool MsgpackArray<double>::Equals(MsgpackArrayBase *other) {
 	return true;
 }
 template <> bool MsgpackArray<float>::Equals(MsgpackArrayBase *other) {
+	if (other == NULL) { return false; }
 	if (Items.size() != ((MsgpackArray<float> *)other)->Items.size()) { return false; }
 	for (size_t i = 0; i < Items.size(); i++) {
 		if (Items[i] != ((MsgpackArray<float> *)other)->Items[i]) { return false; }
