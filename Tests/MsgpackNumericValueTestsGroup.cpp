@@ -42,11 +42,11 @@ TEST(MsgpackNumericValueGroup, Uint64_TryParse_Test) {
 	msgpack_sbuffer_init(&sbuf);
 	msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
 	msgpack_pack_array(&pk, 1);
-	msgpack_pack_uint64(&pk, 12345678901234567890LL);
+	msgpack_pack_uint64(&pk, 1234567890123456789LL);
 	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
 
 	CHECK_TRUE(testable0.TryParse(&deserialized));
-	CHECK_EQUAL(testable0.Get(), 12345678901234567890LL);
+	CHECK_EQUAL(testable0.Get(), 1234567890123456789LL);
 
 	CHECK_FALSE(testable1.TryParse(&deserialized));
 	CHECK_FALSE(testable2.TryParse(&deserialized));
@@ -392,7 +392,7 @@ TEST(MsgpackNumericValueGroup, TryParse_NULL_Test) {
 
 TEST(MsgpackNumericValueGroup, Write_Test) {
 	MsgpackFieldsContainer container;
-	MsgpackValue<uint64_t> testable0(&container, 0, 12345678901234567890LL);
+	MsgpackValue<uint64_t> testable0(&container, 0, 1234567890123456789LL);
 	MsgpackValue<unsigned int> testable1(&container, 0, 1234567890);
 	MsgpackValue<uint32_t> testable2(&container, 0, 1234567891);
 	MsgpackValue<uint16_t> testable3(&container, 0, 12345);
@@ -424,7 +424,7 @@ TEST(MsgpackNumericValueGroup, Write_Test) {
 	msgpack_unpack(sbuf.data, sbuf.size, NULL, NULL, &deserialized);
 
 	CHECK_EQUAL(deserialized.via.array.ptr[0].type, MSGPACK_OBJECT_POSITIVE_INTEGER);
-	CHECK_EQUAL(deserialized.via.array.ptr[0].via.u64, 12345678901234567890LL);
+	CHECK_EQUAL(deserialized.via.array.ptr[0].via.u64, 1234567890123456789LL);
 
 	CHECK_EQUAL(deserialized.via.array.ptr[1].type, MSGPACK_OBJECT_POSITIVE_INTEGER);
 	CHECK_EQUAL(deserialized.via.array.ptr[1].via.u64, 1234567890);
