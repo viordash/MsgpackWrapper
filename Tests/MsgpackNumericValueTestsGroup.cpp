@@ -519,6 +519,7 @@ TEST(MsgpackNumericValueGroup, MsgpackUIntField_Equals_Test) {
 	CHECK_FALSE(testable1 == testable01);
 	CHECK_FALSE(testable1.Equals(&testable01));
 	CHECK_FALSE(testable01.Equals(&testable1));
+	CHECK_FALSE(testable1.Equals(NULL));
 
 	CHECK_TRUE(testable2 == testable02);
 	CHECK_FALSE(testable2 != testable02);
@@ -529,6 +530,8 @@ TEST(MsgpackNumericValueGroup, MsgpackUIntField_Equals_Test) {
 	CHECK_FALSE(testable2 == testable02);
 	CHECK_FALSE(testable2.Equals(&testable02));
 	CHECK_FALSE(testable02.Equals(&testable2));
+	CHECK_FALSE(testable2.Equals(NULL));
+
 
 	CHECK_TRUE(testable3 == testable03);
 	CHECK_FALSE(testable3 != testable03);
@@ -539,6 +542,8 @@ TEST(MsgpackNumericValueGroup, MsgpackUIntField_Equals_Test) {
 	CHECK_FALSE(testable3 == testable03);
 	CHECK_FALSE(testable3.Equals(&testable03));
 	CHECK_FALSE(testable03.Equals(&testable3));
+	CHECK_FALSE(testable3.Equals(NULL));
+
 
 	CHECK_TRUE(testable4 == testable04);
 	CHECK_FALSE(testable4 != testable04);
@@ -549,6 +554,8 @@ TEST(MsgpackNumericValueGroup, MsgpackUIntField_Equals_Test) {
 	CHECK_FALSE(testable4 == testable04);
 	CHECK_FALSE(testable4.Equals(&testable04));
 	CHECK_FALSE(testable04.Equals(&testable4));
+	CHECK_FALSE(testable4.Equals(NULL));
+
 }
 
 TEST(MsgpackNumericValueGroup, MsgpackUIntField_CloneTo_Test) {
@@ -614,6 +621,7 @@ TEST(MsgpackNumericValueGroup, MsgpackIntField_Equals_Test) {
 	CHECK_FALSE(testable1 == testable01);
 	CHECK_FALSE(testable1.Equals(&testable01));
 	CHECK_FALSE(testable01.Equals(&testable1));
+	CHECK_FALSE(testable1.Equals(NULL));
 
 	CHECK_TRUE(testable2 == testable02);
 	CHECK_FALSE(testable2 != testable02);
@@ -624,6 +632,8 @@ TEST(MsgpackNumericValueGroup, MsgpackIntField_Equals_Test) {
 	CHECK_FALSE(testable2 == testable02);
 	CHECK_FALSE(testable2.Equals(&testable02));
 	CHECK_FALSE(testable02.Equals(&testable2));
+	CHECK_FALSE(testable2.Equals(NULL));
+
 
 	CHECK_TRUE(testable3 == testable03);
 	CHECK_FALSE(testable3 != testable03);
@@ -634,6 +644,8 @@ TEST(MsgpackNumericValueGroup, MsgpackIntField_Equals_Test) {
 	CHECK_FALSE(testable3 == testable03);
 	CHECK_FALSE(testable3.Equals(&testable03));
 	CHECK_FALSE(testable03.Equals(&testable3));
+	CHECK_FALSE(testable3.Equals(NULL));
+
 
 	CHECK_TRUE(testable4 == testable04);
 	CHECK_FALSE(testable4 != testable04);
@@ -644,6 +656,8 @@ TEST(MsgpackNumericValueGroup, MsgpackIntField_Equals_Test) {
 	CHECK_FALSE(testable4 == testable04);
 	CHECK_FALSE(testable4.Equals(&testable04));
 	CHECK_FALSE(testable04.Equals(&testable4));
+	CHECK_FALSE(testable4.Equals(NULL));
+
 }
 
 TEST(MsgpackNumericValueGroup, MsgpackIntField_CloneTo_Test) {
@@ -880,6 +894,8 @@ TEST(MsgpackNumericValueGroup, MsgpackFloatField_Equals_Test) {
 	CHECK_FALSE(testable1 == testable01);
 	CHECK_FALSE(testable1.Equals(&testable01));
 	CHECK_FALSE(testable01.Equals(&testable1));
+	CHECK_FALSE(testable1.Equals(NULL));
+
 
 	CHECK_TRUE(testable2 == testable02);
 	CHECK_FALSE(testable2 != testable02);
@@ -890,6 +906,8 @@ TEST(MsgpackNumericValueGroup, MsgpackFloatField_Equals_Test) {
 	CHECK_FALSE(testable2 == testable02);
 	CHECK_FALSE(testable2.Equals(&testable02));
 	CHECK_FALSE(testable02.Equals(&testable2));
+	CHECK_FALSE(testable2.Equals(NULL));
+
 }
 
 TEST(MsgpackNumericValueGroup, MsgpackFloatField_CloneTo_Test) {

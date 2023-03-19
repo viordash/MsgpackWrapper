@@ -4,31 +4,31 @@
 #include <stdlib.h>
 #include "MsgpackWrapper.h"
 
-template <> bool MsgpackValue<bool>::Equals(MsgpackValueBase *other) { return Id == other->Id && value == ((MsgpackValue<bool> *)other)->value; }
-template <> bool MsgpackValue<int8_t>::Equals(MsgpackValueBase *other) { return Id == other->Id && value == ((MsgpackValue<int8_t> *)other)->value; }
-template <> bool MsgpackValue<int16_t>::Equals(MsgpackValueBase *other) { return Id == other->Id && value == ((MsgpackValue<int16_t> *)other)->value; }
-template <> bool MsgpackValue<int32_t>::Equals(MsgpackValueBase *other) { return Id == other->Id && value == ((MsgpackValue<int32_t> *)other)->value; }
-template <> bool MsgpackValue<int64_t>::Equals(MsgpackValueBase *other) { return Id == other->Id && value == ((MsgpackValue<int64_t> *)other)->value; }
-template <> bool MsgpackValue<uint8_t>::Equals(MsgpackValueBase *other) { return Id == other->Id && value == ((MsgpackValue<uint8_t> *)other)->value; }
-template <> bool MsgpackValue<uint16_t>::Equals(MsgpackValueBase *other) { return Id == other->Id && value == ((MsgpackValue<uint16_t> *)other)->value; }
-template <> bool MsgpackValue<uint32_t>::Equals(MsgpackValueBase *other) { return Id == other->Id && value == ((MsgpackValue<uint32_t> *)other)->value; }
-template <> bool MsgpackValue<uint64_t>::Equals(MsgpackValueBase *other) { return Id == other->Id && value == ((MsgpackValue<uint64_t> *)other)->value; }
-template <> bool MsgpackValue<float>::Equals(MsgpackValueBase *other) { return Id == other->Id && value == ((MsgpackValue<float> *)other)->value; }
-template <> bool MsgpackValue<double>::Equals(MsgpackValueBase *other) { return Id == other->Id && value == ((MsgpackValue<double> *)other)->value; }
+template <> bool MsgpackValue<bool>::Equals(MsgpackValueBase *other) { return other != NULL && Id == other->Id && value == ((MsgpackValue<bool> *)other)->value; }
+template <> bool MsgpackValue<int8_t>::Equals(MsgpackValueBase *other) { return other != NULL && Id == other->Id && value == ((MsgpackValue<int8_t> *)other)->value; }
+template <> bool MsgpackValue<int16_t>::Equals(MsgpackValueBase *other) { return other != NULL && Id == other->Id && value == ((MsgpackValue<int16_t> *)other)->value; }
+template <> bool MsgpackValue<int32_t>::Equals(MsgpackValueBase *other) { return other != NULL && Id == other->Id && value == ((MsgpackValue<int32_t> *)other)->value; }
+template <> bool MsgpackValue<int64_t>::Equals(MsgpackValueBase *other) { return other != NULL && Id == other->Id && value == ((MsgpackValue<int64_t> *)other)->value; }
+template <> bool MsgpackValue<uint8_t>::Equals(MsgpackValueBase *other) { return other != NULL && Id == other->Id && value == ((MsgpackValue<uint8_t> *)other)->value; }
+template <> bool MsgpackValue<uint16_t>::Equals(MsgpackValueBase *other) { return other != NULL && Id == other->Id && value == ((MsgpackValue<uint16_t> *)other)->value; }
+template <> bool MsgpackValue<uint32_t>::Equals(MsgpackValueBase *other) { return other != NULL && Id == other->Id && value == ((MsgpackValue<uint32_t> *)other)->value; }
+template <> bool MsgpackValue<uint64_t>::Equals(MsgpackValueBase *other) { return other != NULL && Id == other->Id && value == ((MsgpackValue<uint64_t> *)other)->value; }
+template <> bool MsgpackValue<float>::Equals(MsgpackValueBase *other) { return other != NULL && Id == other->Id && value == ((MsgpackValue<float> *)other)->value; }
+template <> bool MsgpackValue<double>::Equals(MsgpackValueBase *other) { return other != NULL && Id == other->Id && value == ((MsgpackValue<double> *)other)->value; }
 template <> bool MsgpackValue<char *>::Equals(MsgpackValueBase *other) { //
-	return Id == other->Id
+	return other != NULL && Id == other->Id
 		&& (value == ((MsgpackValue<char *> *)other)->value //
 			|| (value != NULL && ((MsgpackValue<char *> *)other)->value != NULL && strcmp(value, ((MsgpackValue<char *> *)other)->value) == 0));
 }
 template <> bool MsgpackValue<TMsgpackRawData>::Equals(MsgpackValueBase *other) {
-	return Id == other->Id && ((TMsgpackRawData)value).Data == ((TMsgpackRawData)(((MsgpackValue<TMsgpackRawData> *)other)->value)).Data //
+	return other != NULL && Id == other->Id && ((TMsgpackRawData)value).Data == ((TMsgpackRawData)(((MsgpackValue<TMsgpackRawData> *)other)->value)).Data //
 		&& ((TMsgpackRawData)value).Size == ((TMsgpackRawData)(((MsgpackValue<TMsgpackRawData> *)other)->value)).Size;
 }
 template <> bool MsgpackValue<MsgpackObject *>::Equals(MsgpackValueBase *other) {
-	return Id == other->Id && (MsgpackObject *)value->Equals((MsgpackObject *)((MsgpackValue<MsgpackObject *> *)other)->value);
+	return other != NULL && Id == other->Id && (MsgpackObject *)value->Equals((MsgpackObject *)((MsgpackValue<MsgpackObject *> *)other)->value);
 }
 template <> bool MsgpackValue<MsgpackArrayBase *>::Equals(MsgpackValueBase *other) {
-	return Id == other->Id && (MsgpackObject *)value->Equals((MsgpackArrayBase *)(((MsgpackValue<MsgpackArrayBase *> *)other)->value));
+	return other != NULL && Id == other->Id && (MsgpackObject *)value->Equals((MsgpackArrayBase *)(((MsgpackValue<MsgpackArrayBase *> *)other)->value));
 }
 /*
 
