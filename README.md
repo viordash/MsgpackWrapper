@@ -1,4 +1,6 @@
 # MsgpackWrapper
+[![CMake](https://github.com/viordash/MsgpackWrapper/actions/workflows/cmake.yml/badge.svg?branch=master)](https://github.com/viordash/MsgpackWrapper/actions/workflows/cmake.yml)
+
 Wrap Msgpack to be used as objects of predefined class, in continuation of the project [RapidJSONWrapper](https://github.com/viordash/RapidJSONWrapper) 
 
 
