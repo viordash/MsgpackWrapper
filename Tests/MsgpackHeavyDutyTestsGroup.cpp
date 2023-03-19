@@ -47,14 +47,14 @@ static void SerializeUserDto(msgpack_packer *packer, const TUserDto *pUserDto) {
 }
 
 static TUserDto *DeserializeUserDto(msgpack_object *deserialized) {
-	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
-	if (deserialized->via.array.size != 2) { return false; }
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return NULL; }
+	if (deserialized->via.array.size != 2) { return NULL; }
 
 	msgpack_object name = deserialized->via.array.ptr[0];
-	if (name.type != MSGPACK_OBJECT_STR) { return false; }
+	if (name.type != MSGPACK_OBJECT_STR) { return NULL; }
 
 	msgpack_object role = deserialized->via.array.ptr[1];
-	if (role.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
+	if (role.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return NULL; }
 
 	auto userDto = new TUserDto();
 	userDto->name = strDuplicate(name.via.str.ptr, name.via.str.size);
@@ -124,25 +124,25 @@ static void SerializeGoodsDto(msgpack_packer *packer, const TGoodsDto *pGoodsDto
 }
 
 static TGoodsDto *DeserializeGoodsDto(msgpack_object *deserialized) {
-	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
-	if (deserialized->via.array.size != 8) { return false; }
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return NULL; }
+	if (deserialized->via.array.size != 8) { return NULL; }
 
 	msgpack_object id = deserialized->via.array.ptr[0];
-	if (id.type != MSGPACK_OBJECT_POSITIVE_INTEGER && id.type != MSGPACK_OBJECT_NEGATIVE_INTEGER) { return false; }
+	if (id.type != MSGPACK_OBJECT_POSITIVE_INTEGER && id.type != MSGPACK_OBJECT_NEGATIVE_INTEGER) { return NULL; }
 	msgpack_object created = deserialized->via.array.ptr[1];
-	if (created.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
+	if (created.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return NULL; }
 	msgpack_object group = deserialized->via.array.ptr[2];
-	if (group.type != MSGPACK_OBJECT_STR) { return false; }
+	if (group.type != MSGPACK_OBJECT_STR) { return NULL; }
 	msgpack_object name = deserialized->via.array.ptr[3];
-	if (name.type != MSGPACK_OBJECT_STR) { return false; }
+	if (name.type != MSGPACK_OBJECT_STR) { return NULL; }
 	msgpack_object price = deserialized->via.array.ptr[4];
-	if (price.type != MSGPACK_OBJECT_FLOAT32) { return false; }
+	if (price.type != MSGPACK_OBJECT_FLOAT32) { return NULL; }
 	msgpack_object quantity = deserialized->via.array.ptr[5];
-	if (quantity.type != MSGPACK_OBJECT_FLOAT64) { return false; }
+	if (quantity.type != MSGPACK_OBJECT_FLOAT64) { return NULL; }
 	msgpack_object deleted = deserialized->via.array.ptr[6];
-	if (deleted.type != MSGPACK_OBJECT_BOOLEAN) { return false; }
+	if (deleted.type != MSGPACK_OBJECT_BOOLEAN) { return NULL; }
 	msgpack_object storeName = deserialized->via.array.ptr[7];
-	if (storeName.type != MSGPACK_OBJECT_STR) { return false; }
+	if (storeName.type != MSGPACK_OBJECT_STR) { return NULL; }
 
 	auto goodsDto = new TGoodsDto();
 	goodsDto->id = (int)id.via.i64;
@@ -170,7 +170,7 @@ static void SerializeGoodsList(msgpack_packer *packer, std::vector<TGoodsDto *> 
 }
 
 static std::vector<TGoodsDto *> *DeserializeGoodsList(msgpack_object *deserialized) {
-	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return NULL; }
 
 	auto goodsList = new std::vector<TGoodsDto *>();
 	goodsList->reserve(deserialized->via.array.size);
@@ -229,20 +229,20 @@ static void SerializeOrderDto(msgpack_packer *packer, const TOrderDto *pOrderDto
 
 static TOrderDto *DeserializeOrderDto(msgpack_object *deserialized) {
 
-	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
-	if (deserialized->via.array.size != 4) { return false; }
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return NULL; }
+	if (deserialized->via.array.size != 4) { return NULL; }
 
 	msgpack_object supplier = deserialized->via.array.ptr[0];
-	if (supplier.type != MSGPACK_OBJECT_STR) { return false; }
+	if (supplier.type != MSGPACK_OBJECT_STR) { return NULL; }
 
 	msgpack_object dateTime = deserialized->via.array.ptr[1];
-	if (dateTime.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
+	if (dateTime.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return NULL; }
 
 	msgpack_object goods = deserialized->via.array.ptr[2];
-	if (goods.type != MSGPACK_OBJECT_ARRAY) { return false; }
+	if (goods.type != MSGPACK_OBJECT_ARRAY) { return NULL; }
 
 	msgpack_object user = deserialized->via.array.ptr[3];
-	if (user.type != MSGPACK_OBJECT_ARRAY) { return false; }
+	if (user.type != MSGPACK_OBJECT_ARRAY) { return NULL; }
 
 	auto orderDto = new TOrderDto();
 	orderDto->supplier = strDuplicate(supplier.via.str.ptr, supplier.via.str.size);
@@ -266,7 +266,7 @@ static void SerializeOrdersList(msgpack_packer *packer, std::vector<TOrderDto *>
 }
 
 static std::vector<TOrderDto *> *DeserializeOrdersList(msgpack_object *deserialized) {
-	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return NULL; }
 
 	auto ordersList = new std::vector<TOrderDto *>();
 	ordersList->reserve(deserialized->via.array.size);
@@ -325,20 +325,20 @@ static void SerializeCustomerDto(msgpack_packer *packer, const TCustomerDto *cus
 }
 
 static TCustomerDto *DeserializeCustomerDto(msgpack_object *deserialized) {
-	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
-	if (deserialized->via.array.size != 4) { return false; }
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return NULL; }
+	if (deserialized->via.array.size != 4) { return NULL; }
 
 	msgpack_object id = deserialized->via.array.ptr[0];
-	if (id.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return false; }
+	if (id.type != MSGPACK_OBJECT_POSITIVE_INTEGER) { return NULL; }
 
 	msgpack_object name = deserialized->via.array.ptr[1];
-	if (name.type != MSGPACK_OBJECT_STR) { return false; }
+	if (name.type != MSGPACK_OBJECT_STR) { return NULL; }
 
 	msgpack_object blob = deserialized->via.array.ptr[2];
-	if (blob.type != MSGPACK_OBJECT_STR) { return false; }
+	if (blob.type != MSGPACK_OBJECT_STR) { return NULL; }
 
 	msgpack_object orders = deserialized->via.array.ptr[3];
-	if (orders.type != MSGPACK_OBJECT_ARRAY) { return false; }
+	if (orders.type != MSGPACK_OBJECT_ARRAY) { return NULL; }
 
 	auto customerDto = new TCustomerDto();
 	customerDto->id = (uint64_t)id.via.u64;
@@ -362,7 +362,7 @@ static void SerializeCustomerList(msgpack_packer *packer, std::vector<TCustomerD
 }
 
 static std::vector<TCustomerDto *> *DeserializeCustomerList(msgpack_object *deserialized) {
-	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return false; }
+	if (deserialized->type != MSGPACK_OBJECT_ARRAY) { return NULL; }
 
 	auto customerList = new std::vector<TCustomerDto *>();
 	customerList->reserve(deserialized->via.array.size);
