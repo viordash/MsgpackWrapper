@@ -9,12 +9,11 @@ if(WIN32)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif(WIN32)
 
-
-set (MSGPACK_BUILD_TESTS  OFF)
-set (MSGPACK_GEN_COVERAGE  OFF)
-set (MSGPACK_BUILD_EXAMPLES  OFF)
-set (MSGPACK_ENABLE_SHARED OFF)
-set (MSGPACK_ENABLE_STATIC  ON)
+OPTION (MSGPACK_BUILD_TESTS  OFF)
+OPTION (MSGPACK_GEN_COVERAGE  OFF)
+OPTION (MSGPACK_BUILD_EXAMPLES  OFF)
+SET (MSGPACK_ENABLE_SHARED OFF)
+SET (MSGPACK_ENABLE_STATIC  ON)
 
 include_directories(msgpack-c/include/msgpack msgpack-c/include msgpack-c/src)
 include_directories(build/msgpack-c/include build/msgpack-c/include/msgpack)
