@@ -286,77 +286,89 @@ template <> void MsgpackArray<float>::DeleteItem(const float item) {}
 
 
 */
-template <> void MsgpackArray<char *>::Remove(const char *item) {
+template <> bool MsgpackArray<char *>::Remove(const char *item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
-template <> void MsgpackArray<TBoolArray>::Remove(const TBoolArray item) {
+template <> bool MsgpackArray<TBoolArray>::Remove(const TBoolArray item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
-template <> void MsgpackArray<int64_t>::Remove(const int64_t item) {
+template <> bool MsgpackArray<int64_t>::Remove(const int64_t item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
-template <> void MsgpackArray<uint64_t>::Remove(const uint64_t item) {
+template <> bool MsgpackArray<uint64_t>::Remove(const uint64_t item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
-template <> void MsgpackArray<int32_t>::Remove(const int32_t item) {
+template <> bool MsgpackArray<int32_t>::Remove(const int32_t item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
-template <> void MsgpackArray<uint32_t>::Remove(const uint32_t item) {
+template <> bool MsgpackArray<uint32_t>::Remove(const uint32_t item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
-template <> void MsgpackArray<int16_t>::Remove(const int16_t item) {
+template <> bool MsgpackArray<int16_t>::Remove(const int16_t item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
-template <> void MsgpackArray<uint16_t>::Remove(const uint16_t item) {
+template <> bool MsgpackArray<uint16_t>::Remove(const uint16_t item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
-template <> void MsgpackArray<int8_t>::Remove(const int8_t item) {
+template <> bool MsgpackArray<int8_t>::Remove(const int8_t item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
-template <> void MsgpackArray<uint8_t>::Remove(const uint8_t item) {
+template <> bool MsgpackArray<uint8_t>::Remove(const uint8_t item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
-template <> void MsgpackArray<double>::Remove(const double item) {
+template <> bool MsgpackArray<double>::Remove(const double item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
-template <> void MsgpackArray<float>::Remove(const float item) {
+template <> bool MsgpackArray<float>::Remove(const float item) {
 	auto iter = Find(item);
-	if (iter == Items.end()) { return; }
+	if (iter == Items.end()) { return false; }
 	DeleteItem(*iter);
 	Items.erase(iter);
+	return true;
 }
 /*
 
