@@ -42,12 +42,12 @@ bool MsgpackObjectsArray::Update(size_t index, MsgpackObject *item) {
 	return true;
 }
 
-void MsgpackObjectsArray::Remove(MsgpackObject *item) {
+bool MsgpackObjectsArray::Remove(MsgpackObject *item) {
 	auto iter = Find(item);
-	if (iter != Items.end()) {
-		DeleteItem(*iter);
-		Items.erase(iter);
-	}
+	if (iter == Items.end()) { return false; }
+	DeleteItem(*iter);
+	Items.erase(iter);
+	return true;
 }
 std::vector<MsgpackObject *>::iterator MsgpackObjectsArray::Find(MsgpackObject *item) {
 	if (item != NULL) {
@@ -63,9 +63,7 @@ void MsgpackObjectsArray::DeleteItem(MsgpackObject *item) { delete item; }
 bool MsgpackObjectsArray::WriteObject(msgpack_packer *packer) {
 	if (msgpack_pack_array(packer, Items.size()) != 0) { return false; }
 	for (const auto &item : Items) {
-		if (!item->Write(packer)) {
-			return false;
-		}
+		if (!item->Write(packer)) { return false; }
 	}
 	return true;
 }

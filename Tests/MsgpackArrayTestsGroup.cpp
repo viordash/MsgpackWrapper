@@ -346,11 +346,11 @@ TEST(MsgpackArrayTestsGroup, MsgpackObjectsArray_Remove_Test) {
 	list1.Add(new UserDto("user 4", 999));
 
 	auto item1 = new UserDto("user 3", 100);
-	list1.Remove(item1);
+	CHECK_TRUE(list1.Remove(item1));
 	delete item1;
 
 	auto item2 = new UserDto("user 2", 10);
-	list1.Remove(item2);
+	CHECK_TRUE(list1.Remove(item2));
 	delete item2;
 
 	CHECK_EQUAL(list1.Size(), 2);
@@ -698,11 +698,11 @@ TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Equals_Test) {
 	CHECK_FALSE(list1 == list2);
 	list2.Update(2, "User3");
 	CHECK_TRUE(list1 == list2);
-	list2.Remove("user 2");
+	CHECK_TRUE(list2.Remove("user 2"));
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
 
-	list1.Remove("user 2");
+	CHECK_TRUE(list1.Remove("user 2"));
 	list1.Update(0, NULL);
 	CHECK_TRUE(list1 != list2);
 	CHECK_FALSE(list1 == list2);
@@ -763,11 +763,11 @@ TEST(MsgpackArrayTestsGroup, MsgpackStringArray_Remove_Test) {
 	list1.Add("user 4");
 	list1.Add(NULL);
 
-	list1.Remove("user 3");
-	list1.Remove("user 2");
-	list1.Remove(NULL);
+	CHECK_TRUE(list1.Remove("user 3"));
+	CHECK_TRUE(list1.Remove("user 2"));
+	CHECK_TRUE(list1.Remove(NULL));
 	CHECK_EQUAL(list1.Size(), 2);
-	list1.Remove("user Not exists");
+	CHECK_FALSE(list1.Remove("user Not exists"));
 	CHECK_EQUAL(list1.Size(), 2);
 }
 
@@ -1001,10 +1001,10 @@ TEST(MsgpackArrayTestsGroup, MsgpackBoolArray_Remove_Test) {
 	list1.Add(false);
 	list1.Add(false);
 
-	list1.Remove(true);
-	list1.Remove(false);
+	CHECK_TRUE(list1.Remove(true));
+	CHECK_TRUE(list1.Remove(false));
 	CHECK_EQUAL(list1.Size(), 2);
-	list1.Remove(true);
+	CHECK_TRUE(list1.Remove(true));
 	CHECK_EQUAL(list1.Size(), 1);
 }
 
@@ -1181,7 +1181,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt64Array_Remove_Test) {
 	list1.Add(5188146770730811392LL);
 	list1.Add(0);
 
-	list1.Remove(0);
+	CHECK_TRUE(list1.Remove(0));
 	CHECK_EQUAL(list1.Size(), 2);
 }
 
@@ -1369,7 +1369,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint64Array_Remove_Test) {
 	list1.Add(5188146770730811392LL);
 	list1.Add(0);
 
-	list1.Remove(0);
+	CHECK_TRUE(list1.Remove(0));
 	CHECK_EQUAL(list1.Size(), 2);
 }
 
@@ -1556,7 +1556,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt32Array_Remove_Test) {
 	list1.Add(2147483647);
 	list1.Add(0);
 
-	list1.Remove(0);
+	CHECK_TRUE(list1.Remove(0));
 	CHECK_EQUAL(list1.Size(), 2);
 }
 
@@ -1731,7 +1731,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint32Array_Remove_Test) {
 	list1.Add(2147483647);
 	list1.Add(5);
 
-	list1.Remove(5);
+	CHECK_TRUE(list1.Remove(5));
 	CHECK_EQUAL(list1.Size(), 2);
 }
 
@@ -1923,7 +1923,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt16Array_Remove_Test) {
 	list1.Add(32767);
 	list1.Add(0);
 
-	list1.Remove(0);
+	CHECK_TRUE(list1.Remove(0));
 	CHECK_EQUAL(list1.Size(), 2);
 }
 
@@ -2106,7 +2106,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint16Array_Remove_Test) {
 	list1.Add(65535);
 	list1.Add(1);
 
-	list1.Remove(0);
+	CHECK_TRUE(list1.Remove(0));
 	CHECK_EQUAL(list1.Size(), 2);
 }
 
@@ -2307,7 +2307,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackInt8Array_Remove_Test) {
 	list1.Add(-128);
 	list1.Add(1);
 
-	list1.Remove(0);
+	CHECK_TRUE(list1.Remove(0));
 	CHECK_EQUAL(list1.Size(), 2);
 }
 
@@ -2498,7 +2498,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackUint8Array_Remove_Test) {
 	list1.Add(254);
 	list1.Add(1);
 
-	list1.Remove(0);
+	CHECK_TRUE(list1.Remove(0));
 	CHECK_EQUAL(list1.Size(), 2);
 }
 
@@ -2688,7 +2688,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackDoubleArray_Remove_Test) {
 	list1.Add(1.254);
 	list1.Add(65535.15);
 
-	list1.Remove(1.254);
+	CHECK_TRUE(list1.Remove(1.254));
 	CHECK_EQUAL(list1.Size(), 2);
 }
 
@@ -2878,7 +2878,7 @@ TEST(MsgpackArrayTestsGroup, MsgpackFloatArray_Remove_Test) {
 	list1.Add(1.254f);
 	list1.Add(65535.15f);
 
-	list1.Remove(1.254f);
+	CHECK_TRUE(list1.Remove(1.254f));
 	CHECK_EQUAL(list1.Size(), 2);
 }
 

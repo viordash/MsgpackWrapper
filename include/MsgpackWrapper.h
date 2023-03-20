@@ -75,7 +75,7 @@ template <class TItem> class MsgpackArray : public MsgpackArrayBase {
 
 	virtual bool Add(ConstTItem item, size_t newValueLen = size_t());
 	virtual bool Update(size_t index, ConstTItem item);
-	virtual void Remove(ConstTItem item);
+	virtual bool Remove(ConstTItem item);
 	typename std::vector<TItem>::iterator Find(ConstTItem item);
 
 	bool Equals(MsgpackArrayBase *other) override;
@@ -108,7 +108,7 @@ class MsgpackObjectsArray : public MsgpackArrayBase {
 
 	virtual bool Add(MsgpackObject *item);
 	virtual bool Update(size_t index, MsgpackObject *item);
-	virtual void Remove(MsgpackObject *item);
+	virtual bool Remove(MsgpackObject *item);
 
 	typename std::vector<MsgpackObject *>::iterator Find(MsgpackObject *item);
 
