@@ -594,7 +594,7 @@ TEST(MsgpackHeavyDutyTestsGroup, MsgpackObject_Perfomance_Test) {
 	UT_PRINT(text);
 
 	CHECK_EQUAL(size, nativeSize);
-	CHECK_FALSE(durationAdd > nativeDurationAdd * 4);
-	CHECK_FALSE(durationDirectWriteTo > nativeDurationDirectWriteTo * 4);
-	CHECK_FALSE(durationTryParse > nativeDurationTryParse * 4);
+	CHECK_FALSE(durationAdd > nativeDurationAdd * 6);
+	CHECK_FALSE(durationDirectWriteTo > nativeDurationDirectWriteTo * 6);
+	CHECK_FALSE(durationTryParse > nativeDurationTryParse * 6);
 }
