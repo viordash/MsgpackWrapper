@@ -12,8 +12,8 @@ template <class T> class MsgpackValue : public MsgpackValueBase {
   public:
     typedef typename std::conditional<std::is_same<T, char *>::value, const char *, typename std::add_const<T>::type>::type ConstT;
 
-    MsgpackValue(MsgpackFieldsContainer *container, unsigned int id, size_t valueLen, ConstT value) : MsgpackValueBase(container, id) { InitValue(value, valueLen); }
-    MsgpackValue(MsgpackFieldsContainer *container, unsigned int id, ConstT value = T()) : MsgpackValue(container, id, size_t(), value) {}
+    MsgpackValue(MsgpackFieldsContainer *container, unsigned int id, size_t valueLen, ConstT val) : MsgpackValueBase(container, id) { InitValue(val, valueLen); }
+    MsgpackValue(MsgpackFieldsContainer *container, unsigned int id, ConstT val = T()) : MsgpackValue(container, id, size_t(), val) {}
 
     virtual ~MsgpackValue() { DeleteValue(); }
 
