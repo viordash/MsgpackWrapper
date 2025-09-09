@@ -8,7 +8,10 @@ set(MSGPACK_BUILD_EXAMPLES OFF CACHE BOOL "Disable examples")
 set(MSGPACK_ENABLE_SHARED OFF CACHE BOOL "Disable shared")
 set(MSGPACK_ENABLE_STATIC ON CACHE BOOL "Enable static")
 
+option(MSGPACKWRAPPER_BUILD_DEMO "Build demonstration application" ON)
+
 add_subdirectory(msgpack-c)
+
 get_target_property(MSGPACK_BINARY_INCLUDE_DIRS msgpack-c BINARY_DIR)
 
 include_directories(
@@ -34,7 +37,7 @@ set(CPP_SOURCE_FILES
 
 add_library(MsgpackWrapper STATIC ${CPP_SOURCE_FILES})
 
-target_link_libraries(MsgpackWrapper PUBLIC msgpack-c)
+target_link_libraries(MsgpackWrapper PRIVATE msgpack-c)
 
 target_include_directories(MsgpackWrapper PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -43,6 +46,18 @@ target_include_directories(MsgpackWrapper PUBLIC
     ${MSGPACK_BINARY_INCLUDE_DIRS}/include
     ${MSGPACK_BINARY_INCLUDE_DIRS}/include/msgpack
 )
+
+if(MSGPACKWRAPPER_BUILD_DEMO)
+    add_executable(MsgpackWrapperDemo main.cpp)
+    target_link_libraries(MsgpackWrapperDemo MsgpackWrapper)
+    target_include_directories(MsgpackWrapperDemo PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/msgpack-c/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/msgpack-c/include/msgpack
+        ${MSGPACK_BINARY_INCLUDE_DIRS}/include
+        ${MSGPACK_BINARY_INCLUDE_DIRS}/include/msgpack
+    )
+endif()
 
 if(PROJECT_IS_TOP_LEVEL AND NOT MSGPACKWRAPPER_SKIP_TESTING)
     enable_testing() 
