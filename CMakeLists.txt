@@ -10,6 +10,35 @@ set(MSGPACK_ENABLE_STATIC ON CACHE BOOL "Enable static")
 
 option(MSGPACKWRAPPER_BUILD_DEMO "Build demonstration application" ON)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -DNDEBUG")
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -flto -fno-rtti")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -flto -fno-rtti")
+    elseif(MSVC)
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2 /GL /MP")
+    endif()
+elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -g -DNDEBUG")
+elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
+    set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -Os -DNDEBUG")
+else()
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g")
+endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wshadow -Wconversion -Wsign-conversion")
+endif()
+
+if(WIN32)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    if(MSVC)
+        add_compile_options(/W4 /WX)
+    endif()
+endif()
+
 add_subdirectory(msgpack-c)
 
 get_target_property(MSGPACK_BINARY_INCLUDE_DIRS msgpack-c BINARY_DIR)
@@ -21,10 +50,6 @@ include_directories(
     ${MSGPACK_BINARY_INCLUDE_DIRS}/include
     ${MSGPACK_BINARY_INCLUDE_DIRS}/include/msgpack
 )
-
-if(WIN32)
-  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-endif(WIN32)
 
 set(CPP_SOURCE_FILES 
   src/MsgpackValueBase.cpp
@@ -46,6 +71,20 @@ target_include_directories(MsgpackWrapper PUBLIC
     ${MSGPACK_BINARY_INCLUDE_DIRS}/include
     ${MSGPACK_BINARY_INCLUDE_DIRS}/include/msgpack
 )
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        set_target_properties(MsgpackWrapper PROPERTIES 
+            INTERPROCEDURAL_OPTIMIZATION TRUE
+            LINK_FLAGS "-flto"
+        )
+    elseif(MSVC)
+        set_target_properties(MsgpackWrapper PROPERTIES 
+            INTERPROCEDURAL_OPTIMIZATION TRUE
+            LINK_FLAGS "/LTCG"
+        )
+    endif()
+endif()
 
 if(MSGPACKWRAPPER_BUILD_DEMO)
     add_executable(MsgpackWrapperDemo main.cpp)
