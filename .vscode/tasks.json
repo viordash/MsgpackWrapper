@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
 		{
-			"label": "build all",
+			"label": "build",
 			"type": "shell",
 			"command": "/usr/bin/cmake --build ./build --config Debug --target all -- -j8",
 			"problemMatcher": [
