@@ -29,7 +29,7 @@ template <class T> class MsgpackValue : public MsgpackValueBase {
 
   protected:
     T value;
-    void InitValue(ConstT value, size_t valueLen);
+    void InitValue(ConstT val, size_t valLen);
     void DeleteValue();
 };
 

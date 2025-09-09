@@ -87,32 +87,74 @@ template <> void MsgpackValue<MsgpackArrayBase *>::DeleteValue() {}
 
 
 */
-template <> void MsgpackValue<bool>::InitValue(const bool value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<int8_t>::InitValue(const int8_t value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<int16_t>::InitValue(const int16_t value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<int32_t>::InitValue(const int32_t value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<int64_t>::InitValue(const int64_t value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<uint8_t>::InitValue(const uint8_t value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<uint16_t>::InitValue(const uint16_t value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<uint32_t>::InitValue(const uint32_t value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<uint64_t>::InitValue(const uint64_t value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<float>::InitValue(const float value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<double>::InitValue(const double value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<char *>::InitValue(const char *value, size_t valueLen) {
-    if (value == NULL) {
+template <> void MsgpackValue<bool>::InitValue(const bool val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<int8_t>::InitValue(const int8_t val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<int16_t>::InitValue(const int16_t val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<int32_t>::InitValue(const int32_t val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<int64_t>::InitValue(const int64_t val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<uint8_t>::InitValue(const uint8_t val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<uint16_t>::InitValue(const uint16_t val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<uint32_t>::InitValue(const uint32_t val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<uint64_t>::InitValue(const uint64_t val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<float>::InitValue(const float val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<double>::InitValue(const double val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<char *>::InitValue(const char *val, size_t valLen) {
+    if (val == NULL) {
         this->value = NULL;
     } else {
-        size_t len = valueLen != size_t() //
-                       ? valueLen         //
-                       : strlen(value);
+        size_t len = valLen != size_t() //
+                       ? valLen         //
+                       : strlen(val);
         this->value = new char[len + 1];
-        memcpy(this->value, value, len);
+        memcpy(this->value, val, len);
         this->value[len] = 0;
     }
 }
-template <> void MsgpackValue<TMsgpackRawData>::InitValue(const TMsgpackRawData value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<MsgpackObject *>::InitValue(MsgpackObject *value, size_t valueLen) { this->value = value; }
-template <> void MsgpackValue<MsgpackArrayBase *>::InitValue(MsgpackArrayBase *value, size_t valueLen) { this->value = value; }
+template <> void MsgpackValue<TMsgpackRawData>::InitValue(const TMsgpackRawData val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<MsgpackObject *>::InitValue(MsgpackObject *val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
+template <> void MsgpackValue<MsgpackArrayBase *>::InitValue(MsgpackArrayBase *val, size_t valLen) {
+    (void)valLen;
+    this->value = val;
+}
 /*
 
 */
@@ -169,6 +211,7 @@ template <> void MsgpackValue<TMsgpackRawData>::Set(const TMsgpackRawData newVal
     InitValue(newValue, newValueLen);
 }
 template <> void MsgpackValue<MsgpackObject *>::Set(MsgpackObject *newValue, size_t newValueLen) {
+    (void)newValueLen;
     if (this->value == NULL) {
         this->value = newValue;
     } else if (newValue != NULL) {
@@ -176,6 +219,7 @@ template <> void MsgpackValue<MsgpackObject *>::Set(MsgpackObject *newValue, siz
     }
 }
 template <> void MsgpackValue<MsgpackArrayBase *>::Set(MsgpackArrayBase *newValue, size_t newValueLen) {
+    (void)newValueLen;
     if (this->value == NULL) {
         this->value = newValue;
     } else if (newValue != NULL) {

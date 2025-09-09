@@ -141,7 +141,7 @@
             "name": "(Windows) Launch",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Debug/MsgpackWrapper.exe",
+            "program": "${workspaceFolder}/build/Debug/MsgpackWrapperDemo.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

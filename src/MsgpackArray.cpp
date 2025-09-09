@@ -191,17 +191,50 @@ template <> void MsgpackArray<char *>::AddInternal(const char *item, size_t newV
         Items.push_back(newItem);
     }
 }
-template <> void MsgpackArray<TBoolArray>::AddInternal(const TBoolArray item, size_t newValueLen) { Items.push_back(item); }
-template <> void MsgpackArray<int64_t>::AddInternal(const int64_t item, size_t newValueLen) { Items.push_back(item); }
-template <> void MsgpackArray<uint64_t>::AddInternal(const uint64_t item, size_t newValueLen) { Items.push_back(item); }
-template <> void MsgpackArray<int32_t>::AddInternal(const int32_t item, size_t newValueLen) { Items.push_back(item); }
-template <> void MsgpackArray<uint32_t>::AddInternal(const uint32_t item, size_t newValueLen) { Items.push_back(item); }
-template <> void MsgpackArray<int16_t>::AddInternal(const int16_t item, size_t newValueLen) { Items.push_back(item); }
-template <> void MsgpackArray<uint16_t>::AddInternal(const uint16_t item, size_t newValueLen) { Items.push_back(item); }
-template <> void MsgpackArray<int8_t>::AddInternal(const int8_t item, size_t newValueLen) { Items.push_back(item); }
-template <> void MsgpackArray<uint8_t>::AddInternal(const uint8_t item, size_t newValueLen) { Items.push_back(item); }
-template <> void MsgpackArray<double>::AddInternal(const double item, size_t newValueLen) { Items.push_back(item); }
-template <> void MsgpackArray<float>::AddInternal(const float item, size_t newValueLen) { Items.push_back(item); }
+template <> void MsgpackArray<TBoolArray>::AddInternal(const TBoolArray item, size_t newValueLen) {
+    (void)newValueLen;
+    Items.push_back(item);
+}
+template <> void MsgpackArray<int64_t>::AddInternal(const int64_t item, size_t newValueLen) {
+    (void)newValueLen;
+    Items.push_back(item);
+}
+template <> void MsgpackArray<uint64_t>::AddInternal(const uint64_t item, size_t newValueLen) {
+    (void)newValueLen;
+    Items.push_back(item);
+}
+template <> void MsgpackArray<int32_t>::AddInternal(const int32_t item, size_t newValueLen) {
+    (void)newValueLen;
+    Items.push_back(item);
+}
+template <> void MsgpackArray<uint32_t>::AddInternal(const uint32_t item, size_t newValueLen) {
+    (void)newValueLen;
+    Items.push_back(item);
+}
+template <> void MsgpackArray<int16_t>::AddInternal(const int16_t item, size_t newValueLen) {
+    (void)newValueLen;
+    Items.push_back(item);
+}
+template <> void MsgpackArray<uint16_t>::AddInternal(const uint16_t item, size_t newValueLen) {
+    (void)newValueLen;
+    Items.push_back(item);
+}
+template <> void MsgpackArray<int8_t>::AddInternal(const int8_t item, size_t newValueLen) {
+    (void)newValueLen;
+    Items.push_back(item);
+}
+template <> void MsgpackArray<uint8_t>::AddInternal(const uint8_t item, size_t newValueLen) {
+    (void)newValueLen;
+    Items.push_back(item);
+}
+template <> void MsgpackArray<double>::AddInternal(const double item, size_t newValueLen) {
+    (void)newValueLen;
+    Items.push_back(item);
+}
+template <> void MsgpackArray<float>::AddInternal(const float item, size_t newValueLen) {
+    (void)newValueLen;
+    Items.push_back(item);
+}
 /*
 
 
@@ -271,17 +304,17 @@ template <> bool MsgpackArray<float>::Add(const float item, size_t newValueLen) 
 
 */
 template <> void MsgpackArray<char *>::DeleteItem(const char *item) { delete[] item; }
-template <> void MsgpackArray<TBoolArray>::DeleteItem(const TBoolArray item) {}
-template <> void MsgpackArray<int64_t>::DeleteItem(const int64_t item) {}
-template <> void MsgpackArray<uint64_t>::DeleteItem(const uint64_t item) {}
-template <> void MsgpackArray<int32_t>::DeleteItem(const int32_t item) {}
-template <> void MsgpackArray<uint32_t>::DeleteItem(const uint32_t item) {}
-template <> void MsgpackArray<int16_t>::DeleteItem(const int16_t item) {}
-template <> void MsgpackArray<uint16_t>::DeleteItem(const uint16_t item) {}
-template <> void MsgpackArray<int8_t>::DeleteItem(const int8_t item) {}
-template <> void MsgpackArray<uint8_t>::DeleteItem(const uint8_t item) {}
-template <> void MsgpackArray<double>::DeleteItem(const double item) {}
-template <> void MsgpackArray<float>::DeleteItem(const float item) {}
+template <> void MsgpackArray<TBoolArray>::DeleteItem(const TBoolArray item) { (void)item; }
+template <> void MsgpackArray<int64_t>::DeleteItem(const int64_t item) { (void)item; }
+template <> void MsgpackArray<uint64_t>::DeleteItem(const uint64_t item) { (void)item; }
+template <> void MsgpackArray<int32_t>::DeleteItem(const int32_t item) { (void)item; }
+template <> void MsgpackArray<uint32_t>::DeleteItem(const uint32_t item) { (void)item; }
+template <> void MsgpackArray<int16_t>::DeleteItem(const int16_t item) { (void)item; }
+template <> void MsgpackArray<uint16_t>::DeleteItem(const uint16_t item) { (void)item; }
+template <> void MsgpackArray<int8_t>::DeleteItem(const int8_t item) { (void)item; }
+template <> void MsgpackArray<uint8_t>::DeleteItem(const uint8_t item) { (void)item; }
+template <> void MsgpackArray<double>::DeleteItem(const double item) { (void)item; }
+template <> void MsgpackArray<float>::DeleteItem(const float item) { (void)item; }
 /*
 
 

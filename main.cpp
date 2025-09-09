@@ -20,24 +20,14 @@ int main(void) {
 
     UserDto outUserDto("DemoWrapper", uAdmin);
     auto writed = outUserDto.Write(buffer, sizeof(buffer));
-    fprintf(stdout,
-            "out UserDto(%s, %u) serialized to %lu bytes\n",
-            outUserDto.Name.Get(),
-            outUserDto.Role.Get(),
-            writed);
+    fprintf(stdout, "out UserDto(%s, %u) serialized to %u bytes\n", outUserDto.Name.Get(), outUserDto.Role.Get(), (unsigned)writed);
 
     UserDto inUserDto;
     auto res = inUserDto.TryParse(buffer, writed);
     if (res) {
-        fprintf(stdout,
-                "in UserDto(%s, %u) deserialized successfully\n",
-                outUserDto.Name.Get(),
-                outUserDto.Role.Get());
+        fprintf(stdout, "in UserDto(%s, %u) deserialized successfully\n", outUserDto.Name.Get(), outUserDto.Role.Get());
     } else {
-        fprintf(stderr,
-                "in UserDto(%s, %u) deserialized with error\n",
-                outUserDto.Name.Get(),
-                outUserDto.Role.Get());
+        fprintf(stderr, "in UserDto(%s, %u) deserialized with error\n", outUserDto.Name.Get(), outUserDto.Role.Get());
     }
 
     return 0;
