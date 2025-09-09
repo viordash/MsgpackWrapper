@@ -1,13 +1,37 @@
-{ BasedOnStyle: LLVM, IndentWidth: 4, TabWidth: 4, UseTab: Always, Language: Cpp, AlignConsecutiveAssignments: false, 
-AlignTrailingComments: true, ColumnLimit: 200,
-BreakBeforeTernaryOperators: true, 
-BreakBeforeBinaryOperators: NonAssignment, 
-SortIncludes: false, 
-NamespaceIndentation: All, IndentCaseLabels: true, 
-AlwaysBreakTemplateDeclarations: Yes,
-AllowShortBlocksOnASingleLine: Always,
-AllowShortLoopsOnASingleLine: true, 
-AllowShortFunctionsOnASingleLine: All,
-AllowShortIfStatementsOnASingleLine: WithoutElse,
-AlwaysBreakTemplateDeclarations: MultiLine,
-AlignOperands: AlignAfterOperator  }
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+Language: Cpp
+BreakBeforeBraces: Attach
+AlignConsecutiveAssignments: false
+AlignTrailingComments: true
+CommentPragmas: '[\s\S]*'
+ColumnLimit: 200
+BreakBeforeTernaryOperators: true
+BreakBeforeBinaryOperators: NonAssignment
+SortIncludes: true
+NamespaceIndentation: All
+IndentCaseLabels: true
+AlwaysBreakTemplateDeclarations: MultiLine
+AllowShortBlocksOnASingleLine: Always
+AllowShortLoopsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortFunctionsOnASingleLine: All 
+AlignOperands: AlignAfterOperator
+SpacesInContainerLiterals: true
+SpaceBeforeParens: Custom
+Cpp11BracedListStyle: false
+AlignConsecutiveMacros:
+  Enabled: false
+  AcrossEmptyLines: true
+  AcrossComments: true
+AlignConsecutiveDeclarations:
+  Enabled: false
+  AcrossEmptyLines: true
+  AcrossComments: false
+  AlignCompound: true
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackParameters: false 
+AllowAllArgumentsOnNextLine: false
+BinPackArguments: false

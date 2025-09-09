@@ -31,7 +31,7 @@ class UserDto : public MsgpackObject {
 class UsersList : public MsgpackObjectsArray {
   public:
 	bool Validate(MsgpackObject *item) override { return Size() < maxCount && item != NULL && item->Validate(); }
-	MsgpackObject *CreateItem() { return new UserDto(); }
+	MsgpackObject *CreateItem() override { return new UserDto(); }
 };
 
 class StringsList : public MsgpackArray<char *> {
